@@ -9,6 +9,7 @@ import { getData, setData, updateStat } from '../settings/storage.js';
 import * as sound from '../features/sound.js';
 import * as achievements from '../features/achievements.js';
 import * as stats from '../features/stats.js';
+import * as secretMove from '../features/secretMove.js';
 
 // Game state for Endless Mode
 const gameState = {
@@ -63,8 +64,9 @@ function resetGameState() {
  * @param {string} playerMove - The player's selected move
  */
 export function handlePlayerMove(playerMove) {
-    // Generate AI move
-    const aiMove = getRandomMove();
+    // Generate AI move - include fire move if player has unlocked it
+    const includeFireMove = secretMove.isUnlocked();
+    const aiMove = getRandomMove(includeFireMove);
     
     // Determine the winner
     const result = determineWinner(playerMove, aiMove);
@@ -92,6 +94,11 @@ export function handlePlayerMove(playerMove) {
     
     // Check achievements
     achievements.checkAchievements(result, gameState, 'endless');
+    
+    // Check if secret move should be unlocked
+    if (!secretMove.isUnlocked()) {
+        secretMove.init();
+    }
     
     // Get result message
     const resultMessage = getResultMessage(result, playerMove, aiMove);

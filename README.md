@@ -29,11 +29,34 @@ A modern HTML5 + JavaScript game featuring Rock, Paper, Scissors with multiple g
 - Win streak tracking
 - Data persistence and reset options
 
+### Phase 4 (Completed)
+- Multiple theme options (Day, Night, Retro, Neon)
+- Player profile with custom name and avatar
+- Secret "Fire" move unlock (after 10 wins)
+- Settings screen with tabs for profile, theme, sound, and data management
+- First-run experience with profile setup
+
 ### Coming Soon
 - Player avatars
 - Special moves
 - Advanced AI modes
 - Additional themes
+
+## Themes
+
+Choose from four unique visual themes:
+- 🌞 **Day**: Light and clean default theme
+- 🌙 **Night**: Dark theme for low-light environments
+- 🎮 **Retro**: 8-bit pixel style with vibrant colors
+- 💡 **Neon**: Futuristic theme with glowing elements
+
+## Secret Move
+
+Unlock the special "Fire" move after winning 10 games:
+- 🔥 Fire beats Scissors and Paper
+- Rock beats Fire
+- Paper loses to Fire
+- Scissors lose to Fire
 
 ## Achievements
 
@@ -68,6 +91,7 @@ Place audio files in the `assets/audio` directory with the following names:
 3. See the result and your updated score
 4. Continue playing or return to the menu
 5. Check your stats and achievements anytime
+6. Unlock the secret Fire (🔥) move after 10 wins!
 
 ## Development
 

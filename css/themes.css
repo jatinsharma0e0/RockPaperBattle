@@ -1,6 +1,7 @@
 /* Theme Variables */
-:root {
-    /* Day Theme (Default) */
+
+/* Day Theme (Default) */
+body.theme-day, body:not([data-theme]), :root {
     --bg-color: #f5f5f5;
     --text-color: #333333;
     --primary-color: #4a6fa5;
@@ -14,6 +15,101 @@
     --win-color: #4caf50;
     --lose-color: #f44336;
     --draw-color: #ff9800;
+    --border-color: #e0e0e0;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --special-move-color: #ff5722;
+}
+
+/* Night Theme */
+body.theme-night {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --primary-color: #6d98ba;
+    --secondary-color: #4a6fa5;
+    --accent-color: #ff7e67;
+    --section-bg: #1e1e1e;
+    --btn-bg: #4a6fa5;
+    --btn-text: #ffffff;
+    --btn-hover: #6d98ba;
+    --result-bg: #2c2c2c;
+    --win-color: #388e3c;
+    --lose-color: #d32f2f;
+    --draw-color: #f57c00;
+    --border-color: #333333;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --special-move-color: #ff5722;
+}
+
+/* Retro 8-bit Theme */
+body.theme-retro {
+    --bg-color: #5a6988;
+    --text-color: #f8f8f8;
+    --primary-color: #d08159;
+    --secondary-color: #8bac0f;
+    --accent-color: #306082;
+    --section-bg: #0f380f;
+    --btn-bg: #8bac0f;
+    --btn-text: #0f380f;
+    --btn-hover: #9bbc0f;
+    --result-bg: #306082;
+    --win-color: #8bac0f;
+    --lose-color: #d08159;
+    --draw-color: #c0c0c0;
+    --border-color: #9bbc0f;
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --special-move-color: #d08159;
+    
+    /* Pixel font and borders */
+    font-family: 'Press Start 2P', 'Courier New', monospace;
+    image-rendering: pixelated;
+}
+
+body.theme-retro section, 
+body.theme-retro .btn, 
+body.theme-retro .move-btn, 
+body.theme-retro .icon-btn {
+    border: 4px solid var(--border-color);
+    box-shadow: 4px 4px 0 var(--shadow-color);
+}
+
+/* Neon/Futuristic Theme */
+body.theme-neon {
+    --bg-color: #0c0c2b;
+    --text-color: #ffffff;
+    --primary-color: #00ffff;
+    --secondary-color: #ff00ff;
+    --accent-color: #ffff00;
+    --section-bg: #1a1a3a;
+    --btn-bg: #ff00ff;
+    --btn-text: #ffffff;
+    --btn-hover: #ff33ff;
+    --result-bg: #2a2a4a;
+    --win-color: #00ff00;
+    --lose-color: #ff0000;
+    --draw-color: #ffff00;
+    --border-color: #00ffff;
+    --shadow-color: rgba(0, 255, 255, 0.5);
+    --special-move-color: #ff3300;
+}
+
+/* Neon glow effects */
+body.theme-neon h1,
+body.theme-neon h2,
+body.theme-neon h3 {
+    text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color);
+}
+
+body.theme-neon .btn,
+body.theme-neon .move-btn,
+body.theme-neon .icon-btn {
+    box-shadow: 0 0 10px var(--btn-bg), 0 0 20px var(--shadow-color);
+    text-shadow: 0 0 5px var(--btn-text);
+    border: 2px solid var(--btn-bg);
+}
+
+body.theme-neon section {
+    border: 2px solid var(--border-color);
+    box-shadow: 0 0 15px var(--shadow-color);
 }
 
 /* Theme toggle styling */
@@ -23,4 +119,44 @@
     margin-top: 20px;
 }
 
-/* Night theme will be added in Phase 4 */ 
+/* Theme selector */
+.theme-selector {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.theme-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.theme-option:hover {
+    transform: scale(1.1);
+}
+
+.theme-option.active {
+    border-color: var(--accent-color);
+    transform: scale(1.1);
+}
+
+.theme-day-option {
+    background: linear-gradient(to bottom right, #f5f5f5, #4a6fa5);
+}
+
+.theme-night-option {
+    background: linear-gradient(to bottom right, #121212, #6d98ba);
+}
+
+.theme-retro-option {
+    background: linear-gradient(to bottom right, #5a6988, #8bac0f);
+}
+
+.theme-neon-option {
+    background: linear-gradient(to bottom right, #0c0c2b, #00ffff);
+} 

@@ -37,4 +37,69 @@
     0% { transform: scale(1); }
     50% { transform: scale(0.95); }
     100% { transform: scale(1); }
+}
+
+/* Fire move reveal animation */
+@keyframes fireReveal {
+    0% { 
+        transform: scale(0) rotate(-180deg);
+        opacity: 0;
+        box-shadow: 0 0 0 rgba(255, 87, 34, 0);
+    }
+    50% {
+        opacity: 1;
+        box-shadow: 0 0 30px rgba(255, 87, 34, 0.8);
+    }
+    75% {
+        transform: scale(1.2) rotate(10deg);
+    }
+    100% { 
+        transform: scale(1) rotate(0);
+        box-shadow: 0 0 15px rgba(255, 87, 34, 0.5);
+    }
+}
+
+.fire-reveal {
+    animation: fireReveal 1s ease-out forwards;
+}
+
+/* Fire move glow pulse */
+@keyframes fireGlow {
+    0% { box-shadow: 0 0 5px var(--special-move-color); }
+    50% { box-shadow: 0 0 20px var(--special-move-color); }
+    100% { box-shadow: 0 0 5px var(--special-move-color); }
+}
+
+.fire-glow {
+    animation: fireGlow 2s infinite;
+}
+
+/* Avatar selection highlight */
+@keyframes avatarHighlight {
+    0% { transform: scale(1); border-color: transparent; }
+    50% { transform: scale(1.1); border-color: var(--primary-color); }
+    100% { transform: scale(1); border-color: var(--primary-color); }
+}
+
+.avatar-highlight {
+    animation: avatarHighlight 0.5s ease-out forwards;
+}
+
+/* Settings panel slide */
+@keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideOut {
+    from { transform: translateX(0); }
+    to { transform: translateX(100%); }
+}
+
+.slide-out {
+    animation: slideOut 0.3s ease-in forwards;
 } 

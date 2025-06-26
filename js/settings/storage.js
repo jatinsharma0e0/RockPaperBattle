@@ -3,126 +3,121 @@
  * Handles localStorage operations
  */
 
-// Default game data structure
+// Local storage key
+const STORAGE_KEY = 'rock-paper-battle';
+
+// Default data structure
 const DEFAULT_DATA = {
-    name: "PlayerOne",
-    avatar: "robot",
-    theme: "day",
+    theme: 'day',
     soundEnabled: true,
-    achievements: {
-        winStreak3: false,
-        flawlessVictory: false,
-        roundsPlayed10: false
-    },
+    soundVolume: 0.5,
     stats: {
         wins: 0,
         losses: 0,
         draws: 0,
         longestWinStreak: 0,
-        bestMode: ""
+        bestMode: ''
+    },
+    achievements: {
+        winStreak3: false,
+        flawlessVictory: false,
+        roundsPlayed10: false
+    },
+    profile: {
+        name: 'Player',
+        avatar: '👤'
     },
     unlocks: {
-        secretMoveUnlocked: false
+        secretMoveUnlocked: false,
+        secretMoveRevealed: false
     },
-    aiMode: "random"
+    currentWinStreak: 0
 };
 
-// Key used for localStorage
-const STORAGE_KEY = 'rockPaperBattle';
+// Cache for data
+let dataCache = null;
 
 /**
- * Get data from localStorage
- * @param {string} key - Optional specific key to retrieve from storage
- * @returns {Object} - The stored data or a specific value if key is provided
+ * Get all game data from localStorage
+ * @returns {Object} The game data
  */
 export function getData(key = null) {
-    const storedData = localStorage.getItem(STORAGE_KEY);
-    const data = storedData ? JSON.parse(storedData) : DEFAULT_DATA;
-    
-    // If no data exists yet, initialize it
-    if (!storedData) {
-        setData(data);
-    }
-    
-    // Return specific key if requested
-    if (key) {
-        // Handle nested keys with dot notation (e.g., 'stats.wins')
-        if (key.includes('.')) {
-            const keys = key.split('.');
-            let value = data;
-            
-            for (const k of keys) {
-                if (value && typeof value === 'object' && k in value) {
-                    value = value[k];
-                } else {
-                    return null; // Key path doesn't exist
-                }
-            }
-            
-            return value;
+    if (!dataCache) {
+        try {
+            const storedData = localStorage.getItem(STORAGE_KEY);
+            dataCache = storedData ? JSON.parse(storedData) : { ...DEFAULT_DATA };
+        } catch (error) {
+            console.error('Error loading data from localStorage:', error);
+            dataCache = { ...DEFAULT_DATA };
         }
-        
-        return key in data ? data[key] : null;
     }
     
-    return data;
+    // Return specific key or all data
+    if (key) {
+        return dataCache[key];
+    }
+    
+    return dataCache;
 }
 
 /**
  * Save data to localStorage
- * @param {Object|string} dataOrKey - Data object to save or key to update
- * @param {*} value - Value to set if dataOrKey is a key string
+ * @param {string} key - The key to save under
+ * @param {*} value - The value to save
  */
-export function setData(dataOrKey, value = null) {
-    // If first param is a string, update just that key
-    if (typeof dataOrKey === 'string') {
-        const data = getData();
-        
-        // Handle nested keys with dot notation
-        if (dataOrKey.includes('.')) {
-            const keys = dataOrKey.split('.');
-            let currentObj = data;
-            
-            // Navigate to the right nested object
-            for (let i = 0; i < keys.length - 1; i++) {
-                const key = keys[i];
-                if (!(key in currentObj)) {
-                    currentObj[key] = {};
-                }
-                currentObj = currentObj[key];
-            }
-            
-            // Set the value on the final key
-            currentObj[keys[keys.length - 1]] = value;
-        } else {
-            // Simple key update
-            data[dataOrKey] = value;
-        }
-        
+export function setData(key, value) {
+    // Get current data
+    const data = getData();
+    
+    // Update data
+    data[key] = value;
+    
+    // Save to localStorage
+    try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    } else {
-        // Save entire data object
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(dataOrKey));
+        
+        // Update cache
+        dataCache = data;
+    } catch (error) {
+        console.error('Error saving data to localStorage:', error);
     }
 }
 
 /**
- * Update stats in localStorage
- * @param {string} type - Type of stat to update ('wins', 'losses', or 'draws')
- * @param {number} amount - Amount to increment (default: 1)
+ * Update a specific stat
+ * @param {string} statName - The name of the stat to update ('wins', 'losses', or 'draws')
  */
-export function updateStat(type, amount = 1) {
-    if (!['wins', 'losses', 'draws'].includes(type)) {
-        console.error('Invalid stat type:', type);
+export function updateStat(statName) {
+    if (!['wins', 'losses', 'draws'].includes(statName)) {
+        console.error(`Invalid stat name: ${statName}`);
         return;
     }
     
-    const currentValue = getData(`stats.${type}`) || 0;
-    setData(`stats.${type}`, currentValue + amount);
+    // Get current stats
+    const stats = getData('stats') || {};
+    
+    // Increment the stat
+    stats[statName] = (stats[statName] || 0) + 1;
+    
+    // Save updated stats
+    setData('stats', stats);
+}
+
+/**
+ * Clear all game data from localStorage
+ */
+export function clearAllData() {
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+        dataCache = { ...DEFAULT_DATA };
+    } catch (error) {
+        console.error('Error clearing data from localStorage:', error);
+    }
 }
 
 export default {
     getData,
     setData,
-    updateStat
+    updateStat,
+    clearAllData
 }; 

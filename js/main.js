@@ -9,6 +9,10 @@ import * as bestOf5 from './game/bestOf5.js';
 import * as sound from './features/sound.js';
 import * as achievements from './features/achievements.js';
 import * as stats from './features/stats.js';
+import * as theme from './features/theme.js';
+import * as avatar from './features/avatar.js';
+import * as secretMove from './features/secretMove.js';
+import * as settings from './settings/settings.js';
 import { getData, setData } from './settings/storage.js';
 
 // Current game mode
@@ -21,23 +25,23 @@ function init() {
     // Show the landing page by default
     ui.showSection('landing-page');
     
-    // Initialize theme
-    initTheme();
-    
-    // Initialize sound
+    // Initialize features
     sound.init();
-    
-    // Initialize achievements
+    theme.init();
+    avatar.init();
     achievements.init();
-    
-    // Initialize stats
     stats.init();
+    secretMove.init();
+    settings.init();
     
     // Set up event handlers
     setupEventHandlers();
     
     // Initialize data if needed
     initializeData();
+    
+    // Check if this is the first time running the game
+    checkFirstRun();
 }
 
 /**
@@ -79,10 +83,7 @@ function setupEventHandlers() {
             } else if (currentGameMode === 'bestOf5') {
                 bestOf5.handlePlayerMove(move);
             }
-        },
-        
-        // Theme toggle
-        toggleTheme: toggleTheme
+        }
     });
     
     // Best of 5 mode button
@@ -136,8 +137,28 @@ function setupEventHandlers() {
             if (confirm('Are you sure you want to reset all stats and achievements?')) {
                 stats.resetStats();
                 achievements.resetAchievements();
+                secretMove.resetUnlock();
                 renderAchievements();
                 sound.play('click');
+            }
+        });
+    }
+    
+    // Settings button
+    const settingsBtn = document.getElementById('settings-btn');
+    if (settingsBtn) {
+        settingsBtn.addEventListener('click', settings.showSettings);
+    }
+    
+    // Fire move button (secret move)
+    const fireMoveBtn = document.getElementById('fire-move-btn');
+    if (fireMoveBtn) {
+        fireMoveBtn.addEventListener('click', () => {
+            const move = fireMoveBtn.getAttribute('data-move');
+            if (currentGameMode === 'endless') {
+                endless.handlePlayerMove(move);
+            } else if (currentGameMode === 'bestOf5') {
+                bestOf5.handlePlayerMove(move);
             }
         });
     }
@@ -174,36 +195,28 @@ function renderAchievements() {
 }
 
 /**
- * Initializes the theme based on localStorage
- */
-function initTheme() {
-    const theme = getData('theme') || 'day';
-    document.body.setAttribute('data-theme', theme);
-}
-
-/**
- * Toggles between day and night themes
- */
-function toggleTheme() {
-    const currentTheme = getData('theme') || 'day';
-    const newTheme = currentTheme === 'day' ? 'night' : 'day';
-    
-    // Update localStorage
-    setData('theme', newTheme);
-    
-    // Update body attribute
-    document.body.setAttribute('data-theme', newTheme);
-    
-    // Play sound
-    sound.play('click');
-}
-
-/**
  * Initializes game data if it doesn't exist
  */
 function initializeData() {
     // This will initialize default data if none exists
     getData();
+}
+
+/**
+ * Checks if this is the first time running the game
+ */
+function checkFirstRun() {
+    const hasRunBefore = getData('hasRunBefore');
+    
+    if (!hasRunBefore) {
+        // Mark as having run before
+        setData('hasRunBefore', true);
+        
+        // Show settings to set up profile on first run
+        setTimeout(() => {
+            settings.showSettings();
+        }, 1000);
+    }
 }
 
 // Initialize the game when the DOM is fully loaded

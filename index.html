@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
-<body>
+<body class="theme-day">
     <div class="container">
         <!-- Sound Toggle Button (Global) -->
         <button id="sound-toggle" class="icon-btn sound-toggle" title="Toggle Sound">🔊</button>
@@ -17,6 +17,10 @@
         <!-- Landing Page Section -->
         <section id="landing-page">
             <h1>Rock Paper Battle</h1>
+            <div class="player-profile">
+                <div id="player-avatar" class="avatar">👤</div>
+                <div id="player-name">Player</div>
+            </div>
             <div class="game-modes">
                 <button id="endless-mode-btn" class="btn">Endless Mode</button>
                 <button id="best-of-5-btn" class="btn">Best of 5</button>
@@ -24,9 +28,7 @@
             </div>
             <div class="other-buttons">
                 <button id="stats-btn" class="btn secondary-btn">Game Stats</button>
-            </div>
-            <div class="theme-toggle">
-                <button id="theme-toggle-btn">Toggle Theme</button>
+                <button id="settings-btn" class="btn secondary-btn">Settings</button>
             </div>
         </section>
 
@@ -42,7 +44,10 @@
             
             <div class="score-container">
                 <div class="score player-score">
-                    <span>Player: </span>
+                    <div class="player-info">
+                        <div id="game-player-avatar" class="avatar-small">👤</div>
+                        <span id="game-player-name">Player</span>:
+                    </div>
                     <span id="player-score">0</span>
                 </div>
                 <div class="score ai-score">
@@ -58,6 +63,7 @@
                         <button class="move-btn" data-move="rock">✊</button>
                         <button class="move-btn" data-move="paper">✋</button>
                         <button class="move-btn" data-move="scissors">✌️</button>
+                        <button id="fire-move-btn" class="move-btn fire-move hidden" data-move="fire">🔥</button>
                     </div>
                     <div id="player-move-display" class="move-display"></div>
                 </div>
@@ -147,6 +153,99 @@
             
             <div class="stats-actions">
                 <button id="reset-stats-btn" class="btn danger-btn">Reset All Stats</button>
+            </div>
+        </section>
+        
+        <!-- Settings Screen Section -->
+        <section id="settings-screen" class="hidden">
+            <div class="section-header">
+                <h2>Settings</h2>
+                <button id="back-from-settings" class="icon-btn" title="Back to Menu">⬅️</button>
+            </div>
+            
+            <div class="settings-tabs">
+                <button class="tab-btn active" data-tab="profile">Profile</button>
+                <button class="tab-btn" data-tab="theme">Theme</button>
+                <button class="tab-btn" data-tab="sound">Sound</button>
+                <button class="tab-btn" data-tab="data">Data</button>
+            </div>
+            
+            <div class="settings-content">
+                <!-- Profile Settings Tab -->
+                <div id="profile-tab" class="tab-content active">
+                    <h3>Profile Settings</h3>
+                    <div class="setting-group">
+                        <label for="player-name-input">Your Name</label>
+                        <input type="text" id="player-name-input" maxlength="15" placeholder="Enter your name">
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label>Choose Avatar</label>
+                        <div class="avatar-options">
+                            <div class="avatar-option" data-avatar="👤">👤</div>
+                            <div class="avatar-option" data-avatar="🤖">🤖</div>
+                            <div class="avatar-option" data-avatar="👽">👽</div>
+                            <div class="avatar-option" data-avatar="🦊">🦊</div>
+                            <div class="avatar-option" data-avatar="🐱">🐱</div>
+                            <div class="avatar-option" data-avatar="🐺">🐺</div>
+                        </div>
+                    </div>
+                    
+                    <button id="save-profile-btn" class="btn">Save Profile</button>
+                </div>
+                
+                <!-- Theme Settings Tab -->
+                <div id="theme-tab" class="tab-content">
+                    <h3>Theme Settings</h3>
+                    <div class="setting-group">
+                        <label>Choose Theme</label>
+                        <div class="theme-selector">
+                            <div class="theme-option theme-day-option" data-theme="day" title="Day Theme"></div>
+                            <div class="theme-option theme-night-option" data-theme="night" title="Night Theme"></div>
+                            <div class="theme-option theme-retro-option" data-theme="retro" title="Retro Theme"></div>
+                            <div class="theme-option theme-neon-option" data-theme="neon" title="Neon Theme"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="theme-preview">
+                        <h4>Theme Preview</h4>
+                        <div class="preview-content">
+                            <div class="preview-text">Sample Text</div>
+                            <button class="btn preview-btn">Button</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sound Settings Tab -->
+                <div id="sound-tab" class="tab-content">
+                    <h3>Sound Settings</h3>
+                    <div class="setting-group">
+                        <label for="sound-toggle-setting">Sound Effects</label>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="sound-toggle-setting" checked>
+                            <span class="toggle-slider"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label for="sound-volume">Volume</label>
+                        <input type="range" id="sound-volume" min="0" max="100" value="50">
+                    </div>
+                    
+                    <button id="test-sound-btn" class="btn">Test Sound</button>
+                </div>
+                
+                <!-- Data Settings Tab -->
+                <div id="data-tab" class="tab-content">
+                    <h3>Data Management</h3>
+                    <div class="setting-group">
+                        <p>Manage your game data and progress.</p>
+                    </div>
+                    
+                    <button id="reset-stats-settings-btn" class="btn">Reset Statistics</button>
+                    <button id="reset-achievements-btn" class="btn">Reset Achievements</button>
+                    <button id="delete-all-data-btn" class="btn danger-btn">Delete All Data</button>
+                </div>
             </div>
         </section>
     </div>

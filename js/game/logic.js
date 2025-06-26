@@ -1,37 +1,32 @@
 /**
  * Game Logic module for Rock Paper Battle
- * Contains core game rules and utilities
+ * Handles core game mechanics
  */
 
-// Valid moves in the game
-export const MOVES = ['rock', 'paper', 'scissors'];
+// Possible moves
+const MOVES = ['rock', 'paper', 'scissors', 'fire'];
 
-// Move emoji representations
-export const MOVE_EMOJIS = {
+// Move emojis for display
+const MOVE_EMOJIS = {
     rock: '✊',
     paper: '✋',
-    scissors: '✌️'
+    scissors: '✌️',
+    fire: '🔥'
 };
 
 /**
- * Determines the result of a round based on player and AI moves
- * @param {string} playerMove - Player's move ('rock', 'paper', or 'scissors')
- * @param {string} aiMove - AI's move ('rock', 'paper', or 'scissors')
- * @returns {string} - Result: 'win', 'lose', or 'draw'
+ * Determines the winner of a round
+ * @param {string} playerMove - The player's move
+ * @param {string} aiMove - The AI's move
+ * @returns {string} - 'win', 'lose', or 'draw'
  */
 export function determineWinner(playerMove, aiMove) {
-    // Validate moves
-    if (!MOVES.includes(playerMove) || !MOVES.includes(aiMove)) {
-        console.error('Invalid move provided:', playerMove, aiMove);
-        return null;
-    }
-    
-    // Draw case
+    // Same move = draw
     if (playerMove === aiMove) {
         return 'draw';
     }
     
-    // Win cases for player
+    // Standard Rock-Paper-Scissors rules
     if (
         (playerMove === 'rock' && aiMove === 'scissors') ||
         (playerMove === 'paper' && aiMove === 'rock') ||
@@ -40,54 +35,82 @@ export function determineWinner(playerMove, aiMove) {
         return 'win';
     }
     
-    // All other cases are losses
+    // Fire move rules
+    if (playerMove === 'fire') {
+        // Fire beats scissors and paper
+        if (aiMove === 'scissors' || aiMove === 'paper') {
+            return 'win';
+        }
+        // Rock beats fire
+        return 'lose';
+    }
+    
+    if (aiMove === 'fire') {
+        // Fire beats scissors and paper
+        if (playerMove === 'scissors' || playerMove === 'paper') {
+            return 'lose';
+        }
+        // Rock beats fire
+        return 'win';
+    }
+    
+    // Player loses in all other cases
     return 'lose';
 }
 
 /**
  * Generates a random move for the AI
- * @returns {string} - Random move ('rock', 'paper', or 'scissors')
+ * @param {boolean} includeFireMove - Whether to include the fire move
+ * @returns {string} - The AI's move
  */
-export function getRandomMove() {
-    const randomIndex = Math.floor(Math.random() * MOVES.length);
-    return MOVES[randomIndex];
+export function getRandomMove(includeFireMove = false) {
+    const availableMoves = includeFireMove ? MOVES : MOVES.slice(0, 3);
+    const randomIndex = Math.floor(Math.random() * availableMoves.length);
+    return availableMoves[randomIndex];
 }
 
 /**
- * Gets the emoji representation of a move
- * @param {string} move - The move ('rock', 'paper', or 'scissors')
- * @returns {string} - Emoji representing the move
+ * Gets the emoji for a move
+ * @param {string} move - The move
+ * @returns {string} - The emoji for the move
  */
 export function getMoveEmoji(move) {
     return MOVE_EMOJIS[move] || '❓';
 }
 
 /**
- * Gets a descriptive message for the game result
+ * Generates a result message based on the round outcome
  * @param {string} result - The result ('win', 'lose', or 'draw')
- * @param {string} playerMove - Player's move
- * @param {string} aiMove - AI's move
- * @returns {string} - Descriptive message about the result
+ * @param {string} playerMove - The player's move
+ * @param {string} aiMove - The AI's move
+ * @returns {string} - The result message
  */
 export function getResultMessage(result, playerMove, aiMove) {
     const playerEmoji = getMoveEmoji(playerMove);
     const aiEmoji = getMoveEmoji(aiMove);
     
-    switch (result) {
-        case 'win':
-            return `You win! ${playerEmoji} beats ${aiEmoji}`;
-        case 'lose':
-            return `You lose! ${aiEmoji} beats ${playerEmoji}`;
-        case 'draw':
-            return `It's a draw! Both chose ${playerEmoji}`;
-        default:
-            return 'Invalid result';
+    if (result === 'win') {
+        if (playerMove === 'fire' && (aiMove === 'scissors' || aiMove === 'paper')) {
+            return `${playerEmoji} Fire burns ${aiEmoji}! You win!`;
+        }
+        if (playerMove === 'rock' && aiMove === 'fire') {
+            return `${playerEmoji} Rock smothers ${aiEmoji}! You win!`;
+        }
+        return `${playerEmoji} beats ${aiEmoji}! You win!`;
+    } else if (result === 'lose') {
+        if (aiMove === 'fire' && (playerMove === 'scissors' || playerMove === 'paper')) {
+            return `${aiEmoji} Fire burns ${playerEmoji}! You lose!`;
+        }
+        if (aiMove === 'rock' && playerMove === 'fire') {
+            return `${aiEmoji} Rock smothers ${playerEmoji}! You lose!`;
+        }
+        return `${aiEmoji} beats ${playerEmoji}! You lose!`;
+    } else {
+        return `${playerEmoji} ties with ${aiEmoji}! It's a draw!`;
     }
 }
 
 export default {
-    MOVES,
-    MOVE_EMOJIS,
     determineWinner,
     getRandomMove,
     getMoveEmoji,

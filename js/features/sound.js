@@ -1,128 +1,163 @@
 /**
  * Sound module for Rock Paper Battle
- * Handles sound effects and sound toggling
+ * Handles sound effects and audio settings
  */
 
 import { getData, setData } from '../settings/storage.js';
 
-// Sound file paths
-const SOUNDS = {
-    click: 'assets/audio/click.mp3',
-    win: 'assets/audio/win.mp3',
-    lose: 'assets/audio/lose.mp3',
-    draw: 'assets/audio/draw.mp3',
-    gameStart: 'assets/audio/game-start.mp3',
-    gameWin: 'assets/audio/game-win.mp3',
-    gameLose: 'assets/audio/game-lose.mp3',
-    gameDraw: 'assets/audio/game-draw.mp3'
-};
+// Sound state
+let soundEnabled = true;
+let volume = 0.5;
 
 // Audio elements cache
-const audioElements = {};
+const audioCache = {};
 
 /**
- * Initializes the sound system
+ * Initialize the sound system
  */
 export function init() {
-    // Preload audio files
-    preloadSounds();
-    
-    // Set up sound toggle button
-    setupSoundToggle();
-}
-
-/**
- * Preloads sound files for faster playback
- */
-function preloadSounds() {
-    for (const [key, path] of Object.entries(SOUNDS)) {
-        const audio = new Audio();
-        audio.src = path;
-        audio.preload = 'auto';
-        audioElements[key] = audio;
+    // Load sound settings from localStorage
+    const savedSoundEnabled = getData('soundEnabled');
+    if (savedSoundEnabled !== null) {
+        soundEnabled = savedSoundEnabled;
     }
-}
-
-/**
- * Sets up the sound toggle button
- */
-function setupSoundToggle() {
-    const soundToggleBtn = document.getElementById('sound-toggle');
-    if (!soundToggleBtn) return;
     
-    // Set initial state
+    const savedVolume = getData('soundVolume');
+    if (savedVolume !== null) {
+        volume = savedVolume;
+    }
+    
+    // Update the sound toggle button
     updateSoundToggleButton();
     
-    // Add click event
-    soundToggleBtn.addEventListener('click', toggleSound);
+    // Preload common sounds
+    preloadSound('click');
+    preloadSound('win');
+    preloadSound('lose');
+    preloadSound('draw');
 }
 
 /**
- * Updates the sound toggle button appearance based on current state
+ * Update the sound toggle button based on current state
  */
-export function updateSoundToggleButton() {
-    const soundToggleBtn = document.getElementById('sound-toggle');
-    if (!soundToggleBtn) return;
-    
-    const soundEnabled = getData('soundEnabled');
-    
-    // Update button text/icon
-    if (soundEnabled) {
-        soundToggleBtn.innerHTML = '🔊';
-        soundToggleBtn.setAttribute('title', 'Sound On');
-    } else {
-        soundToggleBtn.innerHTML = '🔇';
-        soundToggleBtn.setAttribute('title', 'Sound Off');
+function updateSoundToggleButton() {
+    const soundToggle = document.getElementById('sound-toggle');
+    if (soundToggle) {
+        soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+        soundToggle.title = soundEnabled ? 'Sound On' : 'Sound Off';
     }
 }
 
 /**
- * Toggles sound on/off
+ * Toggle sound on/off
  */
 export function toggleSound() {
-    const currentState = getData('soundEnabled');
-    const newState = !currentState;
+    soundEnabled = !soundEnabled;
     
-    // Update localStorage
-    setData('soundEnabled', newState);
+    // Save to localStorage
+    setData('soundEnabled', soundEnabled);
     
-    // Update button
+    // Update UI
     updateSoundToggleButton();
     
-    // Play feedback sound if turning on
-    if (newState) {
+    // Play a sound if enabled
+    if (soundEnabled) {
         play('click');
     }
 }
 
 /**
- * Plays a sound effect
+ * Set whether sound is enabled
+ * @param {boolean} enabled - Whether sound should be enabled
+ */
+export function setSoundEnabled(enabled) {
+    soundEnabled = enabled;
+    
+    // Save to localStorage
+    setData('soundEnabled', soundEnabled);
+    
+    // Update UI
+    updateSoundToggleButton();
+}
+
+/**
+ * Check if sound is enabled
+ * @returns {boolean} Whether sound is enabled
+ */
+export function isSoundEnabled() {
+    return soundEnabled;
+}
+
+/**
+ * Set the volume level
+ * @param {number} level - Volume level between 0 and 1
+ */
+export function setVolume(level) {
+    // Ensure volume is between 0 and 1
+    volume = Math.max(0, Math.min(1, level));
+    
+    // Save to localStorage
+    setData('soundVolume', volume);
+}
+
+/**
+ * Get the current volume level
+ * @returns {number} The current volume level between 0 and 1
+ */
+export function getVolume() {
+    return volume;
+}
+
+/**
+ * Preload a sound for faster playback
+ * @param {string} soundName - The name of the sound to preload
+ */
+function preloadSound(soundName) {
+    if (audioCache[soundName]) return;
+    
+    const audio = new Audio(`assets/audio/${soundName}.mp3`);
+    audio.load();
+    audioCache[soundName] = audio;
+}
+
+/**
+ * Play a sound effect
  * @param {string} soundName - The name of the sound to play
  */
 export function play(soundName) {
-    // Check if sound is enabled
-    const soundEnabled = getData('soundEnabled');
     if (!soundEnabled) return;
     
-    // Check if sound exists
-    if (!audioElements[soundName]) {
-        console.error(`Sound "${soundName}" not found`);
-        return;
-    }
-    
     try {
-        // Clone the audio to allow overlapping sounds
-        const soundToPlay = audioElements[soundName].cloneNode();
-        soundToPlay.volume = 0.5; // Set volume to 50%
-        soundToPlay.play();
+        let audio = audioCache[soundName];
+        
+        // If not cached, create a new audio element
+        if (!audio) {
+            audio = new Audio(`assets/audio/${soundName}.mp3`);
+            audioCache[soundName] = audio;
+        }
+        
+        // Reset the audio to the beginning if it's already playing
+        audio.pause();
+        audio.currentTime = 0;
+        
+        // Set the volume
+        audio.volume = volume;
+        
+        // Play the sound
+        audio.play().catch(error => {
+            console.warn(`Failed to play sound "${soundName}":`, error);
+        });
     } catch (error) {
-        console.error('Error playing sound:', error);
+        console.error(`Error playing sound "${soundName}":`, error);
     }
 }
 
 export default {
     init,
-    play,
     toggleSound,
-    updateSoundToggleButton
+    setSoundEnabled,
+    isSoundEnabled,
+    setVolume,
+    getVolume,
+    play
 }; 

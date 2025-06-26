@@ -96,6 +96,30 @@
     .achievement-notification h3 {
         font-size: 1rem;
     }
+    
+    /* Settings screen responsive styles */
+    .settings-tabs {
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        font-size: 0.9rem;
+        padding: 5px 10px;
+    }
+    
+    .avatar-options {
+        justify-content: center;
+    }
+    
+    .avatar-option {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+    
+    .theme-selector {
+        flex-wrap: wrap;
+    }
 }
 
 /* Tablets (576px - 768px) */
@@ -115,6 +139,11 @@
     
     .achievements-container {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+    
+    /* Settings screen responsive styles */
+    .avatar-options {
+        justify-content: center;
     }
 }
 
@@ -151,5 +180,16 @@
     
     .stats-details {
         flex-direction: row;
+    }
+    
+    /* Settings screen in landscape */
+    .settings-content {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    .avatar-options {
+        flex-wrap: wrap;
+        justify-content: center;
     }
 } 
