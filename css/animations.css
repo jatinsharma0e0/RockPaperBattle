@@ -1,5 +1,29 @@
 /* Animations for Rock Paper Battle */
 
+/* CSS media query for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Reduced motion class for manual toggle */
+.reduced-motion * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+}
+
+.reduced-motion .fade-in,
+.reduced-motion .fade-out,
+.reduced-motion .btn-press {
+    animation: none !important;
+}
+
 /* Placeholder for shake animation - will be implemented later */
 @keyframes shake {
     0% { transform: translateX(0); }
@@ -63,6 +87,13 @@
     animation: fireReveal 1s ease-out forwards;
 }
 
+/* Reduced motion version of fire reveal */
+.reduced-motion .fire-reveal {
+    animation: none !important;
+    opacity: 1;
+    transform: scale(1) rotate(0);
+}
+
 /* Fire move glow pulse */
 @keyframes fireGlow {
     0% { box-shadow: 0 0 5px var(--special-move-color); }
@@ -74,6 +105,11 @@
     animation: fireGlow 2s infinite;
 }
 
+.reduced-motion .fire-glow {
+    animation: none !important;
+    box-shadow: 0 0 10px var(--special-move-color);
+}
+
 /* Avatar selection highlight */
 @keyframes avatarHighlight {
     0% { transform: scale(1); border-color: transparent; }
@@ -83,6 +119,11 @@
 
 .avatar-highlight {
     animation: avatarHighlight 0.5s ease-out forwards;
+}
+
+.reduced-motion .avatar-highlight {
+    animation: none !important;
+    border-color: var(--primary-color);
 }
 
 /* Settings panel slide */
@@ -102,6 +143,12 @@
 
 .slide-out {
     animation: slideOut 0.3s ease-in forwards;
+}
+
+.reduced-motion .slide-in,
+.reduced-motion .slide-out {
+    animation: none !important;
+    transform: translateX(0);
 }
 
 /* Idle Animations */
@@ -155,6 +202,14 @@
     animation: idleBackground 5s ease-in-out infinite;
 }
 
+/* Disable idle animations for reduced motion */
+.reduced-motion .idle-pulse,
+.reduced-motion .idle-glow,
+.reduced-motion .idle-background {
+    animation: none !important;
+    box-shadow: none;
+}
+
 /* AI personality animations */
 @keyframes aiPulse {
     0% { transform: scale(1); opacity: 1; }
@@ -187,6 +242,13 @@
     animation: aiPredictive 2.5s ease-in-out infinite;
 }
 
+/* Disable AI animations for reduced motion */
+.reduced-motion .ai-random-indicator,
+.reduced-motion .ai-cheeky-indicator,
+.reduced-motion .ai-predictive-indicator {
+    animation: none !important;
+}
+
 /* Win/Loss/Draw Animations */
 
 /* Confetti animation for wins */
@@ -212,9 +274,17 @@
     pointer-events: none;
 }
 
+.reduced-motion .confetti-piece {
+    display: none !important;
+}
+
 /* Shake animation for losses */
 .shake-effect {
     animation: shake 0.5s ease-in-out;
+}
+
+.reduced-motion .shake-effect {
+    animation: none !important;
 }
 
 /* Glow animation for draws */
@@ -226,6 +296,11 @@
 
 .draw-effect {
     animation: drawGlow 1s ease-in-out;
+}
+
+.reduced-motion .draw-effect {
+    animation: none !important;
+    box-shadow: 0 0 10px var(--draw-color);
 }
 
 /* Bonus Round Animations */
@@ -241,6 +316,11 @@
     animation: bonusPulse 2s infinite;
 }
 
+.reduced-motion .bonus-round {
+    animation: none !important;
+    border: 2px solid var(--accent-color) !important;
+}
+
 /* Double points glow */
 @keyframes doublePointsGlow {
     0% { box-shadow: 0 0 0px 0px gold, inset 0 0 0px 0px gold; }
@@ -250,6 +330,11 @@
 
 .double-points {
     animation: doublePointsGlow 1.5s infinite;
+}
+
+.reduced-motion .double-points {
+    animation: none !important;
+    border: 2px solid gold !important;
 }
 
 /* Reverse rules spin */
@@ -268,6 +353,10 @@
     animation: reverseRulesSpin 5s infinite;
 }
 
+.reduced-motion .reverse-rules {
+    animation: none !important;
+}
+
 /* Chaos mode wobble */
 @keyframes chaosWobble {
     0% { transform: skewX(0deg); }
@@ -279,6 +368,10 @@
 
 .chaos-mode {
     animation: chaosWobble 0.5s infinite;
+}
+
+.reduced-motion .chaos-mode {
+    animation: none !important;
 }
 
 /* Chaos mode button effect */
@@ -302,6 +395,11 @@
     0% { left: -100%; }
     50% { left: 100%; }
     100% { left: 100%; }
+}
+
+.reduced-motion .chaos-mode-btn::after {
+    animation: none !important;
+    display: none;
 }
 
 /* Bonus notification animation */
@@ -346,6 +444,11 @@
     animation: bonusNotificationIn 0.5s ease-out forwards, bonusNotificationOut 0.5s ease-in forwards 3.5s;
 }
 
+.reduced-motion .bonus-notification.show {
+    animation: none !important;
+    opacity: 1;
+}
+
 /* Speed Mode Animations */
 
 /* Timer bar animation */
@@ -357,4 +460,24 @@
 
 .speed-timer.warning {
     animation: timerWarningPulse 0.5s infinite;
+}
+
+.reduced-motion .speed-timer.warning {
+    animation: none !important;
+    background-color: var(--lose-color);
+}
+
+/* Loading animation */
+@keyframes loadingPulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.7; }
+}
+
+.loading-logo {
+    animation: loadingPulse 1.5s infinite ease-in-out;
+}
+
+.reduced-motion .loading-logo {
+    animation: none !important;
 } 

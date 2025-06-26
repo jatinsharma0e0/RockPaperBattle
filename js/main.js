@@ -17,7 +17,11 @@ import * as idle from './features/idle.js';
 import * as speedMode from './features/speedMode.js';
 import * as bonusRound from './features/bonusRound.js';
 import * as settings from './settings/settings.js';
+import * as accessibility from './features/accessibility.js';
 import { getData, setData } from './settings/storage.js';
+import * as preloader from './utils/preloader.js';
+import * as dataManager from './utils/dataManager.js';
+import * as performance from './utils/performance.js';
 
 // Current game mode
 let currentGameMode = null;
@@ -26,6 +30,52 @@ let currentGameMode = null;
  * Initializes the game
  */
 function init() {
+    // Start the preloader
+    startPreloader();
+}
+
+/**
+ * Start the asset preloader
+ */
+function startPreloader() {
+    const loadingBar = document.getElementById('loading-bar');
+    const loadingText = document.getElementById('loading-text');
+    
+    // Start preloading assets
+    preloader.preloadAssets(
+        // Progress callback
+        (progress) => {
+            if (loadingBar) {
+                loadingBar.style.width = `${progress}%`;
+            }
+            if (loadingText) {
+                loadingText.textContent = `Loading game assets: ${progress}%`;
+            }
+        },
+        // Completion callback
+        () => {
+            if (loadingText) {
+                loadingText.textContent = 'Ready to play!';
+            }
+            // Small delay before hiding the loading screen
+            setTimeout(initializeGame, 500);
+        }
+    );
+}
+
+/**
+ * Initialize the game after assets are loaded
+ */
+function initializeGame() {
+    // Hide loading screen
+    const loadingScreen = document.getElementById('loading-screen');
+    if (loadingScreen) {
+        loadingScreen.classList.add('fade-out');
+        setTimeout(() => {
+            loadingScreen.style.display = 'none';
+        }, 500);
+    }
+    
     // Show the landing page by default
     ui.showSection('landing-page');
     
@@ -41,6 +91,10 @@ function init() {
     speedMode.init();
     bonusRound.init();
     settings.init();
+    accessibility.init();
+    
+    // Initialize performance monitor (disabled by default)
+    performance.init(false);
     
     // Set up event handlers
     setupEventHandlers();
@@ -53,6 +107,9 @@ function init() {
     
     // Set up visual effects
     setupVisualEffects();
+    
+    // Add keyboard controls
+    setupKeyboardNavigation();
 }
 
 /**
@@ -207,10 +264,100 @@ function setupEventHandlers() {
         });
     }
     
+    // FPS Monitor toggle
+    const fpsToggle = document.getElementById('fps-toggle');
+    if (fpsToggle) {
+        fpsToggle.addEventListener('change', () => {
+            performance.toggle();
+            sound.play('click');
+        });
+    }
+    
+    // Data export button
+    const exportDataBtn = document.getElementById('export-data-btn');
+    if (exportDataBtn) {
+        exportDataBtn.addEventListener('click', () => {
+            dataManager.exportGameData();
+            sound.play('click');
+        });
+    }
+    
+    // Data import input
+    const importDataFile = document.getElementById('import-data-file');
+    if (importDataFile) {
+        importDataFile.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                dataManager.importGameData(file)
+                    .then((result) => {
+                        alert(`Import successful! Imported ${result.stats.totalItems} items including ${result.stats.achievements} achievements.`);
+                        // Reload the page to apply changes
+                        window.location.reload();
+                    })
+                    .catch((error) => {
+                        alert(`Import failed: ${error.message}`);
+                    });
+            }
+        });
+    }
+    
     // Add event listeners to reset idle timer
     document.addEventListener('click', idle.resetIdleTimer);
     document.addEventListener('mousemove', idle.resetIdleTimer);
     document.addEventListener('keydown', idle.resetIdleTimer);
+}
+
+/**
+ * Set up keyboard navigation for accessibility
+ */
+function setupKeyboardNavigation() {
+    // Handle keyboard navigation for move buttons
+    document.addEventListener('keydown', (event) => {
+        // Only handle keyboard navigation when game screen is active
+        const gameScreen = document.getElementById('game-screen');
+        if (gameScreen && !gameScreen.classList.contains('hidden')) {
+            // Enter or Space to select focused move
+            if ((event.key === 'Enter' || event.key === ' ') && document.activeElement.classList.contains('move-btn')) {
+                event.preventDefault();
+                const move = document.activeElement.getAttribute('data-move');
+                if (move) {
+                    // Stop speed timer if active
+                    speedMode.stopTimer();
+                    
+                    // Make the move
+                    if (currentGameMode === 'endless') {
+                        endless.handlePlayerMove(move);
+                    } else if (currentGameMode === 'bestOf5') {
+                        bestOf5.handlePlayerMove(move);
+                    }
+                    
+                    // Reset idle timer on move
+                    idle.resetIdleTimer();
+                }
+            }
+        }
+        
+        // Handle tab navigation for avatar and theme selectors
+        if (event.key === 'Enter' || event.key === ' ') {
+            if (document.activeElement.classList.contains('avatar-option')) {
+                event.preventDefault();
+                const avatarValue = document.activeElement.getAttribute('data-avatar');
+                if (avatarValue) {
+                    // Select this avatar
+                    avatar.selectAvatar(avatarValue);
+                }
+            }
+            
+            if (document.activeElement.classList.contains('theme-option')) {
+                event.preventDefault();
+                const themeValue = document.activeElement.getAttribute('data-theme');
+                if (themeValue) {
+                    // Select this theme
+                    theme.setTheme(themeValue);
+                }
+            }
+        }
+    });
 }
 
 /**
@@ -219,6 +366,9 @@ function setupEventHandlers() {
 function setupVisualEffects() {
     // Create a global function to show win animation with confetti
     window.showWinAnimation = function() {
+        // Skip if reduced motion is enabled
+        if (accessibility.isReducedMotion()) return;
+        
         // Create confetti pieces
         const confettiContainer = document.querySelector('.confetti-container');
         if (!confettiContainer) return;
@@ -253,7 +403,7 @@ function setupVisualEffects() {
     
     // Function to show loss animation (shake)
     window.showLossAnimation = function(element) {
-        if (!element) return;
+        if (!element || accessibility.isReducedMotion()) return;
         
         // Add shake effect class
         element.classList.add('shake-effect');
@@ -266,7 +416,7 @@ function setupVisualEffects() {
     
     // Function to show draw animation (glow)
     window.showDrawAnimation = function(element) {
-        if (!element) return;
+        if (!element || accessibility.isReducedMotion()) return;
         
         // Add draw effect class
         element.classList.add('draw-effect');
@@ -295,6 +445,10 @@ function renderAchievements() {
     allAchievements.forEach(achievement => {
         const achievementItem = document.createElement('div');
         achievementItem.className = `achievement-item ${achievement.unlocked ? 'unlocked' : 'locked'}`;
+        achievementItem.setAttribute('role', 'listitem');
+        
+        const unlockStatus = achievement.unlocked ? 'Unlocked' : 'Locked';
+        achievementItem.setAttribute('aria-label', `${achievement.name} - ${unlockStatus} - ${achievement.description}`);
         
         achievementItem.innerHTML = `
             <div class="achievement-icon">${achievement.icon}</div>

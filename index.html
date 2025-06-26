@@ -3,232 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rock Paper Battle - A modern take on the classic game with bonus rounds, AI opponents, and special moves.">
     <title>Rock Paper Battle</title>
+    <!-- Preload critical assets -->
+    <link rel="preload" href="assets/audio/click.mp3" as="audio">
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="js/main.js" as="script">
+    <!-- Favicon -->
+    <link rel="icon" href="assets/images/favicon.png" type="image/png">
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/themes.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/high-contrast.css">
 </head>
 <body class="theme-day">
-    <div class="container">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-container">
+            <div class="loading-logo">🎮</div>
+            <h1>Rock Paper Battle</h1>
+            <div class="loading-progress">
+                <div id="loading-bar" class="loading-bar"></div>
+            </div>
+            <div id="loading-text" class="loading-text">Loading game assets...</div>
+        </div>
+    </div>
+
+    <div class="container" aria-live="polite">
         <!-- Confetti Container for Win Animation -->
-        <div class="confetti-container"></div>
+        <div class="confetti-container" aria-hidden="true"></div>
         
         <!-- Sound Toggle Button (Global) -->
-        <button id="sound-toggle" class="icon-btn sound-toggle" title="Toggle Sound">🔊</button>
+        <button id="sound-toggle" class="icon-btn sound-toggle" title="Toggle Sound" aria-label="Toggle Sound">🔊</button>
         
         <!-- Landing Page Section -->
-        <section id="landing-page">
-            <h1>Rock Paper Battle</h1>
+        <section id="landing-page" aria-labelledby="game-title">
+            <h1 id="game-title">Rock Paper Battle</h1>
             <div class="player-profile">
-                <div id="player-avatar" class="avatar">👤</div>
+                <div id="player-avatar" class="avatar" aria-label="Player Avatar">👤</div>
                 <div id="player-name">Player</div>
             </div>
-            <div class="game-modes">
-                <button id="endless-mode-btn" class="btn">Endless Mode</button>
-                <button id="best-of-5-btn" class="btn">Best of 5</button>
+            <div class="game-modes" role="group" aria-label="Game Modes">
+                <button id="endless-mode-btn" class="btn" aria-label="Start Endless Mode">Endless Mode</button>
+                <button id="best-of-5-btn" class="btn" aria-label="Start Best of 5 Mode">Best of 5</button>
                 <!-- Other game modes will be added later -->
             </div>
-            <div class="other-buttons">
-                <button id="stats-btn" class="btn secondary-btn">Game Stats</button>
-                <button id="settings-btn" class="btn secondary-btn">Settings</button>
+            <div class="other-buttons" role="group" aria-label="Other Options">
+                <button id="stats-btn" class="btn secondary-btn" aria-label="View Game Statistics">Game Stats</button>
+                <button id="settings-btn" class="btn secondary-btn" aria-label="Open Settings">Settings</button>
             </div>
         </section>
 
         <!-- Game Screen Section -->
-        <section id="game-screen" class="hidden">
+        <section id="game-screen" class="hidden" aria-labelledby="game-mode-title">
             <div class="game-header">
-                <h2>Endless Mode</h2>
+                <h2 id="game-mode-title">Endless Mode</h2>
                 <div class="game-controls">
-                    <button id="back-to-menu" class="icon-btn" title="Back to Menu">⬅️</button>
-                    <button id="reset-scores" class="icon-btn" title="Reset Scores">🔄</button>
+                    <button id="back-to-menu" class="icon-btn" title="Back to Menu" aria-label="Back to Menu">⬅️</button>
+                    <button id="reset-scores" class="icon-btn" title="Reset Scores" aria-label="Reset Scores">🔄</button>
                 </div>
             </div>
             
             <!-- Game Info Banner -->
-            <div id="game-info-banner" class="game-info-banner hidden">
-                <span class="game-info-banner-icon">⚡</span>
+            <div id="game-info-banner" class="game-info-banner hidden" aria-live="polite">
+                <span class="game-info-banner-icon" aria-hidden="true">⚡</span>
                 <span id="game-info-text">Speed Mode Active</span>
             </div>
             
             <div class="score-container">
                 <div class="score player-score">
                     <div class="player-info">
-                        <div id="game-player-avatar" class="avatar-small">👤</div>
+                        <div id="game-player-avatar" class="avatar-small" aria-hidden="true">👤</div>
                         <span id="game-player-name">Player</span>:
                     </div>
-                    <span id="player-score">0</span>
+                    <span id="player-score" aria-live="polite">0</span>
                 </div>
                 <div class="score ai-score">
                     <div class="ai-info">
-                        <div id="ai-mode-indicator" class="ai-mode-indicator">🤖</div>
+                        <div id="ai-mode-indicator" class="ai-mode-indicator" aria-hidden="true">🤖</div>
                         <span>AI</span>:
                     </div>
-                    <span id="ai-score">0</span>
+                    <span id="ai-score" aria-live="polite">0</span>
                 </div>
             </div>
 
             <div class="game-area">
                 <div class="player-choice">
-                    <h3>Your Choice</h3>
-                    <div class="move-buttons">
-                        <button class="move-btn" data-move="rock">✊</button>
-                        <button class="move-btn" data-move="paper">✋</button>
-                        <button class="move-btn" data-move="scissors">✌️</button>
-                        <button id="fire-move-btn" class="move-btn fire-move hidden" data-move="fire">🔥</button>
+                    <h3 id="player-move-heading">Your Choice</h3>
+                    <div class="move-buttons" role="group" aria-labelledby="player-move-heading">
+                        <button class="move-btn" data-move="rock" tabindex="0" aria-label="Choose Rock">✊</button>
+                        <button class="move-btn" data-move="paper" tabindex="0" aria-label="Choose Paper">✋</button>
+                        <button class="move-btn" data-move="scissors" tabindex="0" aria-label="Choose Scissors">✌️</button>
+                        <button id="fire-move-btn" class="move-btn fire-move hidden" data-move="fire" tabindex="0" aria-label="Choose Fire">🔥</button>
                     </div>
-                    <div id="player-move-display" class="move-display"></div>
+                    <div id="player-move-display" class="move-display" aria-live="polite"></div>
                 </div>
                 
                 <div class="ai-choice">
                     <h3>AI Choice</h3>
-                    <div id="ai-move-display" class="move-display"></div>
+                    <div id="ai-move-display" class="move-display" aria-live="polite"></div>
                 </div>
             </div>
         </section>
 
         <!-- Results Screen Section -->
-        <section id="results-screen" class="hidden">
+        <section id="results-screen" class="hidden" aria-labelledby="result-title">
             <h2 id="result-title">Result</h2>
-            <div id="result-message" class="result-message"></div>
+            <div id="result-message" class="result-message" aria-live="polite"></div>
             <div class="result-details">
-                <p>Player: <span id="player-move"></span></p>
-                <p>AI: <span id="ai-move"></span></p>
+                <p>Player: <span id="player-move" aria-live="polite"></span></p>
+                <p>AI: <span id="ai-move" aria-live="polite"></span></p>
             </div>
-            <div class="result-actions">
-                <button id="play-again-btn" class="btn">Play Again</button>
-                <button id="back-to-menu-btn" class="btn">Back to Menu</button>
+            <div class="result-actions" role="group" aria-label="Result Options">
+                <button id="play-again-btn" class="btn" aria-label="Play Again">Play Again</button>
+                <button id="back-to-menu-btn" class="btn" aria-label="Return to Main Menu">Back to Menu</button>
             </div>
         </section>
 
         <!-- Stats Screen Section -->
-        <section id="stats-screen" class="hidden">
+        <section id="stats-screen" class="hidden" aria-labelledby="stats-title">
             <div class="section-header">
-                <h2>Game Statistics</h2>
-                <button id="back-from-stats" class="icon-btn" title="Back to Menu">⬅️</button>
+                <h2 id="stats-title">Game Statistics</h2>
+                <button id="back-from-stats" class="icon-btn" title="Back to Menu" aria-label="Back to Menu">⬅️</button>
             </div>
             
             <div class="stats-container">
                 <div class="stats-overview">
                     <div class="stat-box">
                         <h3>Total Games</h3>
-                        <p id="stats-total-games">0</p>
+                        <p id="stats-total-games" aria-live="polite">0</p>
                     </div>
                     <div class="stat-box">
                         <h3>Win Rate</h3>
-                        <p id="stats-win-rate">0%</p>
+                        <p id="stats-win-rate" aria-live="polite">0%</p>
                     </div>
                 </div>
                 
                 <div class="stat-row">
                     <div class="stat-label">Wins</div>
                     <div class="stat-bar-container">
-                        <div id="stats-wins-bar" class="stat-bar win-bar"></div>
+                        <div id="stats-wins-bar" class="stat-bar win-bar" aria-hidden="true"></div>
                     </div>
-                    <div class="stat-value" id="stats-wins">0</div>
+                    <div class="stat-value" id="stats-wins" aria-live="polite">0</div>
                 </div>
                 
                 <div class="stat-row">
                     <div class="stat-label">Losses</div>
                     <div class="stat-bar-container">
-                        <div id="stats-losses-bar" class="stat-bar lose-bar"></div>
+                        <div id="stats-losses-bar" class="stat-bar lose-bar" aria-hidden="true"></div>
                     </div>
-                    <div class="stat-value" id="stats-losses">0</div>
+                    <div class="stat-value" id="stats-losses" aria-live="polite">0</div>
                 </div>
                 
                 <div class="stat-row">
                     <div class="stat-label">Draws</div>
                     <div class="stat-bar-container">
-                        <div id="stats-draws-bar" class="stat-bar draw-bar"></div>
+                        <div id="stats-draws-bar" class="stat-bar draw-bar" aria-hidden="true"></div>
                     </div>
-                    <div class="stat-value" id="stats-draws">0</div>
+                    <div class="stat-value" id="stats-draws" aria-live="polite">0</div>
                 </div>
                 
                 <div class="stats-details">
                     <div class="stat-detail">
                         <h4>Longest Win Streak</h4>
-                        <p id="stats-streak">0</p>
+                        <p id="stats-streak" aria-live="polite">0</p>
                     </div>
                     <div class="stat-detail">
                         <h4>Most Played Mode</h4>
-                        <p id="stats-best-mode">None</p>
+                        <p id="stats-best-mode" aria-live="polite">None</p>
                     </div>
                 </div>
                 
                 <div class="stats-details">
                     <div class="stat-detail">
                         <h4>Best AI Mode</h4>
-                        <p id="stats-best-ai-mode">Random</p>
+                        <p id="stats-best-ai-mode" aria-live="polite">Random</p>
                     </div>
                     <div class="stat-detail">
                         <h4>Bonus Rounds Won</h4>
-                        <p id="stats-bonus-rounds">0</p>
+                        <p id="stats-bonus-rounds" aria-live="polite">0</p>
                     </div>
                 </div>
             </div>
             
             <div class="achievements-section">
                 <h3>Achievements</h3>
-                <div class="achievements-container" id="achievements-list">
+                <div class="achievements-container" id="achievements-list" role="list" aria-label="Achievements List">
                     <!-- Achievements will be populated by JavaScript -->
                 </div>
             </div>
             
             <div class="stats-actions">
-                <button id="reset-stats-btn" class="btn danger-btn">Reset All Stats</button>
+                <button id="reset-stats-btn" class="btn danger-btn" aria-label="Reset All Stats and Achievements">Reset All Stats</button>
             </div>
         </section>
         
         <!-- Settings Screen Section -->
-        <section id="settings-screen" class="hidden">
+        <section id="settings-screen" class="hidden" aria-labelledby="settings-title">
             <div class="section-header">
-                <h2>Settings</h2>
-                <button id="back-from-settings" class="icon-btn" title="Back to Menu">⬅️</button>
+                <h2 id="settings-title">Settings</h2>
+                <button id="back-from-settings" class="icon-btn" title="Back to Menu" aria-label="Back to Menu">⬅️</button>
             </div>
             
-            <div class="settings-tabs">
-                <button class="tab-btn active" data-tab="profile">Profile</button>
-                <button class="tab-btn" data-tab="theme">Theme</button>
-                <button class="tab-btn" data-tab="sound">Sound</button>
-                <button class="tab-btn" data-tab="ai">AI</button>
-                <button class="tab-btn" data-tab="game">Game</button>
-                <button class="tab-btn" data-tab="data">Data</button>
+            <div class="settings-tabs" role="tablist" aria-label="Settings Tabs">
+                <button id="profile-tab-btn" class="tab-btn active" data-tab="profile" role="tab" aria-selected="true" aria-controls="profile-tab">Profile</button>
+                <button id="theme-tab-btn" class="tab-btn" data-tab="theme" role="tab" aria-selected="false" aria-controls="theme-tab">Theme</button>
+                <button id="sound-tab-btn" class="tab-btn" data-tab="sound" role="tab" aria-selected="false" aria-controls="sound-tab">Sound</button>
+                <button id="ai-tab-btn" class="tab-btn" data-tab="ai" role="tab" aria-selected="false" aria-controls="ai-tab">AI</button>
+                <button id="game-tab-btn" class="tab-btn" data-tab="game" role="tab" aria-selected="false" aria-controls="game-tab">Game</button>
+                <button id="access-tab-btn" class="tab-btn" data-tab="access" role="tab" aria-selected="false" aria-controls="access-tab">Accessibility</button>
+                <button id="data-tab-btn" class="tab-btn" data-tab="data" role="tab" aria-selected="false" aria-controls="data-tab">Data</button>
             </div>
             
             <div class="settings-content">
                 <!-- Profile Settings Tab -->
-                <div id="profile-tab" class="tab-content active">
+                <div id="profile-tab" class="tab-content active" role="tabpanel" aria-labelledby="profile-tab-btn">
                     <h3>Profile Settings</h3>
                     <div class="setting-group">
                         <label for="player-name-input">Your Name</label>
-                        <input type="text" id="player-name-input" maxlength="15" placeholder="Enter your name">
+                        <input type="text" id="player-name-input" maxlength="15" placeholder="Enter your name" aria-describedby="name-desc">
+                        <p id="name-desc" class="setting-description">Choose a name to display in the game (max 15 characters)</p>
                     </div>
                     
                     <div class="setting-group">
-                        <label>Choose Avatar</label>
-                        <div class="avatar-options">
-                            <div class="avatar-option" data-avatar="👤">👤</div>
-                            <div class="avatar-option" data-avatar="🤖">🤖</div>
-                            <div class="avatar-option" data-avatar="👽">👽</div>
-                            <div class="avatar-option" data-avatar="🦊">🦊</div>
-                            <div class="avatar-option" data-avatar="🐱">🐱</div>
-                            <div class="avatar-option" data-avatar="🐺">🐺</div>
+                        <label id="avatar-label">Choose Avatar</label>
+                        <div class="avatar-options" role="radiogroup" aria-labelledby="avatar-label">
+                            <div class="avatar-option" data-avatar="👤" role="radio" tabindex="0" aria-label="Default Avatar" aria-checked="false">👤</div>
+                            <div class="avatar-option" data-avatar="🤖" role="radio" tabindex="0" aria-label="Robot Avatar" aria-checked="false">🤖</div>
+                            <div class="avatar-option" data-avatar="👽" role="radio" tabindex="0" aria-label="Alien Avatar" aria-checked="false">👽</div>
+                            <div class="avatar-option" data-avatar="🦊" role="radio" tabindex="0" aria-label="Fox Avatar" aria-checked="false">🦊</div>
+                            <div class="avatar-option" data-avatar="🐱" role="radio" tabindex="0" aria-label="Cat Avatar" aria-checked="false">🐱</div>
+                            <div class="avatar-option" data-avatar="🐺" role="radio" tabindex="0" aria-label="Wolf Avatar" aria-checked="false">🐺</div>
                         </div>
                     </div>
                     
-                    <button id="save-profile-btn" class="btn">Save Profile</button>
+                    <button id="save-profile-btn" class="btn" aria-label="Save Profile Settings">Save Profile</button>
                 </div>
                 
                 <!-- Theme Settings Tab -->
-                <div id="theme-tab" class="tab-content">
+                <div id="theme-tab" class="tab-content" role="tabpanel" aria-labelledby="theme-tab-btn">
                     <h3>Theme Settings</h3>
                     <div class="setting-group">
-                        <label>Choose Theme</label>
-                        <div class="theme-selector">
-                            <div class="theme-option theme-day-option" data-theme="day" title="Day Theme"></div>
-                            <div class="theme-option theme-night-option" data-theme="night" title="Night Theme"></div>
-                            <div class="theme-option theme-retro-option" data-theme="retro" title="Retro Theme"></div>
-                            <div class="theme-option theme-neon-option" data-theme="neon" title="Neon Theme"></div>
+                        <label id="theme-label">Choose Theme</label>
+                        <div class="theme-selector" role="radiogroup" aria-labelledby="theme-label">
+                            <div class="theme-option theme-day-option" data-theme="day" role="radio" tabindex="0" aria-label="Day Theme" aria-checked="false" title="Day Theme"></div>
+                            <div class="theme-option theme-night-option" data-theme="night" role="radio" tabindex="0" aria-label="Night Theme" aria-checked="false" title="Night Theme"></div>
+                            <div class="theme-option theme-retro-option" data-theme="retro" role="radio" tabindex="0" aria-label="Retro Theme" aria-checked="false" title="Retro Theme"></div>
+                            <div class="theme-option theme-neon-option" data-theme="neon" role="radio" tabindex="0" aria-label="Neon Theme" aria-checked="false" title="Neon Theme"></div>
                         </div>
                     </div>
                     
@@ -236,63 +259,68 @@
                         <h4>Theme Preview</h4>
                         <div class="preview-content">
                             <div class="preview-text">Sample Text</div>
-                            <button class="btn preview-btn">Button</button>
+                            <button class="btn preview-btn" aria-hidden="true">Button</button>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Sound Settings Tab -->
-                <div id="sound-tab" class="tab-content">
+                <div id="sound-tab" class="tab-content" role="tabpanel" aria-labelledby="sound-tab-btn">
                     <h3>Sound Settings</h3>
                     <div class="setting-group">
                         <label for="sound-toggle-setting">Sound Effects</label>
                         <div class="toggle-switch">
-                            <input type="checkbox" id="sound-toggle-setting" checked>
+                            <input type="checkbox" id="sound-toggle-setting" checked aria-describedby="sound-toggle-desc">
                             <span class="toggle-slider"></span>
                         </div>
+                        <p id="sound-toggle-desc" class="setting-description">Enable game sound effects</p>
                     </div>
                     
                     <div class="setting-group">
                         <label for="sound-volume">Sound Volume</label>
-                        <input type="range" id="sound-volume" min="0" max="100" value="50">
+                        <input type="range" id="sound-volume" min="0" max="100" value="50" aria-describedby="sound-volume-desc">
+                        <p id="sound-volume-desc" class="setting-description">Adjust sound effect volume</p>
                     </div>
                     
                     <div class="setting-group">
                         <label for="ambient-toggle-setting">Ambient Sound</label>
                         <div class="toggle-switch">
-                            <input type="checkbox" id="ambient-toggle-setting" checked>
+                            <input type="checkbox" id="ambient-toggle-setting" checked aria-describedby="ambient-toggle-desc">
                             <span class="toggle-slider"></span>
                         </div>
+                        <p id="ambient-toggle-desc" class="setting-description">Enable ambient background sounds during idle time</p>
                     </div>
                     
                     <div class="setting-group">
                         <label for="ambient-volume">Ambient Volume</label>
-                        <input type="range" id="ambient-volume" min="0" max="100" value="30">
+                        <input type="range" id="ambient-volume" min="0" max="100" value="30" aria-describedby="ambient-volume-desc">
+                        <p id="ambient-volume-desc" class="setting-description">Adjust ambient sound volume</p>
                     </div>
                     
-                    <button id="test-sound-btn" class="btn">Test Sound</button>
+                    <button id="test-sound-btn" class="btn" aria-label="Test Sound Settings">Test Sound</button>
                 </div>
                 
                 <!-- AI Settings Tab -->
-                <div id="ai-tab" class="tab-content">
+                <div id="ai-tab" class="tab-content" role="tabpanel" aria-labelledby="ai-tab-btn">
                     <h3>AI Settings</h3>
                     <div class="setting-group">
                         <label for="ai-mode-select">AI Personality</label>
-                        <select id="ai-mode-select" class="select-dropdown">
+                        <select id="ai-mode-select" class="select-dropdown" aria-describedby="ai-mode-desc">
                             <option value="random">🤖 Random</option>
                             <option value="cheeky">😏 Cheeky</option>
                             <option value="predictive">🧠 Predictive</option>
                         </select>
+                        <p id="ai-mode-desc" class="setting-description">Choose the AI behavior style</p>
                     </div>
                     
-                    <div id="ai-mode-description" class="mode-description">
+                    <div id="ai-mode-description" class="mode-description" aria-live="polite">
                         <h4>Random Mode</h4>
                         <p>AI picks a move randomly each turn.</p>
                     </div>
                 </div>
                 
                 <!-- Game Settings Tab -->
-                <div id="game-tab" class="tab-content">
+                <div id="game-tab" class="tab-content" role="tabpanel" aria-labelledby="game-tab-btn">
                     <h3>Game Settings</h3>
                     
                     <div class="setting-group">
@@ -301,33 +329,85 @@
                         <div class="toggle-group">
                             <label for="speed-mode-toggle" class="toggle-label">Speed Mode</label>
                             <div class="toggle-switch">
-                                <input type="checkbox" id="speed-mode-toggle">
+                                <input type="checkbox" id="speed-mode-toggle" aria-describedby="speed-mode-desc">
                                 <span class="toggle-slider"></span>
                             </div>
+                            <p id="speed-mode-desc" class="setting-description">3-second time limit for each move (Endless mode only)</p>
                         </div>
-                        <p class="mode-description">3-second time limit for each move (Endless mode only)</p>
                         
                         <div class="toggle-group">
                             <label for="bonus-rounds-toggle" class="toggle-label">Bonus Rounds</label>
                             <div class="toggle-switch">
-                                <input type="checkbox" id="bonus-rounds-toggle" checked>
+                                <input type="checkbox" id="bonus-rounds-toggle" checked aria-describedby="bonus-rounds-desc">
                                 <span class="toggle-slider"></span>
                             </div>
+                            <p id="bonus-rounds-desc" class="setting-description">Random bonus rounds with special rules</p>
                         </div>
-                        <p class="mode-description">Random bonus rounds with special rules</p>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <h4>Developer Options</h4>
+                        <div class="toggle-group">
+                            <label for="fps-toggle" class="toggle-label">FPS Counter</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="fps-toggle" aria-describedby="fps-toggle-desc">
+                                <span class="toggle-slider"></span>
+                            </div>
+                            <p id="fps-toggle-desc" class="setting-description">Show performance metrics</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Accessibility Tab -->
+                <div id="access-tab" class="tab-content" role="tabpanel" aria-labelledby="access-tab-btn">
+                    <h3>Accessibility Settings</h3>
+                    
+                    <div class="setting-group">
+                        <div class="toggle-group">
+                            <label for="high-contrast-toggle" class="toggle-label">High Contrast Mode</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="high-contrast-toggle" aria-describedby="high-contrast-desc">
+                                <span class="toggle-slider"></span>
+                            </div>
+                            <p id="high-contrast-desc" class="setting-description">Enable high contrast colors for better visibility</p>
+                        </div>
+                        
+                        <div class="toggle-group">
+                            <label for="reduced-motion-toggle" class="toggle-label">Reduced Motion</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="reduced-motion-toggle" aria-describedby="reduced-motion-desc">
+                                <span class="toggle-slider"></span>
+                            </div>
+                            <p id="reduced-motion-desc" class="setting-description">Minimize animations and motion effects</p>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Data Settings Tab -->
-                <div id="data-tab" class="tab-content">
+                <div id="data-tab" class="tab-content" role="tabpanel" aria-labelledby="data-tab-btn">
                     <h3>Data Management</h3>
                     <div class="setting-group">
                         <p>Manage your game data and progress.</p>
                     </div>
                     
-                    <button id="reset-stats-settings-btn" class="btn">Reset Statistics</button>
-                    <button id="reset-achievements-btn" class="btn">Reset Achievements</button>
-                    <button id="delete-all-data-btn" class="btn danger-btn">Delete All Data</button>
+                    <div class="setting-group">
+                        <h4>Export and Import</h4>
+                        <button id="export-data-btn" class="btn" aria-describedby="export-desc">Export Game Data</button>
+                        <p id="export-desc" class="setting-description">Download your game data as a JSON file</p>
+                        
+                        <div class="import-container">
+                            <label for="import-data-file" class="btn" tabindex="0">Import Game Data</label>
+                            <input type="file" id="import-data-file" accept=".json" aria-describedby="import-desc">
+                            <p id="import-desc" class="setting-description">Restore your game data from a previously exported file</p>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <h4>Reset Options</h4>
+                        <button id="reset-stats-settings-btn" class="btn" aria-label="Reset Statistics">Reset Statistics</button>
+                        <button id="reset-achievements-btn" class="btn" aria-label="Reset Achievements">Reset Achievements</button>
+                        <button id="delete-all-data-btn" class="btn danger-btn" aria-label="Delete All Game Data">Delete All Data</button>
+                    </div>
                 </div>
             </div>
         </section>

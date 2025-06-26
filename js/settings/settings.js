@@ -13,6 +13,8 @@ import * as secretMove from '../features/secretMove.js';
 import * as aiModes from '../features/aiModes.js';
 import * as speedMode from '../features/speedMode.js';
 import * as bonusRound from '../features/bonusRound.js';
+import * as accessibility from '../features/accessibility.js';
+import * as performance from '../utils/performance.js';
 
 /**
  * Initialize the settings screen
@@ -40,6 +42,11 @@ function setupEventListeners() {
             if (tabId) {
                 switchTab(tabId);
                 sound.play('click');
+                
+                // Update tab ARIA attributes
+                tabButtons.forEach(btn => {
+                    btn.setAttribute('aria-selected', btn === button);
+                });
             }
         });
     });
@@ -145,6 +152,42 @@ function setupEventListeners() {
         // Add change event listener
         bonusRoundsToggle.addEventListener('change', () => {
             bonusRound.setEnabled(bonusRoundsToggle.checked);
+            sound.play('click');
+        });
+    }
+    
+    // FPS toggle
+    const fpsToggle = document.getElementById('fps-toggle');
+    if (fpsToggle) {
+        // Add change event listener
+        fpsToggle.addEventListener('change', () => {
+            performance.toggle();
+            sound.play('click');
+        });
+    }
+    
+    // High contrast toggle
+    const highContrastToggle = document.getElementById('high-contrast-toggle');
+    if (highContrastToggle) {
+        // Set initial value
+        highContrastToggle.checked = accessibility.isHighContrast();
+        
+        // Add change event listener
+        highContrastToggle.addEventListener('change', () => {
+            accessibility.toggleHighContrast();
+            sound.play('click');
+        });
+    }
+    
+    // Reduced motion toggle
+    const reducedMotionToggle = document.getElementById('reduced-motion-toggle');
+    if (reducedMotionToggle) {
+        // Set initial value
+        reducedMotionToggle.checked = accessibility.isReducedMotion();
+        
+        // Add change event listener
+        reducedMotionToggle.addEventListener('change', () => {
+            accessibility.toggleReducedMotion();
             sound.play('click');
         });
     }
@@ -257,20 +300,24 @@ function switchTab(tabId) {
     const tabContents = document.querySelectorAll('.tab-content');
     tabContents.forEach(content => {
         content.classList.remove('active');
+        content.setAttribute('aria-hidden', 'true');
     });
     
     // Show selected tab content
     const selectedTab = document.getElementById(`${tabId}-tab`);
     if (selectedTab) {
         selectedTab.classList.add('active');
+        selectedTab.setAttribute('aria-hidden', 'false');
     }
     
     // Update tab button states
     const tabButtons = document.querySelectorAll('.tab-btn');
     tabButtons.forEach(button => {
         button.classList.remove('active');
+        button.setAttribute('aria-selected', 'false');
         if (button.getAttribute('data-tab') === tabId) {
             button.classList.add('active');
+            button.setAttribute('aria-selected', 'true');
         }
     });
 }

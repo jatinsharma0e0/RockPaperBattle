@@ -51,15 +51,32 @@ A modern HTML5 + JavaScript game featuring Rock, Paper, Scissors with multiple g
   - 🔁 Reverse Rules: Rock beats Paper, Paper beats Scissors, Scissors beats Rock
   - 🎲 Chaos Mode: Randomly shuffled move labels
 - Enhanced visual feedback:
-  - Confetti animation on wins
+  - Confetti animation for wins
   - Shake effect on losses
   - Glow effect on draws
 - Game settings tab with toggles for Speed and Bonus features
 
-### Coming Soon
-- Multiplayer options
-- More themes and avatars
-- Additional special moves
+### Phase 7 (Completed)
+- Accessibility improvements:
+  - ARIA attributes and semantic HTML
+  - Keyboard navigation support
+  - High contrast mode
+  - Reduced motion option
+  - System preference detection
+- Performance optimization:
+  - Asset preloading system
+  - Loading screen with progress bar
+  - FPS counter and performance metrics
+  - Optimized animations and transitions
+- Data management:
+  - Export/import game data as JSON
+  - Data schema versioning
+  - Improved localStorage handling
+- UI Polish:
+  - Improved animations and transitions
+  - Enhanced focus states for better navigation
+  - Loading screen with visual feedback
+  - Better error handling and fallbacks
 
 ## Themes
 
@@ -68,6 +85,15 @@ Choose from four unique visual themes:
 - 🌙 **Night**: Dark theme for low-light environments
 - 🎮 **Retro**: 8-bit pixel style with vibrant colors
 - 💡 **Neon**: Futuristic theme with glowing elements
+
+## Accessibility
+
+Rock Paper Battle includes several accessibility features:
+- **High Contrast Mode**: Enhanced color contrast for better visibility
+- **Reduced Motion**: Minimizes animations for users sensitive to motion
+- **Keyboard Navigation**: Full keyboard support for all game actions
+- **ARIA Support**: Screen reader compatibility with semantic HTML
+- **System Preference Detection**: Automatically matches OS accessibility settings
 
 ## Secret Move
 
@@ -103,7 +129,9 @@ Unlock these achievements as you play:
 - Local storage for game persistence
 - No external dependencies
 - Responsive design for all devices
-- Idle detection and ambient sound system
+- Asset preloading system
+- Accessibility support
+- Performance optimization
 
 ## Audio Credits
 
@@ -143,4 +171,24 @@ For ambient sounds, place files in `assets/audio/ambient`:
 To add new features, follow the modular structure:
 - Game modes go in `js/game/`
 - Features go in `js/features/`
-- Settings go in `js/settings/` 
+- Settings go in `js/settings/`
+- Utilities go in `js/utils/`
+
+## Deployment
+
+The game can be deployed on any static hosting platform:
+- GitHub Pages
+- Netlify
+- Vercel
+- Any web server that can serve static files
+
+No build process is required - just upload the files to your web server.
+
+## Browser Support
+
+Tested and compatible with:
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+- Mobile browsers (iOS Safari, Android Chrome) 

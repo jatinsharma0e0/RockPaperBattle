@@ -1,0 +1,125 @@
+/* High Contrast Theme for Rock Paper Battle */
+/* Applied when high-contrast mode is enabled */
+
+body.high-contrast {
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --primary-color: #ffff00;
+    --primary-color-rgb: 255, 255, 0;
+    --secondary-color: #00ffff;
+    --accent-color: #ff00ff;
+    --section-bg: #121212;
+    --btn-bg: #ffff00;
+    --btn-text: #000000;
+    --btn-hover: #ffffff;
+    --result-bg: #333333;
+    --win-color: #00ff00;
+    --lose-color: #ff0000;
+    --draw-color: #ffff00;
+    --border-color: #ffffff;
+    --shadow-color: rgba(255, 255, 255, 0.3);
+    --special-move-color: #ff8000;
+}
+
+/* Enhanced focus indicators */
+body.high-contrast *:focus {
+    outline: 3px solid var(--accent-color) !important;
+    outline-offset: 3px;
+}
+
+/* Increase text contrast */
+body.high-contrast h1,
+body.high-contrast h2,
+body.high-contrast h3,
+body.high-contrast h4,
+body.high-contrast p,
+body.high-contrast span {
+    color: var(--text-color);
+    text-shadow: none;
+}
+
+/* Make buttons more distinct */
+body.high-contrast .btn,
+body.high-contrast .move-btn,
+body.high-contrast .icon-btn {
+    border: 2px solid var(--border-color);
+    text-shadow: none;
+    box-shadow: none;
+}
+
+/* Ensure form controls are visible */
+body.high-contrast input[type="checkbox"],
+body.high-contrast input[type="radio"] {
+    border: 2px solid var(--border-color);
+}
+
+/* Improved toggle switch visibility */
+body.high-contrast .toggle-slider {
+    background-color: #555555;
+    border: 2px solid var(--border-color);
+}
+
+body.high-contrast input:checked + .toggle-slider {
+    background-color: var(--primary-color);
+}
+
+body.high-contrast .toggle-slider:before {
+    background-color: #ffffff;
+    border: 1px solid #000000;
+}
+
+/* Make game areas stand out more */
+body.high-contrast section {
+    border: 2px solid var(--border-color);
+    box-shadow: none;
+}
+
+body.high-contrast .game-area {
+    border: 2px solid var(--border-color);
+}
+
+/* High contrast game elements */
+body.high-contrast .player-choice,
+body.high-contrast .ai-choice {
+    background-color: var(--section-bg);
+    border: 2px solid var(--border-color);
+    padding: 15px;
+    border-radius: var(--border-radius);
+}
+
+/* Make move display more visible */
+body.high-contrast .move-display {
+    background-color: #333333;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+}
+
+/* Improve notification visibility */
+body.high-contrast .bonus-notification,
+body.high-contrast .achievement-notification {
+    background-color: #000000;
+    border: 3px solid var(--accent-color);
+    color: var(--text-color);
+}
+
+/* Clear animations that might reduce visibility */
+body.high-contrast .idle-animation,
+body.high-contrast .idle-pulse,
+body.high-contrast .idle-glow {
+    animation: none;
+    box-shadow: none;
+}
+
+/* Ensure speed timer is visible */
+body.high-contrast .speed-timer-container {
+    border: 2px solid var(--border-color);
+    background-color: #333333;
+}
+
+body.high-contrast .speed-timer {
+    background-color: var(--primary-color);
+}
+
+body.high-contrast .speed-timer.warning {
+    background-color: var(--lose-color);
+} 
