@@ -4,7 +4,7 @@ export default {
   base: './',
   server: {
     port: 3000,
-    open: true, // Automatically open browser on server start
+    open: true, 
     cors: true
   },
   build: {
