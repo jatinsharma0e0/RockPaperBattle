@@ -182,6 +182,7 @@ export function toggleSound() {
  * @param {boolean} enabled - Whether sound should be enabled
  */
 export function setSoundEnabled(enabled) {
+    console.log('setSoundEnabled called with:', enabled);
     soundEnabled = enabled;
     setData('soundEnabled', enabled);
     updateSoundButtonState();
@@ -207,6 +208,7 @@ export function isSoundEnabled() {
  * @param {boolean} enabled - Whether ambient sound should be enabled
  */
 export function setAmbientEnabled(enabled) {
+    console.log('setAmbientEnabled called with:', enabled);
     ambientEnabled = enabled;
     setData('ambientEnabled', enabled);
     

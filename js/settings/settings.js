@@ -63,12 +63,26 @@ function setupEventListeners() {
     if (soundToggle) {
         // Set initial value
         soundToggle.checked = sound.isSoundEnabled();
+        console.log('Sound toggle initialized:', soundToggle.checked);
         
         // Add change event listener
         soundToggle.addEventListener('change', () => {
+            console.log('Sound toggle changed to:', soundToggle.checked);
             sound.setSoundEnabled(soundToggle.checked);
             if (soundToggle.checked) {
                 sound.play('click');
+            }
+        });
+        
+        // Add click event listener as a fallback
+        soundToggle.parentElement.addEventListener('click', (e) => {
+            if (e.target !== soundToggle) {
+                soundToggle.checked = !soundToggle.checked;
+                console.log('Sound toggle clicked (parent):', soundToggle.checked);
+                sound.setSoundEnabled(soundToggle.checked);
+                if (soundToggle.checked) {
+                    sound.play('click');
+                }
             }
         });
     }
@@ -96,9 +110,11 @@ function setupEventListeners() {
     if (ambientToggle) {
         // Set initial value
         ambientToggle.checked = sound.isAmbientEnabled();
+        console.log('Ambient toggle initialized:', ambientToggle.checked);
         
         // Add change event listener
         ambientToggle.addEventListener('change', () => {
+            console.log('Ambient toggle changed to:', ambientToggle.checked);
             sound.setAmbientEnabled(ambientToggle.checked);
             
             // Start or stop ambient sound based on toggle state
@@ -108,6 +124,23 @@ function setupEventListeners() {
             } else {
                 sound.stopAmbient();
                 sound.play('click');
+            }
+        });
+        
+        // Add click event listener as a fallback
+        ambientToggle.parentElement.addEventListener('click', (e) => {
+            if (e.target !== ambientToggle) {
+                ambientToggle.checked = !ambientToggle.checked;
+                console.log('Ambient toggle clicked (parent):', ambientToggle.checked);
+                sound.setAmbientEnabled(ambientToggle.checked);
+                
+                if (ambientToggle.checked) {
+                    sound.playAmbient();
+                    sound.play('click');
+                } else {
+                    sound.stopAmbient();
+                    sound.play('click');
+                }
             }
         });
     }
