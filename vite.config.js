@@ -5,7 +5,12 @@ export default {
   server: {
     port: 3000,
     open: true, 
-    cors: true
+    cors: true,
+    headers: {
+      // Ensure proper MIME types when serving locally
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/javascript; charset=utf-8'
+    }
   },
   build: {
     outDir: 'dist',
@@ -13,6 +18,9 @@ export default {
     emptyOutDir: true,
     rollupOptions: {
       output: {
+        // Keep consistent file naming without hashes
+        entryFileNames: '[name].js',
+        chunkFileNames: '[name].js',
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name.split('.');
           const extType = info[info.length - 1];

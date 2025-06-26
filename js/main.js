@@ -488,21 +488,21 @@ function checkFirstRun() {
 }
 
 /**
- * Cleanup function when the page is unloading
+ * Performs cleanup before page unload
  */
 function cleanup() {
-    // Clean up idle detection
-    idle.cleanup();
     
-    // Stop speed timer if active
-    speedMode.stopTimer();
-    
-    // End any active bonus round
-    bonusRound.endBonusRound();
+    // Stop any sounds
+    sound.stopAmbient();
 }
 
-// Initialize the game when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', init); 
+// Initialize the game when DOM is loaded
+window.addEventListener('DOMContentLoaded', init);
 
-// Clean up when the page is unloaded
-window.addEventListener('beforeunload', cleanup); 
+// Add cleanup event
+window.addEventListener('beforeunload', cleanup);
+
+// Initialize immediately if document is already loaded
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    init();
+} 

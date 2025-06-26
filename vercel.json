@@ -2,6 +2,7 @@
   "framework": "vite",
   "outputDirectory": "dist",
   "routes": [
+    { "src": "/(.*\\.(js|css|png|svg|ico|webmanifest|wav|webp|json|jpg|jpeg|gif))$", "dest": "/$1" },
     { "src": "/(.*)", "dest": "/" }
   ]
 } 
