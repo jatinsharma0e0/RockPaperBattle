@@ -95,7 +95,7 @@ function updateActiveAvatarOption(avatar) {
  * Select an avatar
  * @param {string} avatar - The avatar emoji to select
  */
-function selectAvatar(avatar) {
+export function selectAvatar(avatar) {
     currentProfile.avatar = avatar;
 }
 
@@ -180,5 +180,6 @@ export default {
     init,
     setupAvatarSelectors,
     getCurrentProfile,
-    resetProfile
+    resetProfile,
+    selectAvatar
 }; 

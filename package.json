@@ -1,0 +1,27 @@
+{
+  "name": "rockpaperbattle",
+  "version": "1.0.0",
+  "description": "A modern HTML5 + JavaScript game featuring Rock, Paper, Scissors with multiple game modes and features.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build",
+    "vercel-build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jatinsharma00007/RockPaperBattle.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jatinsharma00007/RockPaperBattle/issues"
+  },
+  "homepage": "https://github.com/jatinsharma00007/RockPaperBattle#readme",
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}
