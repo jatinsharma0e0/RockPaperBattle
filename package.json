@@ -2,13 +2,17 @@
   "name": "rockpaperbattle",
   "version": "1.0.0",
   "description": "A modern HTML5 + JavaScript game featuring Rock, Paper, Scissors with multiple game modes and features.",
-  "main": "index.js",
+  "main": "api/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite",
     "build": "vite build",
-    "vercel-build": "npx vite build",
+    "start": "node api/server.js",
+    "vercel-build": "node node_modules/vite/bin/vite.js build",
     "preview": "vite preview"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "repository": {
     "type": "git",
@@ -23,5 +27,8 @@
   "homepage": "https://github.com/jatinsharma00007/RockPaperBattle#readme",
   "devDependencies": {
     "vite": "^7.0.0"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
   }
 }
