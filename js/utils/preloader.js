@@ -31,7 +31,7 @@ const ASSETS = {
     
     // Images
     images: [
-        'logo.png'
+        'logo.webp'
     ],
     
     // Icons
