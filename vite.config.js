@@ -1,6 +1,7 @@
 export default {
   root: '.',
   publicDir: 'assets',
+  base: './',
   server: {
     port: 3000,
     open: true, // Automatically open browser on server start
