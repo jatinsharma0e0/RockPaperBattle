@@ -31,15 +31,24 @@ const ASSETS = {
     
     // Images
     images: [
-        'favicon.png',
         'logo.png'
+    ],
+    
+    // Icons
+    icons: [
+        'favicon-96x96.png',
+        'apple-touch-icon.png',
+        'favicon.svg',
+        'web-app-manifest-192x192.png',
+        'web-app-manifest-512x512.png'
     ]
 };
 
 // Cache for loaded assets
 const assetsCache = {
     audio: {},
-    images: {}
+    images: {},
+    icons: {}
 };
 
 let totalAssets = 0;
@@ -61,7 +70,7 @@ export function preloadAssets(onProgress = null, onComplete = null) {
     onCompleteCallback = onComplete;
     
     // Calculate total assets
-    totalAssets = ASSETS.audio.length + ASSETS.ambientAudio.length + ASSETS.images.length;
+    totalAssets = ASSETS.audio.length + ASSETS.ambientAudio.length + ASSETS.images.length + ASSETS.icons.length;
     loadedAssets = 0;
     
     // Preload regular audio
@@ -77,6 +86,11 @@ export function preloadAssets(onProgress = null, onComplete = null) {
     // Preload images
     ASSETS.images.forEach(file => {
         preloadImage(file);
+    });
+    
+    // Preload icons
+    ASSETS.icons.forEach(file => {
+        preloadIcon(file);
     });
 }
 
@@ -132,6 +146,32 @@ function preloadImage(file) {
     // Add to cache
     const key = file.split('.')[0];
     assetsCache.images[key] = img;
+}
+
+/**
+ * Preload an icon file
+ * @param {string} file - The icon file name
+ */
+function preloadIcon(file) {
+    const img = new Image();
+    
+    // Add load event listener
+    img.onload = () => {
+        assetLoaded(file);
+    };
+    
+    // Add error event listener
+    img.onerror = () => {
+        console.warn(`Failed to load icon file: ${file}`);
+        assetLoaded(file); // Still count as loaded to avoid hanging
+    };
+    
+    // Start loading
+    img.src = `assets/icons/${file}`;
+    
+    // Add to cache
+    const key = file.split('.')[0];
+    assetsCache.icons[key] = img;
 }
 
 /**
@@ -191,9 +231,19 @@ export function getImage(key) {
     return assetsCache.images[key] || null;
 }
 
+/**
+ * Get a cached icon element
+ * @param {string} key - The icon key
+ * @returns {HTMLImageElement|null} The cached icon element or null
+ */
+export function getIcon(key) {
+    return assetsCache.icons[key] || null;
+}
+
 export default {
     preloadAssets,
     isAudioCached,
     getAudio,
-    getImage
+    getImage,
+    getIcon
 }; 
