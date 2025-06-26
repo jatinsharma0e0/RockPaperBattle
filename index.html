@@ -11,11 +11,15 @@
 </head>
 <body>
     <div class="container">
+        <!-- Sound Toggle Button (Global) -->
+        <button id="sound-toggle" class="icon-btn sound-toggle" title="Toggle Sound">🔊</button>
+        
         <!-- Landing Page Section -->
         <section id="landing-page">
             <h1>Rock Paper Battle</h1>
             <div class="game-modes">
                 <button id="endless-mode-btn" class="btn">Endless Mode</button>
+                <button id="best-of-5-btn" class="btn">Best of 5</button>
                 <!-- Other game modes will be added later -->
             </div>
             <div class="theme-toggle">
@@ -27,7 +31,10 @@
         <section id="game-screen" class="hidden">
             <div class="game-header">
                 <h2>Endless Mode</h2>
-                <button id="back-to-menu" class="btn-small">Back to Menu</button>
+                <div class="game-controls">
+                    <button id="back-to-menu" class="icon-btn" title="Back to Menu">⬅️</button>
+                    <button id="reset-scores" class="icon-btn" title="Reset Scores">🔄</button>
+                </div>
             </div>
             
             <div class="score-container">
