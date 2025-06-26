@@ -14,14 +14,11 @@ const elements = {
     
     // Buttons
     endlessModeBtn: document.getElementById('endless-mode-btn'),
-    bestOf5Btn: document.getElementById('best-of-5-btn'),
     backToMenuBtn: document.getElementById('back-to-menu'),
     backToMenuResultBtn: document.getElementById('back-to-menu-btn'),
     playAgainBtn: document.getElementById('play-again-btn'),
     moveButtons: document.querySelectorAll('.move-btn'),
     themeToggleBtn: document.getElementById('theme-toggle-btn'),
-    resetScoresBtn: document.getElementById('reset-scores'),
-    soundToggleBtn: document.getElementById('sound-toggle'),
     
     // Game elements
     playerScore: document.getElementById('player-score'),
@@ -122,27 +119,23 @@ export function showResult(result, message, playerMove, aiMove) {
  */
 export function setupEventListeners(handlers) {
     // Game mode selection
-    if (handlers.startEndlessMode && elements.endlessModeBtn) {
+    if (handlers.startEndlessMode) {
         elements.endlessModeBtn.addEventListener('click', handlers.startEndlessMode);
     }
     
     // Navigation
     if (handlers.backToMenu) {
-        if (elements.backToMenuBtn) {
-            elements.backToMenuBtn.addEventListener('click', handlers.backToMenu);
-        }
-        if (elements.backToMenuResultBtn) {
-            elements.backToMenuResultBtn.addEventListener('click', handlers.backToMenu);
-        }
+        elements.backToMenuBtn.addEventListener('click', handlers.backToMenu);
+        elements.backToMenuResultBtn.addEventListener('click', handlers.backToMenu);
     }
     
     // Play again
-    if (handlers.playAgain && elements.playAgainBtn) {
+    if (handlers.playAgain) {
         elements.playAgainBtn.addEventListener('click', handlers.playAgain);
     }
     
     // Move selection
-    if (handlers.makeMove && elements.moveButtons) {
+    if (handlers.makeMove) {
         elements.moveButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const move = button.getAttribute('data-move');
@@ -152,13 +145,8 @@ export function setupEventListeners(handlers) {
     }
     
     // Theme toggle
-    if (handlers.toggleTheme && elements.themeToggleBtn) {
+    if (handlers.toggleTheme) {
         elements.themeToggleBtn.addEventListener('click', handlers.toggleTheme);
-    }
-    
-    // Reset scores
-    if (handlers.resetScores && elements.resetScoresBtn) {
-        elements.resetScoresBtn.addEventListener('click', handlers.resetScores);
     }
 }
 

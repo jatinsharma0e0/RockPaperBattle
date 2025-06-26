@@ -6,7 +6,6 @@
 import { determineWinner, getRandomMove, getResultMessage } from './logic.js';
 import * as ui from '../ui.js';
 import { getData, updateStat } from '../settings/storage.js';
-import * as sound from '../features/sound.js';
 
 // Game state for Endless Mode
 const gameState = {
@@ -25,9 +24,6 @@ export function initEndlessMode() {
     // Reset game state
     resetGameState();
     
-    // Update UI to show Endless mode
-    document.querySelector('#game-screen h2').textContent = 'Endless Mode';
-    
     // Load previous scores from localStorage if available
     const stats = getData('stats');
     if (stats) {
@@ -38,9 +34,6 @@ export function initEndlessMode() {
     
     // Show the game screen
     ui.showSection('game-screen');
-    
-    // Play start sound
-    sound.play('gameStart');
 }
 
 /**
@@ -79,15 +72,6 @@ export function handlePlayerMove(playerMove) {
     // Update scores and localStorage
     updateScores(result);
     
-    // Play appropriate sound
-    if (result === 'win') {
-        sound.play('win');
-    } else if (result === 'lose') {
-        sound.play('lose');
-    } else {
-        sound.play('draw');
-    }
-    
     // Get result message
     const resultMessage = getResultMessage(result, playerMove, aiMove);
     
@@ -116,7 +100,6 @@ function updateScores(result) {
  * Returns to the main menu
  */
 export function returnToMenu() {
-    sound.play('click');
     ui.showSection('landing-page');
 }
 
@@ -124,34 +107,12 @@ export function returnToMenu() {
  * Continues the game after showing results
  */
 export function continueGame() {
-    sound.play('click');
     ui.showSection('game-screen');
-}
-
-/**
- * Resets the current game scores
- */
-export function resetScores() {
-    // Reset wins and losses in localStorage
-    const data = getData();
-    data.stats.wins = 0;
-    data.stats.losses = 0;
-    data.stats.draws = 0;
-    
-    // Update UI
-    ui.updateScore(0, 0);
-    
-    // Reset game state
-    resetGameState();
-    
-    // Play sound
-    sound.play('click');
 }
 
 export default {
     initEndlessMode,
     handlePlayerMove,
     returnToMenu,
-    continueGame,
-    resetScores
+    continueGame
 }; 

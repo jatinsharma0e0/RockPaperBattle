@@ -27,7 +27,6 @@ body {
     width: 100%;
     max-width: 800px;
     padding: 20px;
-    position: relative;
 }
 
 /* Section Styles */
@@ -89,35 +88,6 @@ h3 {
     padding: 15px 20px;
 }
 
-/* Icon Buttons */
-.icon-btn {
-    font-size: 1.5rem;
-    width: 40px;
-    height: 40px;
-    border: none;
-    border-radius: 50%;
-    background-color: var(--btn-bg);
-    color: var(--btn-text);
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color var(--transition-speed), transform var(--transition-speed);
-}
-
-.icon-btn:hover {
-    background-color: var(--btn-hover);
-    transform: scale(1.1);
-}
-
-/* Sound Toggle Button */
-.sound-toggle {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 100;
-}
-
 /* Game Layout */
 .game-modes {
     display: flex;
@@ -131,11 +101,6 @@ h3 {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-}
-
-.game-controls {
-    display: flex;
-    gap: 10px;
 }
 
 .score-container {
@@ -178,21 +143,6 @@ h3 {
     padding: 15px;
     border-radius: var(--border-radius);
     background-color: var(--result-bg);
-}
-
-.result-message.win {
-    background-color: var(--win-color);
-    color: white;
-}
-
-.result-message.lose {
-    background-color: var(--lose-color);
-    color: white;
-}
-
-.result-message.draw {
-    background-color: var(--draw-color);
-    color: white;
 }
 
 .result-details {
