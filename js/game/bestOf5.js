@@ -7,6 +7,8 @@ import { determineWinner, getRandomMove, getResultMessage } from './logic.js';
 import * as ui from '../ui.js';
 import { getData, setData, updateStat } from '../settings/storage.js';
 import * as sound from '../features/sound.js';
+import * as achievements from '../features/achievements.js';
+import * as stats from '../features/stats.js';
 
 // Game state for Best of 5 Mode
 const gameState = {
@@ -106,6 +108,9 @@ export function handlePlayerMove(playerMove) {
     // Check if game is over
     const isGameOver = checkGameOver();
     
+    // Check achievements
+    achievements.checkAchievements(result, gameState, 'bestOf5');
+    
     // Show result after a short delay
     setTimeout(() => {
         if (isGameOver) {
@@ -117,6 +122,15 @@ export function handlePlayerMove(playerMove) {
     
     // Update localStorage stats
     updateStat(result === 'win' ? 'wins' : result === 'lose' ? 'losses' : 'draws');
+    
+    // Update win streak tracking
+    if (result === 'win') {
+        // Get current win streak
+        const currentWinStreak = getData('currentWinStreak') || 0;
+        
+        // Update longest win streak if needed
+        stats.updateLongestWinStreak(currentWinStreak);
+    }
 }
 
 /**
@@ -152,10 +166,12 @@ function showFinalResult() {
         resultClass = 'win';
         sound.play('gameWin');
         
-        // Update best mode in stats if this is the player's preferred mode
-        const stats = getData('stats');
-        if (!stats.bestMode || stats.bestMode === '') {
-            setData('stats.bestMode', 'Best of 5');
+        // Update best mode in stats
+        stats.updateBestMode('Best of 5');
+        
+        // Check for flawless victory achievement
+        if (gameState.aiScore === 0) {
+            achievements.checkAchievements('win', gameState, 'bestOf5');
         }
     } else {
         title = "You Lose the Match!";
@@ -180,6 +196,7 @@ function showFinalResult() {
  * Returns to the main menu
  */
 export function returnToMenu() {
+    sound.play('click');
     ui.showSection('landing-page');
 }
 
@@ -187,6 +204,8 @@ export function returnToMenu() {
  * Continues the game after showing results
  */
 export function continueGame() {
+    sound.play('click');
+    
     if (gameState.gameOver) {
         // If game is over, start a new game
         resetGameState();

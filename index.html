@@ -22,6 +22,9 @@
                 <button id="best-of-5-btn" class="btn">Best of 5</button>
                 <!-- Other game modes will be added later -->
             </div>
+            <div class="other-buttons">
+                <button id="stats-btn" class="btn secondary-btn">Game Stats</button>
+            </div>
             <div class="theme-toggle">
                 <button id="theme-toggle-btn">Toggle Theme</button>
             </div>
@@ -77,6 +80,73 @@
             <div class="result-actions">
                 <button id="play-again-btn" class="btn">Play Again</button>
                 <button id="back-to-menu-btn" class="btn">Back to Menu</button>
+            </div>
+        </section>
+
+        <!-- Stats Screen Section -->
+        <section id="stats-screen" class="hidden">
+            <div class="section-header">
+                <h2>Game Statistics</h2>
+                <button id="back-from-stats" class="icon-btn" title="Back to Menu">⬅️</button>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stats-overview">
+                    <div class="stat-box">
+                        <h3>Total Games</h3>
+                        <p id="stats-total-games">0</p>
+                    </div>
+                    <div class="stat-box">
+                        <h3>Win Rate</h3>
+                        <p id="stats-win-rate">0%</p>
+                    </div>
+                </div>
+                
+                <div class="stat-row">
+                    <div class="stat-label">Wins</div>
+                    <div class="stat-bar-container">
+                        <div id="stats-wins-bar" class="stat-bar win-bar"></div>
+                    </div>
+                    <div class="stat-value" id="stats-wins">0</div>
+                </div>
+                
+                <div class="stat-row">
+                    <div class="stat-label">Losses</div>
+                    <div class="stat-bar-container">
+                        <div id="stats-losses-bar" class="stat-bar lose-bar"></div>
+                    </div>
+                    <div class="stat-value" id="stats-losses">0</div>
+                </div>
+                
+                <div class="stat-row">
+                    <div class="stat-label">Draws</div>
+                    <div class="stat-bar-container">
+                        <div id="stats-draws-bar" class="stat-bar draw-bar"></div>
+                    </div>
+                    <div class="stat-value" id="stats-draws">0</div>
+                </div>
+                
+                <div class="stats-details">
+                    <div class="stat-detail">
+                        <h4>Longest Win Streak</h4>
+                        <p id="stats-streak">0</p>
+                    </div>
+                    <div class="stat-detail">
+                        <h4>Most Played Mode</h4>
+                        <p id="stats-best-mode">None</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="achievements-section">
+                <h3>Achievements</h3>
+                <div class="achievements-container" id="achievements-list">
+                    <!-- Achievements will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="stats-actions">
+                <button id="reset-stats-btn" class="btn danger-btn">Reset All Stats</button>
             </div>
         </section>
     </div>

@@ -5,8 +5,10 @@
 
 import { determineWinner, getRandomMove, getResultMessage } from './logic.js';
 import * as ui from '../ui.js';
-import { getData, updateStat } from '../settings/storage.js';
+import { getData, setData, updateStat } from '../settings/storage.js';
 import * as sound from '../features/sound.js';
+import * as achievements from '../features/achievements.js';
+import * as stats from '../features/stats.js';
 
 // Game state for Endless Mode
 const gameState = {
@@ -29,9 +31,9 @@ export function initEndlessMode() {
     document.querySelector('#game-screen h2').textContent = 'Endless Mode';
     
     // Load previous scores from localStorage if available
-    const stats = getData('stats');
-    if (stats) {
-        ui.updateScore(stats.wins, stats.losses);
+    const storedStats = getData('stats');
+    if (storedStats) {
+        ui.updateScore(storedStats.wins, storedStats.losses);
     } else {
         ui.updateScore(0, 0);
     }
@@ -88,6 +90,9 @@ export function handlePlayerMove(playerMove) {
         sound.play('draw');
     }
     
+    // Check achievements
+    achievements.checkAchievements(result, gameState, 'endless');
+    
     // Get result message
     const resultMessage = getResultMessage(result, playerMove, aiMove);
     
@@ -106,10 +111,19 @@ function updateScores(result) {
     updateStat(result === 'win' ? 'wins' : result === 'lose' ? 'losses' : 'draws');
     
     // Get updated stats
-    const stats = getData('stats');
+    const storedStats = getData('stats');
     
     // Update UI
-    ui.updateScore(stats.wins, stats.losses);
+    ui.updateScore(storedStats.wins, storedStats.losses);
+    
+    // Update win streak tracking
+    if (result === 'win') {
+        // Get current win streak
+        const currentWinStreak = getData('currentWinStreak') || 0;
+        
+        // Update longest win streak if needed
+        stats.updateLongestWinStreak(currentWinStreak);
+    }
 }
 
 /**
@@ -137,12 +151,16 @@ export function resetScores() {
     data.stats.wins = 0;
     data.stats.losses = 0;
     data.stats.draws = 0;
+    setData('stats', data.stats);
     
     // Update UI
     ui.updateScore(0, 0);
     
     // Reset game state
     resetGameState();
+    
+    // Reset current win streak
+    setData('currentWinStreak', 0);
     
     // Play sound
     sound.play('click');
