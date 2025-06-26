@@ -12,14 +12,14 @@ const SOUNDS = {
     win: 'win.wav',
     lose: 'lose.wav',
     draw: 'draw.wav',
-    gameStart: 'game-start.wav',
-    gameWin: 'game-win.wav',
-    gameLose: 'game-lose.wav',
-    gameDraw: 'game-draw.wav',
+    gameStart: 'gameStart.wav',
+    gameWin: 'gameWin.wav',
+    gameLose: 'gameLose.wav',
+    gameDraw: 'gameDraw.wav',
     countdown: 'countdown.wav',
     tick: 'tick.wav',
-    timeUp: 'time-up.wav',
-    bonusRound: 'bonus-round.wav',
+    timeUp: 'timeUp.wav',
+    bonusRound: 'bonusRound.wav',
     chaos: 'chaos.wav',
 };
 
@@ -95,7 +95,7 @@ export function play(soundName) {
     
     // Fall back to creating new Audio
     if (!audio) {
-        audio = new Audio(`/assets/audio/${audioStyle}/${soundFile}`);
+        audio = new Audio(`./audio/${audioStyle}/${soundFile}`);
     }
     
     audio.volume = volume;
@@ -120,7 +120,7 @@ export function playAmbient(ambientName = 'lofi') {
         currentAmbient = preloader.getAudio(ambientName, true);
     } else {
         // Fall back to creating new Audio
-        currentAmbient = new Audio(`/assets/audio/${audioStyle}/ambient/${soundFile}`);
+        currentAmbient = new Audio(`./audio/${audioStyle}/ambient/${soundFile}`);
     }
     
     if (currentAmbient) {
@@ -203,8 +203,8 @@ export function setVolume(level) {
 }
 
 /**
- * Get the current volume level
- * @returns {number} Volume level (0.0 to 1.0)
+ * Get current volume level
+ * @returns {number} Current volume level (0.0 to 1.0)
  */
 export function getVolume() {
     return volume;
@@ -212,7 +212,7 @@ export function getVolume() {
 
 /**
  * Set the ambient volume level
- * @param {number} level - Ambient volume level (0.0 to 1.0)
+ * @param {number} level - Volume level (0.0 to 1.0)
  */
 export function setAmbientVolume(level) {
     ambientVolume = Math.max(0, Math.min(1, level));
@@ -224,33 +224,32 @@ export function setAmbientVolume(level) {
 }
 
 /**
- * Get the current ambient volume level
- * @returns {number} Ambient volume level (0.0 to 1.0)
+ * Get current ambient volume level
+ * @returns {number} Current ambient volume level (0.0 to 1.0)
  */
 export function getAmbientVolume() {
     return ambientVolume;
 }
 
 /**
- * Set the audio style (retro or modern)
- * @param {string} style - The audio style to use ('retro' or 'modern')
+ * Set audio style (modern or retro)
+ * @param {string} style - The audio style ('modern' or 'retro')
  */
 export function setAudioStyle(style) {
-    if (style !== 'retro' && style !== 'modern') {
-        console.warn('Invalid audio style. Using default "retro".');
-        style = 'retro';
+    if (style !== 'modern' && style !== 'retro') {
+        return;
     }
     
     audioStyle = style;
-    setData('audioStyle', style);
+    setData('audioStyle', audioStyle);
     
-    // Play a test sound to demonstrate the change
-    play('click');
+    // Reload audio assets
+    preloader.reloadAudioAssets();
 }
 
 /**
- * Get the current audio style
- * @returns {string} The current audio style ('retro' or 'modern')
+ * Get current audio style
+ * @returns {string} Current audio style ('modern' or 'retro')
  */
 export function getAudioStyle() {
     return audioStyle;

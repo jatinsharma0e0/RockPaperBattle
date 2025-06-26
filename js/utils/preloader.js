@@ -112,8 +112,8 @@ export function preloadAssets(onProgress = null, onComplete = null) {
 function preloadAudio(file, isAmbient = false) {
     const audioStyle = getAudioStyle();
     const path = isAmbient 
-        ? `./assets/audio/${audioStyle}/ambient/${file}` 
-        : `./assets/audio/${audioStyle}/${file}`;
+        ? `./audio/${audioStyle}/ambient/${file}` 
+        : `./audio/${audioStyle}/${file}`;
     
     const audio = new Audio(path);
     
@@ -155,7 +155,7 @@ function preloadImage(file) {
     };
     
     // Start loading
-    img.src = `./assets/images/${file}`;
+    img.src = `./images/${file}`;
     
     // Add to cache
     const key = file.split('.')[0];
@@ -181,7 +181,7 @@ function preloadIcon(file) {
     };
     
     // Start loading
-    img.src = `./assets/icons/${file}`;
+    img.src = `./icons/${file}`;
     
     // Add to cache
     const key = file.split('.')[0];
