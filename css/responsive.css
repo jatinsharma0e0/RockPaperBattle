@@ -1,0 +1,81 @@
+/* Responsive styles for Rock Paper Battle */
+
+/* Mobile devices (up to 576px) */
+@media (max-width: 576px) {
+    .container {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    h3 {
+        font-size: 1.2rem;
+    }
+    
+    .game-modes {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .move-btn {
+        font-size: 1.5rem;
+        padding: 12px 15px;
+        margin: 0 5px;
+    }
+    
+    .game-area {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .score-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .result-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* Tablets (576px - 768px) */
+@media (min-width: 577px) and (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .move-btn {
+        font-size: 1.8rem;
+    }
+}
+
+/* Larger screens (769px and above) */
+@media (min-width: 769px) {
+    .container {
+        max-width: 800px;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .game-area {
+        flex-direction: row;
+    }
+    
+    .move-buttons {
+        flex-direction: row;
+    }
+    
+    .move-btn {
+        font-size: 1.5rem;
+        padding: 10px 12px;
+    }
+} 

@@ -1,0 +1,26 @@
+/* Theme Variables */
+:root {
+    /* Day Theme (Default) */
+    --bg-color: #f5f5f5;
+    --text-color: #333333;
+    --primary-color: #4a6fa5;
+    --secondary-color: #6d98ba;
+    --accent-color: #ff7e67;
+    --section-bg: #ffffff;
+    --btn-bg: #4a6fa5;
+    --btn-text: #ffffff;
+    --btn-hover: #3a5980;
+    --result-bg: #e8f4f8;
+    --win-color: #4caf50;
+    --lose-color: #f44336;
+    --draw-color: #ff9800;
+}
+
+/* Theme toggle styling */
+.theme-toggle {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* Night theme will be added in Phase 4 */ 

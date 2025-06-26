@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Battle</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Landing Page Section -->
+        <section id="landing-page">
+            <h1>Rock Paper Battle</h1>
+            <div class="game-modes">
+                <button id="endless-mode-btn" class="btn">Endless Mode</button>
+                <!-- Other game modes will be added later -->
+            </div>
+            <div class="theme-toggle">
+                <button id="theme-toggle-btn">Toggle Theme</button>
+            </div>
+        </section>
+
+        <!-- Game Screen Section -->
+        <section id="game-screen" class="hidden">
+            <div class="game-header">
+                <h2>Endless Mode</h2>
+                <button id="back-to-menu" class="btn-small">Back to Menu</button>
+            </div>
+            
+            <div class="score-container">
+                <div class="score player-score">
+                    <span>Player: </span>
+                    <span id="player-score">0</span>
+                </div>
+                <div class="score ai-score">
+                    <span>AI: </span>
+                    <span id="ai-score">0</span>
+                </div>
+            </div>
+
+            <div class="game-area">
+                <div class="player-choice">
+                    <h3>Your Choice</h3>
+                    <div class="move-buttons">
+                        <button class="move-btn" data-move="rock">✊</button>
+                        <button class="move-btn" data-move="paper">✋</button>
+                        <button class="move-btn" data-move="scissors">✌️</button>
+                    </div>
+                    <div id="player-move-display" class="move-display"></div>
+                </div>
+                
+                <div class="ai-choice">
+                    <h3>AI Choice</h3>
+                    <div id="ai-move-display" class="move-display"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Screen Section -->
+        <section id="results-screen" class="hidden">
+            <h2 id="result-title">Result</h2>
+            <div id="result-message" class="result-message"></div>
+            <div class="result-details">
+                <p>Player: <span id="player-move"></span></p>
+                <p>AI: <span id="ai-move"></span></p>
+            </div>
+            <div class="result-actions">
+                <button id="play-again-btn" class="btn">Play Again</button>
+                <button id="back-to-menu-btn" class="btn">Back to Menu</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- JavaScript Modules -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html> 
