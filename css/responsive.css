@@ -44,58 +44,6 @@
         flex-direction: column;
         gap: 10px;
     }
-    
-    /* Stats screen responsive styles */
-    .stats-overview {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .stat-box {
-        width: 100%;
-    }
-    
-    .stat-row {
-        flex-wrap: wrap;
-    }
-    
-    .stat-label {
-        width: 60px;
-        font-size: 0.9rem;
-    }
-    
-    .stat-value {
-        width: 25px;
-        font-size: 0.9rem;
-    }
-    
-    .stats-details {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .stat-detail {
-        width: 100%;
-    }
-    
-    /* Achievements responsive styles */
-    .achievements-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .achievement-notification {
-        min-width: 280px;
-        max-width: 95%;
-        padding: 10px;
-    }
-    
-    .achievement-notification .achievement-icon {
-        font-size: 2rem;
-    }
-    
-    .achievement-notification h3 {
-        font-size: 1rem;
-    }
 }
 
 /* Tablets (576px - 768px) */
@@ -107,25 +55,12 @@
     .move-btn {
         font-size: 1.8rem;
     }
-    
-    /* Stats screen responsive styles */
-    .stat-box {
-        width: 48%;
-    }
-    
-    .achievements-container {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    }
 }
 
 /* Larger screens (769px and above) */
 @media (min-width: 769px) {
     .container {
         max-width: 800px;
-    }
-    
-    .achievements-container {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
 }
 
@@ -142,14 +77,5 @@
     .move-btn {
         font-size: 1.5rem;
         padding: 10px 12px;
-    }
-    
-    /* Stats screen in landscape */
-    .stats-overview {
-        flex-direction: row;
-    }
-    
-    .stats-details {
-        flex-direction: row;
     }
 } 

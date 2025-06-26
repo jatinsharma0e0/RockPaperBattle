@@ -22,25 +22,12 @@ A modern HTML5 + JavaScript game featuring Rock, Paper, Scissors with multiple g
 - Sound effects with toggle
 - Improved UI feedback
 
-### Phase 3 (Completed)
-- Achievements system with notifications
-- Game statistics tracking
-- Stats dashboard with visualizations
-- Win streak tracking
-- Data persistence and reset options
-
 ### Coming Soon
+- Achievements system
 - Player avatars
 - Special moves
 - Advanced AI modes
 - Additional themes
-
-## Achievements
-
-Unlock these achievements as you play:
-- 🥉 **3 Wins in a Row**: Win three games consecutively
-- 🥇 **Flawless Victory**: Win a Best of 5 match without losing any rounds
-- 📊 **10 Total Rounds Played**: Play a total of 10 rounds across any mode
 
 ## Technical Details
 
@@ -67,7 +54,6 @@ Place audio files in the `assets/audio` directory with the following names:
 2. Select Rock (✊), Paper (✋), or Scissors (✌️)
 3. See the result and your updated score
 4. Continue playing or return to the menu
-5. Check your stats and achievements anytime
 
 ## Development
 
