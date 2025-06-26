@@ -7,6 +7,8 @@ import * as ui from './ui.js';
 import * as endless from './game/endless.js';
 import * as bestOf5 from './game/bestOf5.js';
 import * as sound from './features/sound.js';
+import * as achievements from './features/achievements.js';
+import * as stats from './features/stats.js';
 import { getData, setData } from './settings/storage.js';
 
 // Current game mode
@@ -24,6 +26,12 @@ function init() {
     
     // Initialize sound
     sound.init();
+    
+    // Initialize achievements
+    achievements.init();
+    
+    // Initialize stats
+    stats.init();
     
     // Set up event handlers
     setupEventHandlers();
@@ -43,6 +51,7 @@ function setupEventHandlers() {
             currentGameMode = 'endless';
             endless.initEndlessMode();
             sound.play('click');
+            stats.updateBestMode('Endless');
         },
         
         // Navigation
@@ -83,6 +92,7 @@ function setupEventHandlers() {
             currentGameMode = 'bestOf5';
             bestOf5.initBestOf5Mode();
             sound.play('click');
+            stats.updateBestMode('Best of 5');
         });
     }
     
@@ -103,6 +113,64 @@ function setupEventHandlers() {
     if (soundToggleBtn) {
         soundToggleBtn.addEventListener('click', sound.toggleSound);
     }
+    
+    // Stats button
+    const statsBtn = document.getElementById('stats-btn');
+    if (statsBtn) {
+        statsBtn.addEventListener('click', () => {
+            renderAchievements();
+            stats.showStats();
+        });
+    }
+    
+    // Back from stats button
+    const backFromStatsBtn = document.getElementById('back-from-stats');
+    if (backFromStatsBtn) {
+        backFromStatsBtn.addEventListener('click', stats.hideStats);
+    }
+    
+    // Reset stats button
+    const resetStatsBtn = document.getElementById('reset-stats-btn');
+    if (resetStatsBtn) {
+        resetStatsBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset all stats and achievements?')) {
+                stats.resetStats();
+                achievements.resetAchievements();
+                renderAchievements();
+                sound.play('click');
+            }
+        });
+    }
+}
+
+/**
+ * Renders the achievements list in the stats screen
+ */
+function renderAchievements() {
+    const achievementsContainer = document.getElementById('achievements-list');
+    if (!achievementsContainer) return;
+    
+    // Get all achievements with unlock status
+    const allAchievements = achievements.getAllAchievements();
+    
+    // Clear the container
+    achievementsContainer.innerHTML = '';
+    
+    // Add each achievement
+    allAchievements.forEach(achievement => {
+        const achievementItem = document.createElement('div');
+        achievementItem.className = `achievement-item ${achievement.unlocked ? 'unlocked' : 'locked'}`;
+        
+        achievementItem.innerHTML = `
+            <div class="achievement-icon">${achievement.icon}</div>
+            <div class="achievement-content">
+                <h4>${achievement.name}</h4>
+                <p>${achievement.description}</p>
+            </div>
+        `;
+        
+        achievementsContainer.appendChild(achievementItem);
+    });
 }
 
 /**
