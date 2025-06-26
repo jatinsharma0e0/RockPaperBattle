@@ -11,6 +11,9 @@ const DEFAULT_DATA = {
     theme: 'day',
     soundEnabled: true,
     soundVolume: 0.5,
+    ambientEnabled: true,
+    ambientVolume: 0.3,
+    audioStyle: 'retro',
     stats: {
         wins: 0,
         losses: 0,

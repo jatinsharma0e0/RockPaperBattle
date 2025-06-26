@@ -67,16 +67,27 @@ function setupEventListeners() {
         // Add change event listener
         soundToggle.addEventListener('change', () => {
             sound.setSoundEnabled(soundToggle.checked);
-            sound.play('click');
+            if (soundToggle.checked) {
+                sound.play('click');
+            }
         });
     }
     
     // Sound volume slider
     const soundVolumeSlider = document.getElementById('sound-volume');
     if (soundVolumeSlider) {
+        // Set initial value
         soundVolumeSlider.value = sound.getVolume() * 100;
+        
+        // Add input event listener for real-time updates
         soundVolumeSlider.addEventListener('input', () => {
-            sound.setVolume(soundVolumeSlider.value / 100);
+            const newVolume = soundVolumeSlider.value / 100;
+            sound.setVolume(newVolume);
+            
+            // Play a test sound when adjusting to hear the change
+            if (sound.isSoundEnabled() && soundVolumeSlider.value > 0) {
+                sound.play('tick');
+            }
         });
     }
     
@@ -89,16 +100,36 @@ function setupEventListeners() {
         // Add change event listener
         ambientToggle.addEventListener('change', () => {
             sound.setAmbientEnabled(ambientToggle.checked);
-            sound.play('click');
+            
+            // Start or stop ambient sound based on toggle state
+            if (ambientToggle.checked) {
+                sound.playAmbient();
+                sound.play('click');
+            } else {
+                sound.stopAmbient();
+                sound.play('click');
+            }
         });
     }
     
     // Ambient volume slider
     const ambientVolumeSlider = document.getElementById('ambient-volume');
     if (ambientVolumeSlider) {
+        // Set initial value
         ambientVolumeSlider.value = sound.getAmbientVolume() * 100;
+        
+        // Add input event listener for real-time updates
         ambientVolumeSlider.addEventListener('input', () => {
-            sound.setAmbientVolume(ambientVolumeSlider.value / 100);
+            const newVolume = ambientVolumeSlider.value / 100;
+            sound.setAmbientVolume(newVolume);
+            
+            // If ambient is playing, the volume change will be applied immediately
+            // by the setAmbientVolume function
+            
+            // Play a sound to acknowledge the change
+            if (sound.isSoundEnabled() && ambientVolumeSlider.value > 0) {
+                sound.play('tick');
+            }
         });
     }
     

@@ -50,17 +50,33 @@ export function init() {
     
     // Get volume settings
     const savedVolume = getData('soundVolume');
-    if (savedVolume !== undefined) {
-        volume = savedVolume;
+    if (savedVolume !== undefined && savedVolume !== null) {
+        volume = parseFloat(savedVolume);
     }
     
     const savedAmbientVolume = getData('ambientVolume');
-    if (savedAmbientVolume !== undefined) {
-        ambientVolume = savedAmbientVolume;
+    if (savedAmbientVolume !== undefined && savedAmbientVolume !== null) {
+        ambientVolume = parseFloat(savedAmbientVolume);
     }
     
     // Update sound button state
     updateSoundButtonState();
+    
+    // Start ambient sound if enabled
+    if (ambientEnabled) {
+        // Small delay to avoid audio conflicts during page load
+        setTimeout(() => {
+            playAmbient();
+        }, 1000);
+    }
+    
+    console.log('Sound settings initialized:', { 
+        soundEnabled, 
+        ambientEnabled, 
+        volume, 
+        ambientVolume, 
+        audioStyle 
+    });
 }
 
 /**
@@ -98,7 +114,9 @@ export function play(soundName) {
         audio = new Audio(`./audio/${audioStyle}/${soundFile}`);
     }
     
+    // Apply current volume setting
     audio.volume = volume;
+    
     audio.play().catch(e => console.warn('Error playing sound:', e));
 }
 
@@ -118,12 +136,17 @@ export function playAmbient(ambientName = 'lofi') {
     // Try to get from preloaded cache first
     if (preloader.isAudioCached(ambientName, true)) {
         currentAmbient = preloader.getAudio(ambientName, true);
+        if (currentAmbient) {
+            // Create a clone to avoid affecting the cached version
+            currentAmbient = currentAmbient.cloneNode();
+        }
     } else {
         // Fall back to creating new Audio
         currentAmbient = new Audio(`./audio/${audioStyle}/ambient/${soundFile}`);
     }
     
     if (currentAmbient) {
+        // Apply current ambient volume setting
         currentAmbient.volume = ambientVolume;
         currentAmbient.loop = true;
         currentAmbient.play().catch(e => console.warn('Error playing ambient sound:', e));
@@ -162,6 +185,13 @@ export function setSoundEnabled(enabled) {
     soundEnabled = enabled;
     setData('soundEnabled', enabled);
     updateSoundButtonState();
+    
+    // If sound is disabled, ensure we don't play any sounds
+    if (!enabled) {
+        // Stop any currently playing sounds if needed
+        // This would require tracking all playing sounds, which is beyond the scope
+        // of this simple fix, but could be implemented if needed
+    }
 }
 
 /**
@@ -182,6 +212,9 @@ export function setAmbientEnabled(enabled) {
     
     if (!enabled) {
         stopAmbient();
+    } else {
+        // Start ambient sound if it was just enabled
+        playAmbient();
     }
 }
 
@@ -200,6 +233,8 @@ export function isAmbientEnabled() {
 export function setVolume(level) {
     volume = Math.max(0, Math.min(1, level));
     setData('soundVolume', volume);
+    
+    // If we were tracking currently playing sounds, we could update their volume here
 }
 
 /**
@@ -218,6 +253,7 @@ export function setAmbientVolume(level) {
     ambientVolume = Math.max(0, Math.min(1, level));
     setData('ambientVolume', ambientVolume);
     
+    // Update volume of currently playing ambient sound if any
     if (currentAmbient) {
         currentAmbient.volume = ambientVolume;
     }
