@@ -95,7 +95,7 @@ export function play(soundName) {
     
     // Fall back to creating new Audio
     if (!audio) {
-        audio = new Audio(`assets/audio/${audioStyle}/${soundFile}`);
+        audio = new Audio(`/assets/audio/${audioStyle}/${soundFile}`);
     }
     
     audio.volume = volume;
@@ -120,7 +120,7 @@ export function playAmbient(ambientName = 'lofi') {
         currentAmbient = preloader.getAudio(ambientName, true);
     } else {
         // Fall back to creating new Audio
-        currentAmbient = new Audio(`assets/audio/${audioStyle}/ambient/${soundFile}`);
+        currentAmbient = new Audio(`/assets/audio/${audioStyle}/ambient/${soundFile}`);
     }
     
     if (currentAmbient) {
