@@ -8,25 +8,25 @@ import * as preloader from '../utils/preloader.js';
 
 // Configuration
 const SOUNDS = {
-    click: 'click.mp3',
-    win: 'win.mp3',
-    lose: 'lose.mp3',
-    draw: 'draw.mp3',
-    gameStart: 'game-start.mp3',
-    gameWin: 'game-win.mp3',
-    gameLose: 'game-lose.mp3',
-    gameDraw: 'game-draw.mp3',
-    countdown: 'countdown.mp3',
-    tick: 'tick.mp3',
-    timeUp: 'time-up.mp3',
-    bonusRound: 'bonus-round.mp3',
-    chaos: 'chaos.mp3',
+    click: 'click.wav',
+    win: 'win.wav',
+    lose: 'lose.wav',
+    draw: 'draw.wav',
+    gameStart: 'game-start.wav',
+    gameWin: 'game-win.wav',
+    gameLose: 'game-lose.wav',
+    gameDraw: 'game-draw.wav',
+    countdown: 'countdown.wav',
+    tick: 'tick.wav',
+    timeUp: 'time-up.wav',
+    bonusRound: 'bonus-round.wav',
+    chaos: 'chaos.wav',
 };
 
 const AMBIENT_SOUNDS = {
-    wind: 'wind.mp3',
-    hum: 'hum.mp3',
-    lofi: 'lo-fi-loop.mp3'
+    wind: 'wind.wav',
+    hum: 'hum.wav',
+    lofi: 'lo-fi-loop.wav'
 };
 
 // State
@@ -35,6 +35,7 @@ let ambientEnabled = true;
 let volume = 0.5;
 let ambientVolume = 0.3;
 let currentAmbient = null;
+let audioStyle = 'retro'; // Default audio style
 
 /**
  * Initialize sound settings
@@ -43,6 +44,9 @@ export function init() {
     // Load settings from localStorage
     soundEnabled = getData('soundEnabled') !== false; // Default to true
     ambientEnabled = getData('ambientEnabled') !== false; // Default to true
+    
+    // Get audio style setting
+    audioStyle = getData('audioStyle') || 'retro';
     
     // Get volume settings
     const savedVolume = getData('soundVolume');
@@ -91,7 +95,7 @@ export function play(soundName) {
     
     // Fall back to creating new Audio
     if (!audio) {
-        audio = new Audio(`assets/audio/${soundFile}`);
+        audio = new Audio(`assets/audio/${audioStyle}/${soundFile}`);
     }
     
     audio.volume = volume;
@@ -116,7 +120,7 @@ export function playAmbient(ambientName = 'lofi') {
         currentAmbient = preloader.getAudio(ambientName, true);
     } else {
         // Fall back to creating new Audio
-        currentAmbient = new Audio(`assets/audio/ambient/${soundFile}`);
+        currentAmbient = new Audio(`assets/audio/${audioStyle}/ambient/${soundFile}`);
     }
     
     if (currentAmbient) {
@@ -227,6 +231,31 @@ export function getAmbientVolume() {
     return ambientVolume;
 }
 
+/**
+ * Set the audio style (retro or modern)
+ * @param {string} style - The audio style to use ('retro' or 'modern')
+ */
+export function setAudioStyle(style) {
+    if (style !== 'retro' && style !== 'modern') {
+        console.warn('Invalid audio style. Using default "retro".');
+        style = 'retro';
+    }
+    
+    audioStyle = style;
+    setData('audioStyle', style);
+    
+    // Play a test sound to demonstrate the change
+    play('click');
+}
+
+/**
+ * Get the current audio style
+ * @returns {string} The current audio style ('retro' or 'modern')
+ */
+export function getAudioStyle() {
+    return audioStyle;
+}
+
 export default {
     init,
     play,
@@ -240,5 +269,7 @@ export default {
     setVolume,
     getVolume,
     setAmbientVolume,
-    getAmbientVolume
+    getAmbientVolume,
+    setAudioStyle,
+    getAudioStyle
 }; 

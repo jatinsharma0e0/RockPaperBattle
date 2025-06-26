@@ -15,6 +15,7 @@ import * as speedMode from '../features/speedMode.js';
 import * as bonusRound from '../features/bonusRound.js';
 import * as accessibility from '../features/accessibility.js';
 import * as performance from '../utils/performance.js';
+import * as preloader from '../utils/preloader.js';
 
 /**
  * Initialize the settings screen
@@ -60,37 +61,35 @@ function setupEventListeners() {
     // Sound toggle
     const soundToggle = document.getElementById('sound-toggle-setting');
     if (soundToggle) {
+        // Set initial value
         soundToggle.checked = sound.isSoundEnabled();
+        
+        // Add change event listener
         soundToggle.addEventListener('change', () => {
             sound.setSoundEnabled(soundToggle.checked);
-            if (soundToggle.checked) {
-                sound.play('click');
-            }
-        });
-    }
-    
-    // Ambient toggle
-    const ambientToggle = document.getElementById('ambient-toggle-setting');
-    if (ambientToggle) {
-        ambientToggle.checked = sound.isAmbientEnabled();
-        ambientToggle.addEventListener('change', () => {
-            sound.setAmbientEnabled(ambientToggle.checked);
-            if (ambientToggle.checked && sound.isSoundEnabled()) {
-                // Play a short ambient sample
-                sound.playAmbient();
-                setTimeout(() => {
-                    sound.stopAmbient();
-                }, 2000);
-            }
+            sound.play('click');
         });
     }
     
     // Sound volume slider
-    const volumeSlider = document.getElementById('sound-volume');
-    if (volumeSlider) {
-        volumeSlider.value = sound.getVolume() * 100;
-        volumeSlider.addEventListener('input', () => {
-            sound.setVolume(volumeSlider.value / 100);
+    const soundVolumeSlider = document.getElementById('sound-volume');
+    if (soundVolumeSlider) {
+        soundVolumeSlider.value = sound.getVolume() * 100;
+        soundVolumeSlider.addEventListener('input', () => {
+            sound.setVolume(soundVolumeSlider.value / 100);
+        });
+    }
+    
+    // Ambient sound toggle
+    const ambientToggle = document.getElementById('ambient-toggle-setting');
+    if (ambientToggle) {
+        // Set initial value
+        ambientToggle.checked = sound.isAmbientEnabled();
+        
+        // Add change event listener
+        ambientToggle.addEventListener('change', () => {
+            sound.setAmbientEnabled(ambientToggle.checked);
+            sound.play('click');
         });
     }
     
@@ -100,6 +99,34 @@ function setupEventListeners() {
         ambientVolumeSlider.value = sound.getAmbientVolume() * 100;
         ambientVolumeSlider.addEventListener('input', () => {
             sound.setAmbientVolume(ambientVolumeSlider.value / 100);
+        });
+    }
+    
+    // Sound style selector
+    const soundStyleRetro = document.getElementById('sound-style-retro');
+    const soundStyleModern = document.getElementById('sound-style-modern');
+    
+    if (soundStyleRetro && soundStyleModern) {
+        // Set initial values based on current setting
+        const currentStyle = sound.getAudioStyle();
+        soundStyleRetro.checked = currentStyle === 'retro';
+        soundStyleModern.checked = currentStyle === 'modern';
+        
+        // Add change event listeners
+        soundStyleRetro.addEventListener('change', () => {
+            if (soundStyleRetro.checked) {
+                sound.setAudioStyle('retro');
+                // Reload audio assets with new style
+                preloader.reloadAudioAssets();
+            }
+        });
+        
+        soundStyleModern.addEventListener('change', () => {
+            if (soundStyleModern.checked) {
+                sound.setAudioStyle('modern');
+                // Reload audio assets with new style
+                preloader.reloadAudioAssets();
+            }
         });
     }
     

@@ -3,30 +3,32 @@
  * Handles efficient loading of images, audio, and other assets
  */
 
+import { getData } from '../settings/storage.js';
+
 // Assets to preload
 const ASSETS = {
     // Audio files
     audio: [
-        'click.mp3',
-        'win.mp3',
-        'lose.mp3',
-        'draw.mp3',
-        'gameStart.mp3',
-        'gameWin.mp3',
-        'gameLose.mp3',
-        'gameDraw.mp3',
-        'countdown.mp3',
-        'tick.mp3',
-        'timeUp.mp3',
-        'bonusRound.mp3',
-        'chaos.mp3'
+        'click.wav',
+        'win.wav',
+        'lose.wav',
+        'draw.wav',
+        'gameStart.wav',
+        'gameWin.wav',
+        'gameLose.wav',
+        'gameDraw.wav',
+        'countdown.wav',
+        'tick.wav',
+        'timeUp.wav',
+        'bonusRound.wav',
+        'chaos.wav'
     ],
     
     // Ambient audio
     ambientAudio: [
-        'wind.mp3',
-        'hum.mp3',
-        'lo-fi-loop.mp3'
+        'wind.wav',
+        'hum.wav',
+        'lo-fi-loop.wav'
     ],
     
     // Images
@@ -56,6 +58,14 @@ let loadedAssets = 0;
 let isLoading = false;
 let onProgressCallback = null;
 let onCompleteCallback = null;
+
+/**
+ * Get current audio style setting from storage
+ * @returns {string} Current audio style ('retro' or 'modern')
+ */
+function getAudioStyle() {
+    return getData('audioStyle') || 'retro';
+}
 
 /**
  * Preload all game assets
@@ -100,7 +110,11 @@ export function preloadAssets(onProgress = null, onComplete = null) {
  * @param {boolean} isAmbient - Whether this is an ambient audio file
  */
 function preloadAudio(file, isAmbient = false) {
-    const path = isAmbient ? `assets/audio/ambient/${file}` : `assets/audio/${file}`;
+    const audioStyle = getAudioStyle();
+    const path = isAmbient 
+        ? `assets/audio/${audioStyle}/ambient/${file}` 
+        : `assets/audio/${audioStyle}/${file}`;
+    
     const audio = new Audio(path);
     
     // Add load event listener
@@ -240,10 +254,29 @@ export function getIcon(key) {
     return assetsCache.icons[key] || null;
 }
 
+/**
+ * Clear audio cache and reload audio files (for when audio style changes)
+ */
+export function reloadAudioAssets() {
+    // Clear audio cache
+    assetsCache.audio = {};
+    
+    // Reload regular audio
+    ASSETS.audio.forEach(file => {
+        preloadAudio(file);
+    });
+    
+    // Reload ambient audio
+    ASSETS.ambientAudio.forEach(file => {
+        preloadAudio(file, true);
+    });
+}
+
 export default {
     preloadAssets,
     isAudioCached,
     getAudio,
     getImage,
-    getIcon
+    getIcon,
+    reloadAudioAssets
 }; 

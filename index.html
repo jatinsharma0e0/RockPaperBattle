@@ -6,7 +6,7 @@
     <meta name="description" content="Rock Paper Battle - A modern take on the classic game with bonus rounds, AI opponents, and special moves.">
     <title>Rock Paper Battle</title>
     <!-- Preload critical assets -->
-    <link rel="preload" href="assets/audio/click.mp3" as="audio" crossorigin>
+    <link rel="preload" href="assets/audio/retro/click.wav" as="audio" crossorigin>
     <link rel="preload" href="css/style.css" as="style">
     <link rel="preload" href="js/main.js" as="script" crossorigin>
     <!-- Favicon -->
@@ -300,6 +300,21 @@
                         <label for="ambient-volume">Ambient Volume</label>
                         <input type="range" id="ambient-volume" min="0" max="100" value="30" aria-describedby="ambient-volume-desc">
                         <p id="ambient-volume-desc" class="setting-description">Adjust ambient sound volume</p>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label>Sound Style</label>
+                        <div class="radio-group" role="radiogroup" aria-labelledby="sound-style-label">
+                            <div class="radio-option">
+                                <input type="radio" id="sound-style-retro" name="sound-style" checked>
+                                <label for="sound-style-retro">Retro</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="sound-style-modern" name="sound-style">
+                                <label for="sound-style-modern">Modern</label>
+                            </div>
+                        </div>
+                        <p id="sound-style-desc" class="setting-description">Choose between retro and modern sound styles</p>
                     </div>
                     
                     <button id="test-sound-btn" class="btn" aria-label="Test Sound Settings">Test Sound</button>

@@ -727,12 +727,12 @@ h4 {
     box-shadow: 0 0 0 3px var(--accent-color);
 }
 
-/* Toggle switch */
+/* Toggle Button/Switch */
 .toggle-switch {
     position: relative;
-    display: inline-block;
     width: 60px;
     height: 30px;
+    margin: 5px;
 }
 
 .toggle-switch input {
@@ -1060,4 +1060,28 @@ section {
 section.hidden {
     opacity: 0;
     transform: translateY(10px);
+}
+
+/* Radio Group */
+.radio-group {
+    display: flex;
+    gap: 15px;
+    margin: 10px 0;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.radio-option input[type="radio"] {
+    margin-right: 6px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.radio-option label {
+    cursor: pointer;
+    font-size: 0.95rem;
 } 
