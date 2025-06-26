@@ -11,6 +11,9 @@
 </head>
 <body class="theme-day">
     <div class="container">
+        <!-- Confetti Container for Win Animation -->
+        <div class="confetti-container"></div>
+        
         <!-- Sound Toggle Button (Global) -->
         <button id="sound-toggle" class="icon-btn sound-toggle" title="Toggle Sound">🔊</button>
         
@@ -40,6 +43,12 @@
                     <button id="back-to-menu" class="icon-btn" title="Back to Menu">⬅️</button>
                     <button id="reset-scores" class="icon-btn" title="Reset Scores">🔄</button>
                 </div>
+            </div>
+            
+            <!-- Game Info Banner -->
+            <div id="game-info-banner" class="game-info-banner hidden">
+                <span class="game-info-banner-icon">⚡</span>
+                <span id="game-info-text">Speed Mode Active</span>
             </div>
             
             <div class="score-container">
@@ -151,6 +160,10 @@
                         <h4>Best AI Mode</h4>
                         <p id="stats-best-ai-mode">Random</p>
                     </div>
+                    <div class="stat-detail">
+                        <h4>Bonus Rounds Won</h4>
+                        <p id="stats-bonus-rounds">0</p>
+                    </div>
                 </div>
             </div>
             
@@ -178,6 +191,7 @@
                 <button class="tab-btn" data-tab="theme">Theme</button>
                 <button class="tab-btn" data-tab="sound">Sound</button>
                 <button class="tab-btn" data-tab="ai">AI</button>
+                <button class="tab-btn" data-tab="game">Game</button>
                 <button class="tab-btn" data-tab="data">Data</button>
             </div>
             
@@ -274,6 +288,33 @@
                     <div id="ai-mode-description" class="mode-description">
                         <h4>Random Mode</h4>
                         <p>AI picks a move randomly each turn.</p>
+                    </div>
+                </div>
+                
+                <!-- Game Settings Tab -->
+                <div id="game-tab" class="tab-content">
+                    <h3>Game Settings</h3>
+                    
+                    <div class="setting-group">
+                        <h4>Game Modes</h4>
+                        
+                        <div class="toggle-group">
+                            <label for="speed-mode-toggle" class="toggle-label">Speed Mode</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="speed-mode-toggle">
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+                        <p class="mode-description">3-second time limit for each move (Endless mode only)</p>
+                        
+                        <div class="toggle-group">
+                            <label for="bonus-rounds-toggle" class="toggle-label">Bonus Rounds</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="bonus-rounds-toggle" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </div>
+                        <p class="mode-description">Random bonus rounds with special rules</p>
                     </div>
                 </div>
                 

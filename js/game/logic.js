@@ -59,6 +59,50 @@ export function determineWinner(playerMove, aiMove) {
 }
 
 /**
+ * Determines the winner with reversed rules
+ * @param {string} playerMove - The player's move
+ * @param {string} aiMove - The AI's move
+ * @returns {string} - 'win', 'lose', or 'draw'
+ */
+export function determineWinnerReversed(playerMove, aiMove) {
+    // Same move = draw
+    if (playerMove === aiMove) {
+        return 'draw';
+    }
+    
+    // Reversed Rock-Paper-Scissors rules
+    if (
+        (playerMove === 'rock' && aiMove === 'paper') ||
+        (playerMove === 'paper' && aiMove === 'scissors') ||
+        (playerMove === 'scissors' && aiMove === 'rock')
+    ) {
+        return 'win';
+    }
+    
+    // Fire move rules (same as normal)
+    if (playerMove === 'fire') {
+        // Fire beats scissors and paper
+        if (aiMove === 'scissors' || aiMove === 'paper') {
+            return 'win';
+        }
+        // Rock beats fire
+        return 'lose';
+    }
+    
+    if (aiMove === 'fire') {
+        // Fire beats scissors and paper
+        if (playerMove === 'scissors' || playerMove === 'paper') {
+            return 'lose';
+        }
+        // Rock beats fire
+        return 'win';
+    }
+    
+    // Player loses in all other cases
+    return 'lose';
+}
+
+/**
  * Gets the emoji for a move
  * @param {string} move - The move
  * @returns {string} - The emoji for the move
@@ -99,8 +143,20 @@ export function getResultMessage(result, playerMove, aiMove) {
     }
 }
 
+/**
+ * Get a random move from the available moves
+ * @param {Array} availableMoves - Array of available moves
+ * @returns {string} - A random move
+ */
+export function getRandomMove(availableMoves) {
+    const randomIndex = Math.floor(Math.random() * availableMoves.length);
+    return availableMoves[randomIndex];
+}
+
 export default {
     determineWinner,
+    determineWinnerReversed,
     getMoveEmoji,
-    getResultMessage
+    getResultMessage,
+    getRandomMove
 }; 

@@ -6,6 +6,7 @@ A modern HTML5 + JavaScript game featuring Rock, Paper, Scissors with multiple g
 
 - **Endless Mode**: Play continuously against AI with persistent score tracking.
 - **Best of 5**: Battle the AI in a best-of-five match format.
+- **Speed Mode**: Time-limited gameplay with 3-second turns.
 
 ## Features
 
@@ -43,11 +44,22 @@ A modern HTML5 + JavaScript game featuring Rock, Paper, Scissors with multiple g
 - AI mode statistics tracking
 - Responsive visual indicators for different AI personalities
 
+### Phase 6 (Completed)
+- Speed Mode with 3-second time limit per move
+- Bonus Rounds with special rules
+  - 🎯 Double Points: Win for double score
+  - 🔁 Reverse Rules: Rock beats Paper, Paper beats Scissors, Scissors beats Rock
+  - 🎲 Chaos Mode: Randomly shuffled move labels
+- Enhanced visual feedback:
+  - Confetti animation on wins
+  - Shake effect on losses
+  - Glow effect on draws
+- Game settings tab with toggles for Speed and Bonus features
+
 ### Coming Soon
-- Bonus rounds with special rewards
-- Speed mode with time constraints
 - Multiplayer options
 - More themes and avatars
+- Additional special moves
 
 ## Themes
 
@@ -70,6 +82,13 @@ Unlock the special "Fire" move after winning 10 games:
 - 🤖 **Random**: The default AI that picks moves randomly.
 - 😏 **Cheeky**: This AI mimics your last move 40% of the time.
 - 🧠 **Predictive**: Analyzes your patterns and tries to counter your most-used moves.
+
+## Bonus Rounds
+
+Special rounds with unique rules that occur randomly:
+- 🎯 **Double Points**: Win this round for twice the points!
+- 🔁 **Reverse Rules**: All win conditions are flipped (except for Fire)
+- 🎲 **Chaos Mode**: Move labels are shuffled - can you figure out which is which?
 
 ## Achievements
 
@@ -97,6 +116,11 @@ Place audio files in the `assets/audio` directory with the following names:
 - game-win.mp3
 - game-lose.mp3
 - game-draw.mp3
+- countdown.mp3 (for Speed Mode)
+- tick.mp3 (for Speed Mode warning)
+- time-up.mp3 (for Speed Mode timeout)
+- bonus-round.mp3 (for Bonus Round announcement)
+- chaos.mp3 (for Chaos Mode activation)
 
 For ambient sounds, place files in `assets/audio/ambient`:
 - wind.mp3
@@ -106,12 +130,13 @@ For ambient sounds, place files in `assets/audio/ambient`:
 ## How to Play
 
 1. Choose a game mode from the landing page
-2. Select Rock (✊), Paper (✋), or Scissors (✌️)
+2. Select Rock (✊), Paper (✋), Scissors (✌️), or Fire (🔥)
 3. See the result and your updated score
 4. Continue playing or return to the menu
 5. Check your stats and achievements anytime
-6. Unlock the secret Fire (🔥) move after 10 wins!
-7. Try different AI personalities in settings
+6. Try different AI personalities in settings
+7. Enable Speed Mode for a timed challenge
+8. Watch for surprise Bonus Rounds with special rules!
 
 ## Development
 

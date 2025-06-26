@@ -87,7 +87,7 @@ export function getComputerMove(availableMoves) {
  * @param {Array} availableMoves - The moves available to the AI
  * @returns {string} - A random move
  */
-function getRandomMove(availableMoves) {
+export function getRandomMove(availableMoves) {
     const randomIndex = Math.floor(Math.random() * availableMoves.length);
     return availableMoves[randomIndex];
 }
@@ -248,6 +248,7 @@ export default {
     init,
     getAllModes,
     getComputerMove,
+    getRandomMove,
     setAiMode,
     getCurrentMode,
     getCurrentModeDisplayName,

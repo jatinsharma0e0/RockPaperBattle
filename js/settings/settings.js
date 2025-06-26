@@ -11,6 +11,8 @@ import * as achievements from '../features/achievements.js';
 import * as stats from '../features/stats.js';
 import * as secretMove from '../features/secretMove.js';
 import * as aiModes from '../features/aiModes.js';
+import * as speedMode from '../features/speedMode.js';
+import * as bonusRound from '../features/bonusRound.js';
 
 /**
  * Initialize the settings screen
@@ -120,6 +122,33 @@ function setupEventListeners() {
         });
     }
     
+    // Speed mode toggle
+    const speedModeToggle = document.getElementById('speed-mode-toggle');
+    if (speedModeToggle) {
+        // Set initial value
+        speedModeToggle.checked = speedMode.isEnabled();
+        
+        // Add change event listener
+        speedModeToggle.addEventListener('change', () => {
+            speedMode.setEnabled(speedModeToggle.checked);
+            sound.play('click');
+            updateGameBanner();
+        });
+    }
+    
+    // Bonus rounds toggle
+    const bonusRoundsToggle = document.getElementById('bonus-rounds-toggle');
+    if (bonusRoundsToggle) {
+        // Set initial value
+        bonusRoundsToggle.checked = bonusRound.isEnabled();
+        
+        // Add change event listener
+        bonusRoundsToggle.addEventListener('change', () => {
+            bonusRound.setEnabled(bonusRoundsToggle.checked);
+            sound.play('click');
+        });
+    }
+    
     // Reset stats button
     const resetStatsBtn = document.getElementById('reset-stats-settings-btn');
     if (resetStatsBtn) {
@@ -162,6 +191,27 @@ function setupEventListeners() {
                 window.location.reload();
             }
         });
+    }
+}
+
+/**
+ * Update the game info banner based on current settings
+ */
+export function updateGameBanner() {
+    const banner = document.getElementById('game-info-banner');
+    const bannerText = document.getElementById('game-info-text');
+    const bannerIcon = document.querySelector('.game-info-banner-icon');
+    
+    if (!banner || !bannerText || !bannerIcon) return;
+    
+    // Check if speed mode is enabled
+    if (speedMode.isEnabled()) {
+        banner.classList.remove('hidden');
+        banner.classList.add('speed-mode');
+        bannerText.textContent = 'Speed Mode Active';
+        bannerIcon.textContent = '⚡';
+    } else {
+        banner.classList.add('hidden');
     }
 }
 
@@ -262,5 +312,6 @@ function hideSettings() {
 
 export default {
     init,
-    showSettings
+    showSettings,
+    updateGameBanner
 }; 

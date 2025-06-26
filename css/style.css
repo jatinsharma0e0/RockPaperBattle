@@ -734,4 +734,177 @@ input[type="range"]::-webkit-slider-thumb {
 #data-tab .btn {
     margin-right: 10px;
     margin-bottom: 10px;
+}
+
+/* Speed Mode Timer */
+.speed-timer-container {
+    width: 80%;
+    height: 10px;
+    background-color: var(--border-color);
+    border-radius: 5px;
+    margin: 10px auto 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.speed-timer {
+    height: 100%;
+    width: 100%;
+    background-color: var(--primary-color);
+    transition: width 0.05s linear;
+}
+
+.speed-timer.warning {
+    background-color: var(--lose-color);
+}
+
+/* Bonus Round Styles */
+.bonus-notification {
+    background-color: var(--accent-color);
+    color: white;
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    min-width: 300px;
+    max-width: 90%;
+    pointer-events: none;
+}
+
+.bonus-notification-icon {
+    font-size: 2.5rem;
+    margin-right: 15px;
+}
+
+.bonus-notification-content h3 {
+    margin: 0 0 5px;
+    font-size: 1.2rem;
+}
+
+.bonus-notification-content p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Game Area Bonus Round States */
+.game-area.bonus-round {
+    position: relative;
+    z-index: 1;
+    border-radius: var(--border-radius);
+}
+
+.game-area.double-points {
+    border: 2px solid gold;
+}
+
+.game-area.reverse-rules {
+    border: 2px solid var(--accent-color);
+}
+
+.game-area.chaos-mode {
+    border: 2px solid var(--special-move-color);
+}
+
+/* Game Mode Toggle Switch */
+.game-mode-toggles {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 15px 0;
+}
+
+.toggle-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toggle-label {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Button Hover Effects */
+.btn:hover, .btn-small:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+.move-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+    z-index: 2;
+}
+
+.icon-btn:hover {
+    transform: scale(1.15);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Result Screen Transitions */
+.result-message {
+    transition: all 0.3s ease;
+}
+
+.result-message.win, 
+.result-message.lose, 
+.result-message.draw {
+    transform: scale(1.03);
+}
+
+/* Confetti Container */
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* Game Info Banner */
+.game-info-banner {
+    background-color: var(--result-bg);
+    border-radius: var(--border-radius);
+    padding: 8px 15px;
+    margin: 5px 0 15px;
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.game-info-banner.speed-mode {
+    background-color: var(--win-color);
+    color: white;
+}
+
+.game-info-banner.bonus-round {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.game-info-banner-icon {
+    font-size: 1.2rem;
+}
+
+/* Game Settings Tab */
+#game-tab .setting-group {
+    margin-bottom: 20px;
+}
+
+#game-tab .toggle-group {
+    margin: 10px 0;
+}
+
+#game-tab .mode-description {
+    font-size: 0.9rem;
+    margin-top: 10px;
+    font-style: italic;
 } 

@@ -11,6 +11,8 @@ import * as achievements from '../features/achievements.js';
 import * as stats from '../features/stats.js';
 import * as secretMove from '../features/secretMove.js';
 import * as aiModes from '../features/aiModes.js';
+import * as speedMode from '../features/speedMode.js';
+import * as bonusRound from '../features/bonusRound.js';
 
 // Game state for Endless Mode
 const gameState = {
@@ -19,7 +21,10 @@ const gameState = {
     currentRound: 0,
     lastPlayerMove: null,
     lastAiMove: null,
-    lastResult: null
+    lastResult: null,
+    bonusRoundActive: false,
+    bonusType: null,
+    timeoutMove: null
 };
 
 /**
@@ -48,6 +53,33 @@ export function initEndlessMode() {
     
     // Play start sound
     sound.play('gameStart');
+    
+    // If speed mode is enabled, start the timer
+    if (speedMode.isEnabled()) {
+        startSpeedModeTimer();
+    }
+}
+
+/**
+ * Starts the speed mode timer
+ */
+function startSpeedModeTimer() {
+    // Only start the timer if speed mode is enabled
+    if (!speedMode.isEnabled()) return;
+    
+    // Start the timer
+    speedMode.startTimer(3000, () => {
+        // When time is up, make a random move
+        const includeFireMove = secretMove.isUnlocked();
+        const availableMoves = includeFireMove ? ['rock', 'paper', 'scissors', 'fire'] : ['rock', 'paper', 'scissors'];
+        const timeoutMove = speedMode.getTimeoutMove(availableMoves);
+        
+        // Store the timeout move in game state
+        gameState.timeoutMove = timeoutMove;
+        
+        // Handle the move
+        handlePlayerMove(timeoutMove, true);
+    });
 }
 
 /**
@@ -85,21 +117,34 @@ function resetGameState() {
     gameState.lastPlayerMove = null;
     gameState.lastAiMove = null;
     gameState.lastResult = null;
+    gameState.bonusRoundActive = false;
+    gameState.bonusType = null;
+    gameState.timeoutMove = null;
     
     // Reset the move displays
     ui.displayMoves('', '');
     
     // Reset AI move history
     aiModes.resetMoveHistory();
+    
+    // End any active bonus round
+    bonusRound.endBonusRound();
 }
 
 /**
  * Handles player move selection
  * @param {string} playerMove - The player's selected move
+ * @param {boolean} isTimeoutMove - Whether this is an auto-selected move due to timeout
  */
-export function handlePlayerMove(playerMove) {
+export function handlePlayerMove(playerMove, isTimeoutMove = false) {
     // Record the player's move for AI analysis
     aiModes.recordPlayerMove(playerMove);
+    
+    // Check if we should activate a bonus round
+    if (!gameState.bonusRoundActive && bonusRound.isEnabled() && bonusRound.shouldActivateBonusRound()) {
+        gameState.bonusRoundActive = true;
+        gameState.bonusType = bonusRound.activateRandomBonusRound();
+    }
     
     // Generate AI move - include fire move if player has unlocked it
     const includeFireMove = secretMove.isUnlocked();
@@ -108,8 +153,13 @@ export function handlePlayerMove(playerMove) {
     // Get AI move based on current AI mode
     const aiMove = aiModes.getComputerMove(availableMoves);
     
-    // Determine the winner
-    const result = determineWinner(playerMove, aiMove);
+    // Determine the winner (apply bonus round rules if active)
+    let result = determineWinner(playerMove, aiMove);
+    
+    // If this is a bonus round, modify the result according to its rules
+    if (gameState.bonusRoundActive) {
+        result = bonusRound.modifyResult(result, playerMove, aiMove);
+    }
     
     // Update game state
     gameState.lastPlayerMove = playerMove;
@@ -121,7 +171,7 @@ export function handlePlayerMove(playerMove) {
     ui.displayMoves(playerMove, aiMove);
     
     // Update scores and localStorage
-    updateScores(result);
+    updateScores(result, isTimeoutMove);
     
     // Play appropriate sound
     if (result === 'win') {
@@ -143,19 +193,82 @@ export function handlePlayerMove(playerMove) {
     // Get result message
     const resultMessage = getResultMessage(result, playerMove, aiMove);
     
+    // Apply win/loss/draw animations
+    applyResultAnimations(result);
+    
     // Show result after a short delay
     setTimeout(() => {
         ui.showResult(result, resultMessage, playerMove, aiMove);
+        
+        // End the bonus round after the result is shown
+        if (gameState.bonusRoundActive) {
+            bonusRound.endBonusRound();
+            gameState.bonusRoundActive = false;
+            gameState.bonusType = null;
+        }
     }, 1000);
+}
+
+/**
+ * Apply win/loss/draw animations to game elements
+ * @param {string} result - The result of the round ('win', 'lose', or 'draw')
+ */
+function applyResultAnimations(result) {
+    const playerMoveDisplay = document.getElementById('player-move-display');
+    const aiMoveDisplay = document.getElementById('ai-move-display');
+    
+    switch (result) {
+        case 'win':
+            // Show confetti for win
+            if (window.showWinAnimation) {
+                window.showWinAnimation();
+            }
+            break;
+        case 'lose':
+            // Show shake animation for loss
+            if (window.showLossAnimation && playerMoveDisplay) {
+                window.showLossAnimation(playerMoveDisplay);
+            }
+            break;
+        case 'draw':
+            // Show glow effect for draw
+            if (window.showDrawAnimation && playerMoveDisplay && aiMoveDisplay) {
+                window.showDrawAnimation(playerMoveDisplay);
+                window.showDrawAnimation(aiMoveDisplay);
+            }
+            break;
+    }
 }
 
 /**
  * Updates scores based on the round result
  * @param {string} result - The result of the round ('win', 'lose', or 'draw')
+ * @param {boolean} isTimeoutMove - Whether this is an auto-selected move due to timeout
  */
-function updateScores(result) {
-    // Update localStorage stats
-    updateStat(result === 'win' ? 'wins' : result === 'lose' ? 'losses' : 'draws');
+function updateScores(result, isTimeoutMove) {
+    // Check for score multiplier from bonus round
+    const scoreMultiplier = gameState.bonusRoundActive ? bonusRound.getScoreMultiplier() : 1;
+    
+    // If this is a timeout move and the result is a loss, add a timeout penalty
+    if (isTimeoutMove && result !== 'win') {
+        result = 'lose'; // Force a loss for timeout
+    }
+    
+    // Update localStorage stats with appropriate multiplier
+    if (result === 'win') {
+        for (let i = 0; i < scoreMultiplier; i++) {
+            updateStat('wins');
+        }
+    } else if (result === 'lose') {
+        updateStat('losses');
+    } else {
+        updateStat('draws');
+    }
+    
+    // Update bonus rounds won stat
+    if (gameState.bonusRoundActive && result === 'win') {
+        updateBonusRoundStats();
+    }
     
     // Get updated stats
     const storedStats = getData('stats');
@@ -174,6 +287,23 @@ function updateScores(result) {
     
     // Update best AI mode stats
     updateBestAiMode(result);
+}
+
+/**
+ * Updates the bonus rounds won statistic
+ */
+function updateBonusRoundStats() {
+    // Get current bonus rounds won
+    const bonusRoundsWon = getData('bonusRoundsWon') || 0;
+    
+    // Increment and save
+    setData('bonusRoundsWon', bonusRoundsWon + 1);
+    
+    // Update UI in stats screen if it exists
+    const bonusRoundsElement = document.getElementById('stats-bonus-rounds');
+    if (bonusRoundsElement) {
+        bonusRoundsElement.textContent = bonusRoundsWon + 1;
+    }
 }
 
 /**
@@ -242,6 +372,9 @@ function updateBestAiMode(result) {
 export function returnToMenu() {
     sound.play('click');
     ui.showSection('landing-page');
+    
+    // Stop any speed mode timer
+    speedMode.stopTimer();
 }
 
 /**
@@ -250,6 +383,11 @@ export function returnToMenu() {
 export function continueGame() {
     sound.play('click');
     ui.showSection('game-screen');
+    
+    // If speed mode is enabled, start the timer
+    if (speedMode.isEnabled()) {
+        startSpeedModeTimer();
+    }
 }
 
 /**
@@ -274,6 +412,11 @@ export function resetScores() {
     
     // Play sound
     sound.play('click');
+    
+    // If speed mode is enabled, restart the timer
+    if (speedMode.isEnabled()) {
+        startSpeedModeTimer();
+    }
 }
 
 export default {

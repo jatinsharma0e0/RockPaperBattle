@@ -14,6 +14,8 @@ import * as avatar from './features/avatar.js';
 import * as secretMove from './features/secretMove.js';
 import * as aiModes from './features/aiModes.js';
 import * as idle from './features/idle.js';
+import * as speedMode from './features/speedMode.js';
+import * as bonusRound from './features/bonusRound.js';
 import * as settings from './settings/settings.js';
 import { getData, setData } from './settings/storage.js';
 
@@ -36,6 +38,8 @@ function init() {
     secretMove.init();
     aiModes.init();
     idle.init();
+    speedMode.init();
+    bonusRound.init();
     settings.init();
     
     // Set up event handlers
@@ -46,6 +50,9 @@ function init() {
     
     // Check if this is the first time running the game
     checkFirstRun();
+    
+    // Set up visual effects
+    setupVisualEffects();
 }
 
 /**
@@ -60,6 +67,9 @@ function setupEventHandlers() {
             endless.initEndlessMode();
             sound.play('click');
             stats.updateBestMode('Endless');
+            
+            // Update game info banner
+            settings.updateGameBanner();
         },
         
         // Navigation
@@ -69,6 +79,12 @@ function setupEventHandlers() {
             } else if (currentGameMode === 'bestOf5') {
                 bestOf5.returnToMenu();
             }
+            
+            // End any active bonus round
+            bonusRound.endBonusRound();
+            
+            // Stop speed timer if active
+            speedMode.stopTimer();
         },
         
         // Play again
@@ -78,10 +94,16 @@ function setupEventHandlers() {
             } else if (currentGameMode === 'bestOf5') {
                 bestOf5.continueGame();
             }
+            
+            // End any active bonus round
+            bonusRound.endBonusRound();
         },
         
         // Move selection
         makeMove: (move) => {
+            // Stop speed timer if active
+            speedMode.stopTimer();
+            
             if (currentGameMode === 'endless') {
                 endless.handlePlayerMove(move);
             } else if (currentGameMode === 'bestOf5') {
@@ -101,6 +123,12 @@ function setupEventHandlers() {
             bestOf5.initBestOf5Mode();
             sound.play('click');
             stats.updateBestMode('Best of 5');
+            
+            // Speed mode is disabled for Best of 5
+            const banner = document.getElementById('game-info-banner');
+            if (banner) {
+                banner.classList.add('hidden');
+            }
         });
     }
     
@@ -113,6 +141,9 @@ function setupEventHandlers() {
             } else if (currentGameMode === 'bestOf5') {
                 bestOf5.resetScores();
             }
+            
+            // End any active bonus round
+            bonusRound.endBonusRound();
         });
     }
     
@@ -161,6 +192,9 @@ function setupEventHandlers() {
     const fireMoveBtn = document.getElementById('fire-move-btn');
     if (fireMoveBtn) {
         fireMoveBtn.addEventListener('click', () => {
+            // Stop speed timer if active
+            speedMode.stopTimer();
+            
             const move = fireMoveBtn.getAttribute('data-move');
             if (currentGameMode === 'endless') {
                 endless.handlePlayerMove(move);
@@ -177,6 +211,71 @@ function setupEventHandlers() {
     document.addEventListener('click', idle.resetIdleTimer);
     document.addEventListener('mousemove', idle.resetIdleTimer);
     document.addEventListener('keydown', idle.resetIdleTimer);
+}
+
+/**
+ * Set up visual effects for win/loss/draw animations
+ */
+function setupVisualEffects() {
+    // Create a global function to show win animation with confetti
+    window.showWinAnimation = function() {
+        // Create confetti pieces
+        const confettiContainer = document.querySelector('.confetti-container');
+        if (!confettiContainer) return;
+        
+        // Clear any existing confetti
+        confettiContainer.innerHTML = '';
+        
+        // Colors for confetti
+        const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+        
+        // Create confetti pieces
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti-piece';
+            confetti.style.left = `${Math.random() * 100}%`;
+            confetti.style.top = `${Math.random() * 50}%`;
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Add random rotation and movement
+            confetti.style.setProperty('--confetti-dx', `${(Math.random() - 0.5) * 300}px`);
+            confetti.style.setProperty('--confetti-rotate', `${Math.random() * 360}deg`);
+            
+            // Add to container
+            confettiContainer.appendChild(confetti);
+        }
+        
+        // Clean up confetti after animation completes
+        setTimeout(() => {
+            confettiContainer.innerHTML = '';
+        }, 2000);
+    };
+    
+    // Function to show loss animation (shake)
+    window.showLossAnimation = function(element) {
+        if (!element) return;
+        
+        // Add shake effect class
+        element.classList.add('shake-effect');
+        
+        // Remove class after animation completes
+        setTimeout(() => {
+            element.classList.remove('shake-effect');
+        }, 500);
+    };
+    
+    // Function to show draw animation (glow)
+    window.showDrawAnimation = function(element) {
+        if (!element) return;
+        
+        // Add draw effect class
+        element.classList.add('draw-effect');
+        
+        // Remove class after animation completes
+        setTimeout(() => {
+            element.classList.remove('draw-effect');
+        }, 1000);
+    };
 }
 
 /**
@@ -240,6 +339,12 @@ function checkFirstRun() {
 function cleanup() {
     // Clean up idle detection
     idle.cleanup();
+    
+    // Stop speed timer if active
+    speedMode.stopTimer();
+    
+    // End any active bonus round
+    bonusRound.endBonusRound();
 }
 
 // Initialize the game when the DOM is fully loaded
