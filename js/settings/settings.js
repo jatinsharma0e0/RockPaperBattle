@@ -10,6 +10,7 @@ import * as avatar from '../features/avatar.js';
 import * as achievements from '../features/achievements.js';
 import * as stats from '../features/stats.js';
 import * as secretMove from '../features/secretMove.js';
+import * as aiModes from '../features/aiModes.js';
 
 /**
  * Initialize the settings screen
@@ -59,7 +60,23 @@ function setupEventListeners() {
         });
     }
     
-    // Volume slider
+    // Ambient toggle
+    const ambientToggle = document.getElementById('ambient-toggle-setting');
+    if (ambientToggle) {
+        ambientToggle.checked = sound.isAmbientEnabled();
+        ambientToggle.addEventListener('change', () => {
+            sound.setAmbientEnabled(ambientToggle.checked);
+            if (ambientToggle.checked && sound.isSoundEnabled()) {
+                // Play a short ambient sample
+                sound.playAmbient();
+                setTimeout(() => {
+                    sound.stopAmbient();
+                }, 2000);
+            }
+        });
+    }
+    
+    // Sound volume slider
     const volumeSlider = document.getElementById('sound-volume');
     if (volumeSlider) {
         volumeSlider.value = sound.getVolume() * 100;
@@ -68,11 +85,38 @@ function setupEventListeners() {
         });
     }
     
+    // Ambient volume slider
+    const ambientVolumeSlider = document.getElementById('ambient-volume');
+    if (ambientVolumeSlider) {
+        ambientVolumeSlider.value = sound.getAmbientVolume() * 100;
+        ambientVolumeSlider.addEventListener('input', () => {
+            sound.setAmbientVolume(ambientVolumeSlider.value / 100);
+        });
+    }
+    
     // Test sound button
     const testSoundBtn = document.getElementById('test-sound-btn');
     if (testSoundBtn) {
         testSoundBtn.addEventListener('click', () => {
             sound.play('win');
+        });
+    }
+    
+    // AI mode selector
+    const aiModeSelect = document.getElementById('ai-mode-select');
+    if (aiModeSelect) {
+        // Set initial value
+        aiModeSelect.value = aiModes.getCurrentMode();
+        
+        // Update description based on current selection
+        updateAiModeDescription(aiModes.getCurrentMode());
+        
+        // Add change event listener
+        aiModeSelect.addEventListener('change', () => {
+            const selectedMode = aiModeSelect.value;
+            aiModes.setAiMode(selectedMode);
+            updateAiModeDescription(selectedMode);
+            sound.play('click');
         });
     }
     
@@ -118,6 +162,39 @@ function setupEventListeners() {
                 window.location.reload();
             }
         });
+    }
+}
+
+/**
+ * Update the AI mode description based on the selected mode
+ * @param {string} mode - The selected AI mode
+ */
+function updateAiModeDescription(mode) {
+    const descriptionContainer = document.getElementById('ai-mode-description');
+    let title = '';
+    let description = '';
+    
+    switch (mode) {
+        case 'cheeky':
+            title = "Cheeky Mode";
+            description = "This AI sometimes copies your last move (40% chance).";
+            break;
+        case 'predictive':
+            title = "Predictive Mode";
+            description = "This AI analyzes your moves and tries to counter your most used choices.";
+            break;
+        case 'random':
+        default:
+            title = "Random Mode";
+            description = "AI picks a move randomly each turn.";
+            break;
+    }
+    
+    if (descriptionContainer) {
+        descriptionContainer.innerHTML = `
+            <h4>${title}</h4>
+            <p>${description}</p>
+        `;
     }
 }
 

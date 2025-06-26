@@ -51,7 +51,10 @@
                     <span id="player-score">0</span>
                 </div>
                 <div class="score ai-score">
-                    <span>AI: </span>
+                    <div class="ai-info">
+                        <div id="ai-mode-indicator" class="ai-mode-indicator">🤖</div>
+                        <span>AI</span>:
+                    </div>
                     <span id="ai-score">0</span>
                 </div>
             </div>
@@ -142,6 +145,13 @@
                         <p id="stats-best-mode">None</p>
                     </div>
                 </div>
+                
+                <div class="stats-details">
+                    <div class="stat-detail">
+                        <h4>Best AI Mode</h4>
+                        <p id="stats-best-ai-mode">Random</p>
+                    </div>
+                </div>
             </div>
             
             <div class="achievements-section">
@@ -167,6 +177,7 @@
                 <button class="tab-btn active" data-tab="profile">Profile</button>
                 <button class="tab-btn" data-tab="theme">Theme</button>
                 <button class="tab-btn" data-tab="sound">Sound</button>
+                <button class="tab-btn" data-tab="ai">AI</button>
                 <button class="tab-btn" data-tab="data">Data</button>
             </div>
             
@@ -228,11 +239,42 @@
                     </div>
                     
                     <div class="setting-group">
-                        <label for="sound-volume">Volume</label>
+                        <label for="sound-volume">Sound Volume</label>
                         <input type="range" id="sound-volume" min="0" max="100" value="50">
                     </div>
                     
+                    <div class="setting-group">
+                        <label for="ambient-toggle-setting">Ambient Sound</label>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="ambient-toggle-setting" checked>
+                            <span class="toggle-slider"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label for="ambient-volume">Ambient Volume</label>
+                        <input type="range" id="ambient-volume" min="0" max="100" value="30">
+                    </div>
+                    
                     <button id="test-sound-btn" class="btn">Test Sound</button>
+                </div>
+                
+                <!-- AI Settings Tab -->
+                <div id="ai-tab" class="tab-content">
+                    <h3>AI Settings</h3>
+                    <div class="setting-group">
+                        <label for="ai-mode-select">AI Personality</label>
+                        <select id="ai-mode-select" class="select-dropdown">
+                            <option value="random">🤖 Random</option>
+                            <option value="cheeky">😏 Cheeky</option>
+                            <option value="predictive">🧠 Predictive</option>
+                        </select>
+                    </div>
+                    
+                    <div id="ai-mode-description" class="mode-description">
+                        <h4>Random Mode</h4>
+                        <p>AI picks a move randomly each turn.</p>
+                    </div>
                 </div>
                 
                 <!-- Data Settings Tab -->

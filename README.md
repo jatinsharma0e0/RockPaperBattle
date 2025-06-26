@@ -36,11 +36,18 @@ A modern HTML5 + JavaScript game featuring Rock, Paper, Scissors with multiple g
 - Settings screen with tabs for profile, theme, sound, and data management
 - First-run experience with profile setup
 
+### Phase 5 (Completed)
+- AI Personality Modes (🤖 Random, 😏 Cheeky, 🧠 Predictive)
+- Idle animations and ambient sound when inactive
+- Enhanced sound management with separate ambient controls
+- AI mode statistics tracking
+- Responsive visual indicators for different AI personalities
+
 ### Coming Soon
-- Player avatars
-- Special moves
-- Advanced AI modes
-- Additional themes
+- Bonus rounds with special rewards
+- Speed mode with time constraints
+- Multiplayer options
+- More themes and avatars
 
 ## Themes
 
@@ -58,6 +65,12 @@ Unlock the special "Fire" move after winning 10 games:
 - Paper loses to Fire
 - Scissors lose to Fire
 
+## AI Personalities
+
+- 🤖 **Random**: The default AI that picks moves randomly.
+- 😏 **Cheeky**: This AI mimics your last move 40% of the time.
+- 🧠 **Predictive**: Analyzes your patterns and tries to counter your most-used moves.
+
 ## Achievements
 
 Unlock these achievements as you play:
@@ -71,6 +84,7 @@ Unlock these achievements as you play:
 - Local storage for game persistence
 - No external dependencies
 - Responsive design for all devices
+- Idle detection and ambient sound system
 
 ## Audio Credits
 
@@ -84,6 +98,11 @@ Place audio files in the `assets/audio` directory with the following names:
 - game-lose.mp3
 - game-draw.mp3
 
+For ambient sounds, place files in `assets/audio/ambient`:
+- wind.mp3
+- hum.mp3
+- lo-fi-loop.mp3
+
 ## How to Play
 
 1. Choose a game mode from the landing page
@@ -92,6 +111,7 @@ Place audio files in the `assets/audio` directory with the following names:
 4. Continue playing or return to the menu
 5. Check your stats and achievements anytime
 6. Unlock the secret Fire (🔥) move after 10 wins!
+7. Try different AI personalities in settings
 
 ## Development
 

@@ -5,6 +5,7 @@ body.theme-day, body:not([data-theme]), :root {
     --bg-color: #f5f5f5;
     --text-color: #333333;
     --primary-color: #4a6fa5;
+    --primary-color-rgb: 74, 111, 165;
     --secondary-color: #6d98ba;
     --accent-color: #ff7e67;
     --section-bg: #ffffff;
@@ -25,6 +26,7 @@ body.theme-night {
     --bg-color: #121212;
     --text-color: #e0e0e0;
     --primary-color: #6d98ba;
+    --primary-color-rgb: 109, 152, 186;
     --secondary-color: #4a6fa5;
     --accent-color: #ff7e67;
     --section-bg: #1e1e1e;
@@ -45,6 +47,7 @@ body.theme-retro {
     --bg-color: #5a6988;
     --text-color: #f8f8f8;
     --primary-color: #d08159;
+    --primary-color-rgb: 208, 129, 89;
     --secondary-color: #8bac0f;
     --accent-color: #306082;
     --section-bg: #0f380f;
@@ -77,6 +80,7 @@ body.theme-neon {
     --bg-color: #0c0c2b;
     --text-color: #ffffff;
     --primary-color: #00ffff;
+    --primary-color-rgb: 0, 255, 255;
     --secondary-color: #ff00ff;
     --accent-color: #ffff00;
     --section-bg: #1a1a3a;

@@ -59,17 +59,6 @@ export function determineWinner(playerMove, aiMove) {
 }
 
 /**
- * Generates a random move for the AI
- * @param {boolean} includeFireMove - Whether to include the fire move
- * @returns {string} - The AI's move
- */
-export function getRandomMove(includeFireMove = false) {
-    const availableMoves = includeFireMove ? MOVES : MOVES.slice(0, 3);
-    const randomIndex = Math.floor(Math.random() * availableMoves.length);
-    return availableMoves[randomIndex];
-}
-
-/**
  * Gets the emoji for a move
  * @param {string} move - The move
  * @returns {string} - The emoji for the move
@@ -112,7 +101,6 @@ export function getResultMessage(result, playerMove, aiMove) {
 
 export default {
     determineWinner,
-    getRandomMove,
     getMoveEmoji,
     getResultMessage
 }; 

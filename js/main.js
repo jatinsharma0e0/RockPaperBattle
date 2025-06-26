@@ -12,6 +12,8 @@ import * as stats from './features/stats.js';
 import * as theme from './features/theme.js';
 import * as avatar from './features/avatar.js';
 import * as secretMove from './features/secretMove.js';
+import * as aiModes from './features/aiModes.js';
+import * as idle from './features/idle.js';
 import * as settings from './settings/settings.js';
 import { getData, setData } from './settings/storage.js';
 
@@ -32,6 +34,8 @@ function init() {
     achievements.init();
     stats.init();
     secretMove.init();
+    aiModes.init();
+    idle.init();
     settings.init();
     
     // Set up event handlers
@@ -83,6 +87,9 @@ function setupEventHandlers() {
             } else if (currentGameMode === 'bestOf5') {
                 bestOf5.handlePlayerMove(move);
             }
+            
+            // Reset idle timer on move
+            idle.resetIdleTimer();
         }
     });
     
@@ -160,8 +167,16 @@ function setupEventHandlers() {
             } else if (currentGameMode === 'bestOf5') {
                 bestOf5.handlePlayerMove(move);
             }
+            
+            // Reset idle timer on move
+            idle.resetIdleTimer();
         });
     }
+    
+    // Add event listeners to reset idle timer
+    document.addEventListener('click', idle.resetIdleTimer);
+    document.addEventListener('mousemove', idle.resetIdleTimer);
+    document.addEventListener('keydown', idle.resetIdleTimer);
 }
 
 /**
@@ -219,5 +234,16 @@ function checkFirstRun() {
     }
 }
 
+/**
+ * Cleanup function when the page is unloading
+ */
+function cleanup() {
+    // Clean up idle detection
+    idle.cleanup();
+}
+
 // Initialize the game when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', init); 
+
+// Clean up when the page is unloaded
+window.addEventListener('beforeunload', cleanup); 

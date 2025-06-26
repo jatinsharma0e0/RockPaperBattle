@@ -212,9 +212,23 @@ h4 {
     font-size: 1.2rem;
 }
 
-.player-info {
+.player-info, .ai-info {
     display: flex;
     align-items: center;
+}
+
+.ai-mode-indicator {
+    font-size: 1.5rem;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5px;
+    position: relative;
 }
 
 .game-area {
@@ -508,6 +522,7 @@ h4 {
     margin-bottom: 20px;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
+    flex-wrap: wrap;
 }
 
 .tab-btn {
@@ -557,6 +572,40 @@ h4 {
     border-radius: var(--border-radius);
     background-color: var(--bg-color);
     color: var(--text-color);
+}
+
+/* Select dropdown */
+.select-dropdown {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.select-dropdown:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Mode description */
+.mode-description {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: var(--result-bg);
+    border-radius: var(--border-radius);
+}
+
+.mode-description h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.mode-description p {
+    margin: 0;
 }
 
 /* Avatar options */
@@ -654,6 +703,12 @@ input:checked + .toggle-slider:before {
 
 .preview-text {
     font-size: 1.2rem;
+}
+
+/* Idle states */
+body.idle {
+    /* Subtle background ambient effect when idle */
+    transition: all 1s ease-in-out;
 }
 
 /* Volume slider */

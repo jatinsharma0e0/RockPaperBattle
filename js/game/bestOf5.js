@@ -3,13 +3,14 @@
  * Handles the best of 5 gameplay mode against AI
  */
 
-import { determineWinner, getRandomMove, getResultMessage } from './logic.js';
+import { determineWinner, getResultMessage } from './logic.js';
 import * as ui from '../ui.js';
 import { getData, setData, updateStat } from '../settings/storage.js';
 import * as sound from '../features/sound.js';
 import * as achievements from '../features/achievements.js';
 import * as stats from '../features/stats.js';
 import * as secretMove from '../features/secretMove.js';
+import * as aiModes from '../features/aiModes.js';
 
 // Game state for Best of 5 Mode
 const gameState = {
@@ -33,11 +34,41 @@ export function initBestOf5Mode() {
     // Update UI to show Best of 5 mode
     document.querySelector('#game-screen h2').textContent = 'Best of 5';
     
+    // Update AI mode indicator
+    updateAiModeIndicator();
+    
     // Show the game screen
     ui.showSection('game-screen');
     
     // Play start sound
     sound.play('gameStart');
+}
+
+/**
+ * Update the AI mode indicator in the UI
+ */
+function updateAiModeIndicator() {
+    const aiModeIndicator = document.getElementById('ai-mode-indicator');
+    if (aiModeIndicator) {
+        // Clear existing classes
+        aiModeIndicator.className = 'ai-mode-indicator';
+        
+        // Set emoji based on current AI mode
+        aiModeIndicator.textContent = aiModes.getCurrentModeEmoji();
+        
+        // Add animation class based on AI mode
+        const currentMode = aiModes.getCurrentMode();
+        if (currentMode === 'random') {
+            aiModeIndicator.classList.add('ai-random-indicator');
+        } else if (currentMode === 'cheeky') {
+            aiModeIndicator.classList.add('ai-cheeky-indicator');
+        } else if (currentMode === 'predictive') {
+            aiModeIndicator.classList.add('ai-predictive-indicator');
+        }
+        
+        // Set tooltip
+        aiModeIndicator.title = `${aiModes.getCurrentModeDisplayName()} AI Mode`;
+    }
 }
 
 /**
@@ -57,6 +88,9 @@ function resetGameState() {
     
     // Update score display
     updateScoreDisplay();
+    
+    // Reset AI move history
+    aiModes.resetMoveHistory();
 }
 
 /**
@@ -74,9 +108,15 @@ export function handlePlayerMove(playerMove) {
     // Don't allow moves if game is over
     if (gameState.gameOver) return;
     
+    // Record the player's move for AI analysis
+    aiModes.recordPlayerMove(playerMove);
+    
     // Generate AI move - include fire move if player has unlocked it
     const includeFireMove = secretMove.isUnlocked();
-    const aiMove = getRandomMove(includeFireMove);
+    const availableMoves = includeFireMove ? ['rock', 'paper', 'scissors', 'fire'] : ['rock', 'paper', 'scissors'];
+    
+    // Get AI move based on current AI mode
+    const aiMove = aiModes.getComputerMove(availableMoves);
     
     // Determine the winner
     const result = determineWinner(playerMove, aiMove);
@@ -137,6 +177,69 @@ export function handlePlayerMove(playerMove) {
         
         // Update longest win streak if needed
         stats.updateLongestWinStreak(currentWinStreak);
+        
+        // Update best AI mode stats
+        updateBestAiMode(result);
+    }
+}
+
+/**
+ * Updates the best AI mode statistics
+ * @param {string} result - The result of the round ('win', 'lose', or 'draw')
+ */
+function updateBestAiMode(result) {
+    if (result !== 'win') return; // Only track wins
+    
+    const currentMode = aiModes.getCurrentMode();
+    const aiStats = getData('aiStats') || {
+        random: { wins: 0 },
+        cheeky: { wins: 0 },
+        predictive: { wins: 0 }
+    };
+    
+    // Increment win count for current mode
+    if (!aiStats[currentMode]) {
+        aiStats[currentMode] = { wins: 0 };
+    }
+    aiStats[currentMode].wins = (aiStats[currentMode].wins || 0) + 1;
+    
+    // Save updated stats
+    setData('aiStats', aiStats);
+    
+    // Update UI in stats screen if needed
+    const bestModeElement = document.getElementById('stats-best-ai-mode');
+    if (bestModeElement) {
+        // Find the mode with the most wins
+        let bestMode = 'random';
+        let highestWins = 0;
+        
+        for (const [mode, stats] of Object.entries(aiStats)) {
+            if (stats.wins > highestWins) {
+                highestWins = stats.wins;
+                bestMode = mode;
+            }
+        }
+        
+        // Display the best mode with emoji
+        let bestModeDisplay = 'Random';
+        let bestModeEmoji = '🤖';
+        
+        switch (bestMode) {
+            case 'cheeky':
+                bestModeDisplay = 'Cheeky';
+                bestModeEmoji = '😏';
+                break;
+            case 'predictive':
+                bestModeDisplay = 'Predictive';
+                bestModeEmoji = '🧠';
+                break;
+            default:
+                bestModeDisplay = 'Random';
+                bestModeEmoji = '🤖';
+                break;
+        }
+        
+        bestModeElement.textContent = `${bestModeEmoji} ${bestModeDisplay}`;
     }
 }
 
