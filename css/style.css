@@ -298,18 +298,30 @@ h4 {
     align-items: center;
 }
 
-.ai-mode-indicator {
+.ai-difficulty-indicator {
     font-size: 1.5rem;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: var(--secondary-color);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     margin-right: 5px;
+    display: inline-block;
+    vertical-align: middle;
     position: relative;
+    animation: pulse 2s infinite;
+}
+
+.ai-easy-difficulty {
+    color: var(--win-color);
+}
+
+.ai-medium-difficulty {
+    color: var(--primary-color);
+}
+
+.ai-hard-difficulty {
+    color: var(--accent-color);
+}
+
+.ai-impossible-difficulty {
+    color: var(--special-move-color);
+    animation: pulse 1.5s infinite;
 }
 
 .game-area {
@@ -1092,4 +1104,14 @@ section.hidden {
 .radio-option label {
     cursor: pointer;
     font-size: 0.95rem;
+}
+
+.ai-info {
+    display: flex;
+    align-items: center;
+}
+
+#ai-avatar {
+    margin-right: 5px;
+    font-size: 1.5rem;
 } 

@@ -34,41 +34,14 @@ export function initBestOf5Mode() {
     // Update UI to show Best of 5 mode
     document.querySelector('#game-screen h2').textContent = 'Best of 5';
     
-    // Update AI mode indicator
-    updateAiModeIndicator();
+    // Update AI difficulty indicator
+    aiModes.updateAiIndicators();
     
     // Show the game screen
     ui.showSection('game-screen');
     
     // Play start sound
     sound.play('gameStart');
-}
-
-/**
- * Update the AI mode indicator in the UI
- */
-function updateAiModeIndicator() {
-    const aiModeIndicator = document.getElementById('ai-mode-indicator');
-    if (aiModeIndicator) {
-        // Clear existing classes
-        aiModeIndicator.className = 'ai-mode-indicator';
-        
-        // Set emoji based on current AI mode
-        aiModeIndicator.textContent = aiModes.getCurrentModeEmoji();
-        
-        // Add animation class based on AI mode
-        const currentMode = aiModes.getCurrentMode();
-        if (currentMode === 'random') {
-            aiModeIndicator.classList.add('ai-random-indicator');
-        } else if (currentMode === 'cheeky') {
-            aiModeIndicator.classList.add('ai-cheeky-indicator');
-        } else if (currentMode === 'predictive') {
-            aiModeIndicator.classList.add('ai-predictive-indicator');
-        }
-        
-        // Set tooltip
-        aiModeIndicator.title = `${aiModes.getCurrentModeDisplayName()} AI Mode`;
-    }
 }
 
 /**
@@ -131,11 +104,17 @@ export function handlePlayerMove(playerMove) {
     if (result === 'win') {
         gameState.playerScore++;
         sound.play('win');
+        // Record a loss for the AI
+        aiModes.recordGameOutcome('loss');
     } else if (result === 'lose') {
         gameState.aiScore++;
         sound.play('lose');
+        // Record a win for the AI
+        aiModes.recordGameOutcome('win');
     } else {
         sound.play('draw');
+        // Record a draw for the AI
+        aiModes.recordGameOutcome('draw');
     }
     
     // Update score display
@@ -184,24 +163,25 @@ export function handlePlayerMove(playerMove) {
 }
 
 /**
- * Updates the best AI mode statistics
+ * Updates the best AI difficulty statistics
  * @param {string} result - The result of the round ('win', 'lose', or 'draw')
  */
 function updateBestAiMode(result) {
     if (result !== 'win') return; // Only track wins
     
-    const currentMode = aiModes.getCurrentMode();
+    const currentDifficulty = aiModes.getCurrentDifficulty();
     const aiStats = getData('aiStats') || {
-        random: { wins: 0 },
-        cheeky: { wins: 0 },
-        predictive: { wins: 0 }
+        easy: { wins: 0 },
+        medium: { wins: 0 },
+        hard: { wins: 0 },
+        impossible: { wins: 0 }
     };
     
-    // Increment win count for current mode
-    if (!aiStats[currentMode]) {
-        aiStats[currentMode] = { wins: 0 };
+    // Increment win count for current difficulty
+    if (!aiStats[currentDifficulty]) {
+        aiStats[currentDifficulty] = { wins: 0 };
     }
-    aiStats[currentMode].wins = (aiStats[currentMode].wins || 0) + 1;
+    aiStats[currentDifficulty].wins = (aiStats[currentDifficulty].wins || 0) + 1;
     
     // Save updated stats
     setData('aiStats', aiStats);

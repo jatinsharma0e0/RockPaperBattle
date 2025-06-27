@@ -37,8 +37,8 @@ export function initEndlessMode() {
     // Update UI to show Endless mode
     document.querySelector('#game-screen h2').textContent = 'Endless Mode';
     
-    // Update AI mode indicator
-    updateAiModeIndicator();
+    // Update AI difficulty indicator
+    aiModes.updateAiIndicators();
     
     // Load previous scores from localStorage if available
     const storedStats = getData('stats');
@@ -80,33 +80,6 @@ function startSpeedModeTimer() {
         // Handle the move
         handlePlayerMove(timeoutMove, true);
     });
-}
-
-/**
- * Update the AI mode indicator in the UI
- */
-function updateAiModeIndicator() {
-    const aiModeIndicator = document.getElementById('ai-mode-indicator');
-    if (aiModeIndicator) {
-        // Clear existing classes
-        aiModeIndicator.className = 'ai-mode-indicator';
-        
-        // Set emoji based on current AI mode
-        aiModeIndicator.textContent = aiModes.getCurrentModeEmoji();
-        
-        // Add animation class based on AI mode
-        const currentMode = aiModes.getCurrentMode();
-        if (currentMode === 'random') {
-            aiModeIndicator.classList.add('ai-random-indicator');
-        } else if (currentMode === 'cheeky') {
-            aiModeIndicator.classList.add('ai-cheeky-indicator');
-        } else if (currentMode === 'predictive') {
-            aiModeIndicator.classList.add('ai-predictive-indicator');
-        }
-        
-        // Set tooltip
-        aiModeIndicator.title = `${aiModes.getCurrentModeDisplayName()} AI Mode`;
-    }
 }
 
 /**
@@ -259,10 +232,16 @@ function updateScores(result, isTimeoutMove) {
         for (let i = 0; i < scoreMultiplier; i++) {
             updateStat('wins');
         }
+        // Record a loss for the AI
+        aiModes.recordGameOutcome('loss');
     } else if (result === 'lose') {
         updateStat('losses');
+        // Record a win for the AI
+        aiModes.recordGameOutcome('win');
     } else {
         updateStat('draws');
+        // Record a draw for the AI
+        aiModes.recordGameOutcome('draw');
     }
     
     // Update bonus rounds won stat
@@ -285,7 +264,7 @@ function updateScores(result, isTimeoutMove) {
         stats.updateLongestWinStreak(currentWinStreak);
     }
     
-    // Update best AI mode stats
+    // Update best AI difficulty stats
     updateBestAiMode(result);
 }
 
@@ -307,24 +286,25 @@ function updateBonusRoundStats() {
 }
 
 /**
- * Updates the best AI mode statistics
+ * Updates the best AI difficulty statistics
  * @param {string} result - The result of the round ('win', 'lose', or 'draw')
  */
 function updateBestAiMode(result) {
     if (result !== 'win') return; // Only track wins
     
-    const currentMode = aiModes.getCurrentMode();
+    const currentDifficulty = aiModes.getCurrentDifficulty();
     const aiStats = getData('aiStats') || {
-        random: { wins: 0 },
-        cheeky: { wins: 0 },
-        predictive: { wins: 0 }
+        easy: { wins: 0 },
+        medium: { wins: 0 },
+        hard: { wins: 0 },
+        impossible: { wins: 0 }
     };
     
-    // Increment win count for current mode
-    if (!aiStats[currentMode]) {
-        aiStats[currentMode] = { wins: 0 };
+    // Increment win count for current difficulty
+    if (!aiStats[currentDifficulty]) {
+        aiStats[currentDifficulty] = { wins: 0 };
     }
-    aiStats[currentMode].wins = (aiStats[currentMode].wins || 0) + 1;
+    aiStats[currentDifficulty].wins = (aiStats[currentDifficulty].wins || 0) + 1;
     
     // Save updated stats
     setData('aiStats', aiStats);
@@ -332,37 +312,41 @@ function updateBestAiMode(result) {
     // Update UI in stats screen if needed
     const bestModeElement = document.getElementById('stats-best-ai-mode');
     if (bestModeElement) {
-        // Find the mode with the most wins
-        let bestMode = 'random';
+        // Find the difficulty with the most wins
+        let bestDifficulty = 'medium';
         let highestWins = 0;
         
-        for (const [mode, stats] of Object.entries(aiStats)) {
+        for (const [difficulty, stats] of Object.entries(aiStats)) {
             if (stats.wins > highestWins) {
                 highestWins = stats.wins;
-                bestMode = mode;
+                bestDifficulty = difficulty;
             }
         }
         
-        // Display the best mode with emoji
-        let bestModeDisplay = 'Random';
-        let bestModeEmoji = '🤖';
+        // Display the best difficulty with emoji and avatar
+        let bestDifficultyDisplay = 'Median Mind';
+        let bestDifficultyEmoji = '😐';
         
-        switch (bestMode) {
-            case 'cheeky':
-                bestModeDisplay = 'Cheeky';
-                bestModeEmoji = '😏';
+        switch (bestDifficulty) {
+            case 'easy':
+                bestDifficultyDisplay = 'Noobron';
+                bestDifficultyEmoji = '🤓';
                 break;
-            case 'predictive':
-                bestModeDisplay = 'Predictive';
-                bestModeEmoji = '🧠';
+            case 'hard':
+                bestDifficultyDisplay = 'Mindbreaker';
+                bestDifficultyEmoji = '👾';
+                break;
+            case 'impossible':
+                bestDifficultyDisplay = 'Impossible';
+                bestDifficultyEmoji = '👹';
                 break;
             default:
-                bestModeDisplay = 'Random';
-                bestModeEmoji = '🤖';
+                bestDifficultyDisplay = 'Median Mind';
+                bestDifficultyEmoji = '🤖';
                 break;
         }
         
-        bestModeElement.textContent = `${bestModeEmoji} ${bestModeDisplay}`;
+        bestModeElement.textContent = `${bestDifficultyEmoji} ${bestDifficultyDisplay}`;
     }
 }
 

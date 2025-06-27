@@ -153,10 +153,31 @@ export function getRandomMove(availableMoves) {
     return availableMoves[randomIndex];
 }
 
+/**
+ * Get the counter move that beats the given move
+ * @param {string} move - The move to counter
+ * @returns {string} - The counter move
+ */
+export function getCounterMove(move) {
+    switch (move) {
+        case 'rock':
+            return 'paper';
+        case 'paper':
+            return 'scissors';
+        case 'scissors':
+            return 'rock';
+        case 'fire':
+            return 'rock'; // Rock counters fire
+        default:
+            return 'rock';
+    }
+}
+
 export default {
     determineWinner,
     determineWinnerReversed,
     getMoveEmoji,
     getResultMessage,
-    getRandomMove
+    getRandomMove,
+    getCounterMove
 }; 

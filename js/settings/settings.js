@@ -200,20 +200,20 @@ function setupEventListeners() {
         });
     }
     
-    // AI mode selector
-    const aiModeSelect = document.getElementById('ai-mode-select');
-    if (aiModeSelect) {
+    // AI difficulty selector
+    const aiDifficultySelect = document.getElementById('ai-difficulty-select');
+    if (aiDifficultySelect) {
         // Set initial value
-        aiModeSelect.value = aiModes.getCurrentMode();
+        aiDifficultySelect.value = aiModes.getCurrentDifficulty();
         
         // Update description based on current selection
-        updateAiModeDescription(aiModes.getCurrentMode());
+        updateAiDifficultyDescription(aiDifficultySelect.value);
         
         // Add change event listener
-        aiModeSelect.addEventListener('change', () => {
-            const selectedMode = aiModeSelect.value;
-            aiModes.setAiMode(selectedMode);
-            updateAiModeDescription(selectedMode);
+        aiDifficultySelect.addEventListener('change', () => {
+            const selectedDifficulty = aiDifficultySelect.value;
+            aiModes.setDifficulty(selectedDifficulty);
+            updateAiDifficultyDescription(selectedDifficulty);
             sound.play('click');
         });
     }
@@ -342,27 +342,34 @@ export function updateGameBanner() {
 }
 
 /**
- * Update the AI mode description based on the selected mode
- * @param {string} mode - The selected AI mode
+ * Update the AI difficulty description based on the selected difficulty
+ * @param {string} difficulty - The selected AI difficulty
  */
-function updateAiModeDescription(mode) {
-    const descriptionContainer = document.getElementById('ai-mode-description');
+function updateAiDifficultyDescription(difficulty) {
+    const descriptionContainer = document.getElementById('ai-difficulty-description');
     let title = '';
     let description = '';
     
-    switch (mode) {
-        case 'cheeky':
-            title = "Cheeky Mode";
-            description = "This AI sometimes copies your last move (40% chance).";
+    switch (difficulty) {
+        case 'easy':
+            title = "Noobron";
+            description = "Chill, always makes mistakes. Great for beginners or casual play.";
             break;
-        case 'predictive':
-            title = "Predictive Mode";
-            description = "This AI analyzes your moves and tries to counter your most used choices.";
+        case 'medium':
+            title = "Median Mind";
+            description = "Keeps things fair. A balanced challenge for most players.";
             break;
-        case 'random':
+        case 'hard':
+            title = "Mindbreaker";
+            description = "Forces you to think harder. A serious challenge for experienced players!";
+            break;
+        case 'impossible':
+            title = "Impossible";
+            description = "Impossible to Beat. Only for those seeking the ultimate challenge!";
+            break;
         default:
-            title = "Random Mode";
-            description = "AI picks a move randomly each turn.";
+            title = "Median Mind";
+            description = "Keeps things fair. A balanced challenge for most players.";
             break;
     }
     
