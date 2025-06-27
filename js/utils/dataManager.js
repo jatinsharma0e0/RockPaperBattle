@@ -14,8 +14,8 @@ const SCHEMA_VERSION = '1.0';
  */
 export function exportGameData() {
     try {
-        // Get all game data
-        const gameData = getAllGameData();
+        // Get all game data in a structured format
+        const gameData = gatherGameData();
         
         // Add metadata
         gameData.metadata = {
@@ -27,24 +27,95 @@ export function exportGameData() {
         // Convert to JSON string
         const jsonString = JSON.stringify(gameData, null, 2);
         
-        // Create a data URL
-        const dataUrl = `data:text/json;charset=utf-8,${encodeURIComponent(jsonString)}`;
+        // Create a blob for better file handling
+        const blob = new Blob([jsonString], { type: 'application/json' });
         
-        // Create a download link
+        // Create a download link using URL.createObjectURL
+        const url = URL.createObjectURL(blob);
         const downloadLink = document.createElement('a');
-        downloadLink.setAttribute('href', dataUrl);
-        downloadLink.setAttribute('download', `rock-paper-battle-save-${formatDate(new Date())}.json`);
+        downloadLink.href = url;
+        downloadLink.download = `rock-paper-battle-save-${formatDate(new Date())}.json`;
         
         // Trigger download
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
         
+        // Clean up the URL object
+        URL.revokeObjectURL(url);
+        
         return true;
     } catch (error) {
         console.error('Failed to export game data:', error);
         return false;
     }
+}
+
+/**
+ * Gather game data into a structured format
+ * @returns {Object} Structured game data
+ */
+function gatherGameData() {
+    // Get the main data from storage
+    const mainData = getData();
+    
+    // Structure the data into logical sections
+    return {
+        settings: {
+            soundEnabled: mainData.soundEnabled || false,
+            soundVolume: mainData.soundVolume || 0.5,
+            ambientEnabled: mainData.ambientEnabled || false,
+            ambientVolume: mainData.ambientVolume || 0.3,
+            audioStyle: mainData.audioStyle || 'retro',
+            theme: mainData.theme || 'day',
+            highContrast: mainData.highContrast || false,
+            reducedMotion: mainData.reducedMotion || false
+        },
+        profile: mainData.profile || {
+            name: 'Player',
+            avatar: '👤'
+        },
+        stats: mainData.stats || {
+            wins: 0,
+            losses: 0,
+            draws: 0,
+            longestWinStreak: 0,
+            bestMode: ''
+        },
+        achievements: mainData.achievements || {},
+        game: {
+            currentWinStreak: mainData.currentWinStreak || 0,
+            unlocks: mainData.unlocks || {},
+            bonusRoundsEnabled: mainData.bonusRoundsEnabled || true,
+            speedModeEnabled: mainData.speedModeEnabled || false
+        },
+        // Include any other game data that might be stored
+        other: getAllOtherGameData()
+    };
+}
+
+/**
+ * Get any additional game data from localStorage that's not in the main data
+ * @returns {Object} Additional game data
+ */
+function getAllOtherGameData() {
+    const otherData = {};
+    
+    // Get all keys from localStorage
+    const keys = Object.keys(localStorage);
+    
+    // Filter keys that belong to our game but aren't in the main data structure
+    keys.forEach(key => {
+        if (key.startsWith('RockPaperBattle_') || key === 'hasRunBefore') {
+            try {
+                otherData[key] = JSON.parse(localStorage.getItem(key));
+            } catch (e) {
+                otherData[key] = localStorage.getItem(key);
+            }
+        }
+    });
+    
+    return otherData;
 }
 
 /**
@@ -57,30 +128,6 @@ function formatDate(date) {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
-}
-
-/**
- * Get all game data from localStorage
- * @returns {Object} All game data
- */
-function getAllGameData() {
-    const data = {};
-    
-    // Get all keys from localStorage
-    const keys = Object.keys(localStorage);
-    
-    // Filter keys that belong to our game
-    keys.forEach(key => {
-        if (key.startsWith('RockPaperBattle_') || key === 'hasRunBefore') {
-            try {
-                data[key] = JSON.parse(localStorage.getItem(key));
-            } catch (e) {
-                data[key] = localStorage.getItem(key);
-            }
-        }
-    });
-    
-    return data;
 }
 
 /**
@@ -166,6 +213,16 @@ function validateImportedData(data) {
         };
     }
     
+    // Check if the file has any game data (either in structured or legacy format)
+    if (!data.settings && !data.profile && !data.stats && 
+        !data.achievements && !data.game && !data.other && 
+        Object.keys(data).length <= 1) { // Only metadata
+        return {
+            valid: false,
+            message: 'Invalid save file: No game data found'
+        };
+    }
+    
     return { valid: true };
 }
 
@@ -193,14 +250,47 @@ function applyImportedData(importedData) {
     // Clear existing data
     clearAllData();
     
-    // Apply imported data
-    Object.entries(importedData).forEach(([key, value]) => {
-        try {
-            localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
-        } catch (error) {
-            console.error(`Failed to import key ${key}:`, error);
+    // Check if the data is in the structured format
+    if (importedData.settings || importedData.profile || importedData.stats) {
+        // This is the new structured format
+        const structuredData = {
+            // Extract and merge all sections
+            ...importedData.settings,
+            profile: importedData.profile,
+            stats: importedData.stats,
+            achievements: importedData.achievements,
+            unlocks: importedData.game?.unlocks,
+            currentWinStreak: importedData.game?.currentWinStreak,
+            bonusRoundsEnabled: importedData.game?.bonusRoundsEnabled,
+            speedModeEnabled: importedData.game?.speedModeEnabled,
+            // Add any other fields that should be in the main data structure
+        };
+        
+        // Save the structured data
+        Object.entries(structuredData).forEach(([key, value]) => {
+            setData(key, value);
+        });
+        
+        // Handle any additional data from the 'other' section
+        if (importedData.other) {
+            Object.entries(importedData.other).forEach(([key, value]) => {
+                try {
+                    localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+                } catch (error) {
+                    console.error(`Failed to import key ${key}:`, error);
+                }
+            });
         }
-    });
+    } else {
+        // Legacy format - apply directly to localStorage
+        Object.entries(importedData).forEach(([key, value]) => {
+            try {
+                localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+            } catch (error) {
+                console.error(`Failed to import key ${key}:`, error);
+            }
+        });
+    }
 }
 
 /**
@@ -211,26 +301,51 @@ function applyImportedData(importedData) {
 function countImportedItems(importedData) {
     // Count statistics, achievements, etc.
     const stats = {
-        totalItems: Object.keys(importedData).length - 1, // Exclude metadata
+        totalItems: 0,
         achievements: 0,
         stats: false,
         profile: false
     };
     
-    // Check for achievements
-    if (importedData.RockPaperBattle_achievements) {
-        const achievementData = importedData.RockPaperBattle_achievements;
-        stats.achievements = Object.values(achievementData).filter(a => a.unlocked).length;
-    }
-    
-    // Check for game stats
-    if (importedData.RockPaperBattle_stats) {
-        stats.stats = true;
-    }
-    
-    // Check for profile data
-    if (importedData.RockPaperBattle_profile) {
-        stats.profile = true;
+    // Check if using new structured format
+    if (importedData.settings || importedData.profile || importedData.stats) {
+        // Count structured items
+        stats.totalItems = Object.keys(importedData).length - 1; // Exclude metadata
+        
+        // Check for achievements
+        if (importedData.achievements) {
+            stats.achievements = Object.values(importedData.achievements)
+                .filter(a => a === true || a.unlocked === true).length;
+        }
+        
+        // Check for game stats
+        if (importedData.stats) {
+            stats.stats = true;
+        }
+        
+        // Check for profile data
+        if (importedData.profile) {
+            stats.profile = true;
+        }
+    } else {
+        // Legacy format
+        stats.totalItems = Object.keys(importedData).length - 1; // Exclude metadata
+        
+        // Check for achievements
+        if (importedData.RockPaperBattle_achievements) {
+            const achievementData = importedData.RockPaperBattle_achievements;
+            stats.achievements = Object.values(achievementData).filter(a => a.unlocked).length;
+        }
+        
+        // Check for game stats
+        if (importedData.RockPaperBattle_stats) {
+            stats.stats = true;
+        }
+        
+        // Check for profile data
+        if (importedData.RockPaperBattle_profile) {
+            stats.profile = true;
+        }
     }
     
     return stats;
