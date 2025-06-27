@@ -448,31 +448,21 @@ export function getCurrentDifficultyAvatar() {
 }
 
 /**
- * Update the AI difficulty indicator in the UI
+ * Update the AI indicators in the UI
  * This function should be called from the game mode files
  */
 export function updateAiIndicators() {
-    // Update difficulty indicator
-    const aiDifficultyIndicator = document.getElementById('ai-difficulty-indicator');
-    if (aiDifficultyIndicator) {
-        // Clear existing classes
-        aiDifficultyIndicator.className = 'ai-difficulty-indicator';
-        
-        // Set emoji based on current difficulty
-        aiDifficultyIndicator.textContent = getCurrentDifficultyEmoji();
-        
-        // Add class based on difficulty
-        aiDifficultyIndicator.classList.add(`ai-${getCurrentDifficulty()}-difficulty`);
-        
-        // Set tooltip
-        aiDifficultyIndicator.title = `${getCurrentDifficultyDisplayName()} Difficulty`;
-    }
-    
     // Update AI avatar
     const aiAvatar = document.getElementById('ai-avatar');
     if (aiAvatar) {
         aiAvatar.textContent = getCurrentDifficultyAvatar();
         aiAvatar.title = getCurrentDifficultyDisplayName();
+        
+        // Clear existing classes
+        aiAvatar.className = 'avatar-small';
+        
+        // Add class based on difficulty
+        aiAvatar.classList.add(`ai-${getCurrentDifficulty()}-difficulty`);
     }
     
     // For backward compatibility, also update the mode indicator if it exists
@@ -480,6 +470,13 @@ export function updateAiIndicators() {
     if (aiModeIndicator) {
         // Hide the mode indicator since we're not using it anymore
         aiModeIndicator.style.display = 'none';
+    }
+    
+    // For backward compatibility, also update the difficulty indicator if it exists
+    const aiDifficultyIndicator = document.getElementById('ai-difficulty-indicator');
+    if (aiDifficultyIndicator) {
+        // Hide the difficulty indicator since we're using the avatar instead
+        aiDifficultyIndicator.style.display = 'none';
     }
 }
 

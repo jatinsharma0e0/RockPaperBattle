@@ -1114,4 +1114,22 @@ section.hidden {
 #ai-avatar {
     margin-right: 5px;
     font-size: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+#ai-avatar.ai-easy-difficulty {
+    color: var(--win-color);
+}
+
+#ai-avatar.ai-medium-difficulty {
+    color: var(--primary-color);
+}
+
+#ai-avatar.ai-hard-difficulty {
+    color: var(--accent-color);
+}
+
+#ai-avatar.ai-impossible-difficulty {
+    color: var(--special-move-color);
+    animation: pulse 1.5s infinite;
 } 
