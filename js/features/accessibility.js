@@ -28,6 +28,12 @@ export function init() {
     
     // Apply initial settings
     applyAccessibilitySettings();
+    
+    // Log initialization
+    console.log('Accessibility settings initialized:', {
+        highContrast: isHighContrastEnabled,
+        reducedMotion: isReducedMotionEnabled
+    });
 }
 
 /**
@@ -74,18 +80,48 @@ function setupEventListeners() {
     const highContrastToggle = document.getElementById('high-contrast-toggle');
     if (highContrastToggle) {
         highContrastToggle.checked = isHighContrastEnabled;
-        highContrastToggle.addEventListener('change', () => {
-            toggleHighContrast();
+        
+        // Add change event listener
+        highContrastToggle.addEventListener('change', (e) => {
+            enableHighContrast(e.target.checked);
         });
+        
+        // Add click event listener for the toggle wrapper
+        const highContrastToggleParent = highContrastToggle.parentElement;
+        if (highContrastToggleParent && highContrastToggleParent.classList.contains('toggle-switch')) {
+            highContrastToggleParent.addEventListener('click', (e) => {
+                if (e.target !== highContrastToggle) {
+                    // Toggle the checkbox state
+                    highContrastToggle.checked = !highContrastToggle.checked;
+                    // Trigger the change event
+                    enableHighContrast(highContrastToggle.checked);
+                }
+            });
+        }
     }
     
     // Reduced motion toggle
     const reducedMotionToggle = document.getElementById('reduced-motion-toggle');
     if (reducedMotionToggle) {
         reducedMotionToggle.checked = isReducedMotionEnabled;
-        reducedMotionToggle.addEventListener('change', () => {
-            toggleReducedMotion();
+        
+        // Add change event listener
+        reducedMotionToggle.addEventListener('change', (e) => {
+            enableReducedMotion(e.target.checked);
         });
+        
+        // Add click event listener for the toggle wrapper
+        const reducedMotionToggleParent = reducedMotionToggle.parentElement;
+        if (reducedMotionToggleParent && reducedMotionToggleParent.classList.contains('toggle-switch')) {
+            reducedMotionToggleParent.addEventListener('click', (e) => {
+                if (e.target !== reducedMotionToggle) {
+                    // Toggle the checkbox state
+                    reducedMotionToggle.checked = !reducedMotionToggle.checked;
+                    // Trigger the change event
+                    enableReducedMotion(reducedMotionToggle.checked);
+                }
+            });
+        }
     }
     
     // Listen for system preference changes
@@ -109,15 +145,19 @@ function applyAccessibilitySettings() {
     // Apply high contrast
     if (isHighContrastEnabled) {
         document.body.classList.add(HIGH_CONTRAST_CLASS);
+        console.log('High contrast mode enabled');
     } else {
         document.body.classList.remove(HIGH_CONTRAST_CLASS);
+        console.log('High contrast mode disabled');
     }
     
     // Apply reduced motion
     if (isReducedMotionEnabled) {
         document.body.classList.add(REDUCED_MOTION_CLASS);
+        console.log('Reduced motion mode enabled');
     } else {
         document.body.classList.remove(REDUCED_MOTION_CLASS);
+        console.log('Reduced motion mode disabled');
     }
 }
 

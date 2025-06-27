@@ -79,6 +79,9 @@ function initializeGame() {
     // Show the landing page by default
     ui.showSection('landing-page');
     
+    // Initialize accessibility first to ensure settings are applied early
+    accessibility.init();
+    
     // Initialize features
     sound.init();
     theme.init();
@@ -91,7 +94,6 @@ function initializeGame() {
     speedMode.init();
     bonusRound.init();
     settings.init();
-    accessibility.init();
     
     // Initialize performance monitor (disabled by default)
     performance.init(false);
@@ -110,6 +112,9 @@ function initializeGame() {
     
     // Add keyboard controls
     setupKeyboardNavigation();
+    
+    // Log initialization complete
+    console.log('Game initialization complete');
 }
 
 /**

@@ -15,13 +15,36 @@
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+    transition: none !important;
+    animation: none !important;
     scroll-behavior: auto !important;
 }
 
+/* Specific overrides for common animations */
 .reduced-motion .fade-in,
 .reduced-motion .fade-out,
-.reduced-motion .btn-press {
+.reduced-motion .btn-press,
+.reduced-motion .slide-in,
+.reduced-motion .slide-out,
+.reduced-motion .confetti-piece,
+.reduced-motion .shake-effect,
+.reduced-motion .draw-effect,
+.reduced-motion .fire-reveal,
+.reduced-motion .fire-glow,
+.reduced-motion .avatar-highlight,
+.reduced-motion .idle-pulse,
+.reduced-motion .idle-glow,
+.reduced-motion .idle-background,
+.reduced-motion .bonus-round,
+.reduced-motion .double-points,
+.reduced-motion .reverse-rules,
+.reduced-motion .chaos-mode,
+.reduced-motion .bonus-notification,
+.reduced-motion .speed-timer.warning,
+.reduced-motion .loading-logo {
     animation: none !important;
+    transition: none !important;
+    transform: none !important;
 }
 
 /* Placeholder for shake animation - will be implemented later */

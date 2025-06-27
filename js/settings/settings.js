@@ -265,7 +265,27 @@ function setupEventListeners() {
         highContrastToggle.addEventListener('change', () => {
             accessibility.toggleHighContrast();
             sound.play('click');
+            
+            // Log the change
+            console.log('High contrast toggled to:', accessibility.isHighContrast());
         });
+        
+        // Add click event listener for the toggle wrapper
+        const highContrastToggleParent = highContrastToggle.parentElement;
+        if (highContrastToggleParent && highContrastToggleParent.classList.contains('toggle-switch')) {
+            highContrastToggleParent.addEventListener('click', (e) => {
+                if (e.target !== highContrastToggle) {
+                    // Toggle the checkbox state
+                    highContrastToggle.checked = !highContrastToggle.checked;
+                    // Trigger the change manually
+                    accessibility.toggleHighContrast();
+                    sound.play('click');
+                    
+                    // Log the change
+                    console.log('High contrast toggled (parent click) to:', accessibility.isHighContrast());
+                }
+            });
+        }
     }
     
     // Reduced motion toggle
@@ -278,7 +298,27 @@ function setupEventListeners() {
         reducedMotionToggle.addEventListener('change', () => {
             accessibility.toggleReducedMotion();
             sound.play('click');
+            
+            // Log the change
+            console.log('Reduced motion toggled to:', accessibility.isReducedMotion());
         });
+        
+        // Add click event listener for the toggle wrapper
+        const reducedMotionToggleParent = reducedMotionToggle.parentElement;
+        if (reducedMotionToggleParent && reducedMotionToggleParent.classList.contains('toggle-switch')) {
+            reducedMotionToggleParent.addEventListener('click', (e) => {
+                if (e.target !== reducedMotionToggle) {
+                    // Toggle the checkbox state
+                    reducedMotionToggle.checked = !reducedMotionToggle.checked;
+                    // Trigger the change manually
+                    accessibility.toggleReducedMotion();
+                    sound.play('click');
+                    
+                    // Log the change
+                    console.log('Reduced motion toggled (parent click) to:', accessibility.isReducedMotion());
+                }
+            });
+        }
     }
     
     // Reset stats button
