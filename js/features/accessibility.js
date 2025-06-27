@@ -4,6 +4,7 @@
  */
 
 import { getData, setData } from '../settings/storage.js';
+import * as sound from './sound.js';
 
 // Configuration
 const HIGH_CONTRAST_CLASS = 'high-contrast';
@@ -80,7 +81,11 @@ function setupEventListeners() {
     const highContrastToggle = document.getElementById('high-contrast-toggle');
     if (highContrastToggle) {
         highContrastToggle.checked = isHighContrastEnabled;
-        highContrastToggle.addEventListener('change', () => {
+        
+        // Single event handler for the checkbox
+        highContrastToggle.addEventListener('change', (e) => {
+            // Stop propagation to prevent parent click handler from firing
+            e.stopPropagation();
             toggleHighContrast();
         });
         
@@ -89,19 +94,16 @@ function setupEventListeners() {
         if (toggleParent && toggleParent.classList.contains('toggle-switch')) {
             toggleParent.addEventListener('click', (e) => {
                 // Only toggle if the click wasn't on the checkbox itself
+                // This prevents double-toggling since the checkbox has its own change event
                 if (e.target !== highContrastToggle) {
+                    e.preventDefault(); // Prevent default to avoid any other handlers
+                    e.stopPropagation(); // Stop event from bubbling up
+                    
+                    // Manually toggle the checkbox state
+                    highContrastToggle.checked = !highContrastToggle.checked;
                     toggleHighContrast();
                 }
             });
-            
-            // Add specific handler for the toggle slider
-            const toggleSlider = toggleParent.querySelector('.toggle-slider');
-            if (toggleSlider) {
-                toggleSlider.addEventListener('click', () => {
-                    toggleHighContrast();
-                    console.log('Toggle slider clicked, high contrast:', isHighContrastEnabled);
-                });
-            }
         }
     }
     
@@ -109,7 +111,11 @@ function setupEventListeners() {
     const reducedMotionToggle = document.getElementById('reduced-motion-toggle');
     if (reducedMotionToggle) {
         reducedMotionToggle.checked = isReducedMotionEnabled;
-        reducedMotionToggle.addEventListener('change', () => {
+        
+        // Single event handler for the checkbox
+        reducedMotionToggle.addEventListener('change', (e) => {
+            // Stop propagation to prevent parent click handler from firing
+            e.stopPropagation();
             toggleReducedMotion();
         });
         
@@ -119,18 +125,14 @@ function setupEventListeners() {
             toggleParent.addEventListener('click', (e) => {
                 // Only toggle if the click wasn't on the checkbox itself
                 if (e.target !== reducedMotionToggle) {
+                    e.preventDefault(); // Prevent default to avoid any other handlers
+                    e.stopPropagation(); // Stop event from bubbling up
+                    
+                    // Manually toggle the checkbox state
+                    reducedMotionToggle.checked = !reducedMotionToggle.checked;
                     toggleReducedMotion();
                 }
             });
-            
-            // Add specific handler for the toggle slider
-            const toggleSlider = toggleParent.querySelector('.toggle-slider');
-            if (toggleSlider) {
-                toggleSlider.addEventListener('click', () => {
-                    toggleReducedMotion();
-                    console.log('Toggle slider clicked, reduced motion:', isReducedMotionEnabled);
-                });
-            }
         }
     }
     
@@ -152,27 +154,30 @@ function setupEventListeners() {
  * Apply accessibility settings to the document
  */
 function applyAccessibilitySettings() {
-    // Apply high contrast
-    if (isHighContrastEnabled) {
-        document.body.classList.add(HIGH_CONTRAST_CLASS);
-        console.log('Applied high contrast class to body');
-    } else {
-        document.body.classList.remove(HIGH_CONTRAST_CLASS);
-        console.log('Removed high contrast class from body');
-    }
-    
-    // Apply reduced motion
-    if (isReducedMotionEnabled) {
-        document.body.classList.add(REDUCED_MOTION_CLASS);
-    } else {
-        document.body.classList.remove(REDUCED_MOTION_CLASS);
-    }
-    
-    // Log current state for debugging
-    console.log('Current accessibility settings:', {
-        highContrast: isHighContrastEnabled,
-        reducedMotion: isReducedMotionEnabled,
-        bodyClasses: document.body.className
+    // Use requestAnimationFrame to ensure DOM updates are synchronized
+    requestAnimationFrame(() => {
+        // Apply high contrast
+        if (isHighContrastEnabled) {
+            document.body.classList.add(HIGH_CONTRAST_CLASS);
+            console.log('Applied high contrast class to body');
+        } else {
+            document.body.classList.remove(HIGH_CONTRAST_CLASS);
+            console.log('Removed high contrast class from body');
+        }
+        
+        // Apply reduced motion
+        if (isReducedMotionEnabled) {
+            document.body.classList.add(REDUCED_MOTION_CLASS);
+        } else {
+            document.body.classList.remove(REDUCED_MOTION_CLASS);
+        }
+        
+        // Log current state for debugging
+        console.log('Current accessibility settings:', {
+            highContrast: isHighContrastEnabled,
+            reducedMotion: isReducedMotionEnabled,
+            bodyClasses: document.body.className
+        });
     });
 }
 
@@ -193,6 +198,11 @@ export function toggleHighContrast() {
         highContrastToggle.checked = isHighContrastEnabled;
     }
     
+    // Play sound
+    if (sound && sound.play) {
+        sound.play('click');
+    }
+    
     return isHighContrastEnabled;
 }
 
@@ -209,6 +219,11 @@ export function toggleReducedMotion() {
     const reducedMotionToggle = document.getElementById('reduced-motion-toggle');
     if (reducedMotionToggle) {
         reducedMotionToggle.checked = isReducedMotionEnabled;
+    }
+    
+    // Play sound
+    if (sound && sound.play) {
+        sound.play('click');
     }
     
     return isReducedMotionEnabled;

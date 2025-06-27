@@ -261,25 +261,8 @@ function setupEventListeners() {
         // Set initial value
         highContrastToggle.checked = accessibility.isHighContrast();
         
-        // Add change event listener
-        highContrastToggle.addEventListener('change', () => {
-            accessibility.toggleHighContrast();
-            sound.play('click');
-            console.log('High contrast toggled to:', accessibility.isHighContrast());
-        });
-        
-        // Add click event listener to the parent toggle switch (for better touch/click support)
-        const toggleParent = highContrastToggle.parentElement;
-        if (toggleParent && toggleParent.classList.contains('toggle-switch')) {
-            toggleParent.addEventListener('click', (e) => {
-                // Only toggle if the click wasn't on the checkbox itself
-                if (e.target !== highContrastToggle) {
-                    accessibility.toggleHighContrast();
-                    sound.play('click');
-                    console.log('High contrast toggled (parent click) to:', accessibility.isHighContrast());
-                }
-            });
-        }
+        // We don't need to add event handlers here since they're already set up in accessibility.js
+        // This prevents duplicate event handlers that cause double toggling
     }
     
     // Reduced motion toggle
@@ -288,11 +271,8 @@ function setupEventListeners() {
         // Set initial value
         reducedMotionToggle.checked = accessibility.isReducedMotion();
         
-        // Add change event listener
-        reducedMotionToggle.addEventListener('change', () => {
-            accessibility.toggleReducedMotion();
-            sound.play('click');
-        });
+        // We don't need to add event handlers here since they're already set up in accessibility.js
+        // This prevents duplicate event handlers that cause double toggling
     }
     
     // Reset stats button
