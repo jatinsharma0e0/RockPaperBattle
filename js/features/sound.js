@@ -4,7 +4,6 @@
  */
 
 import { getData, setData } from '../settings/storage.js';
-import * as preloader from '../utils/preloader.js';
 
 // Configuration
 const SOUNDS = {
@@ -13,8 +12,8 @@ const SOUNDS = {
     lose: 'lose.wav',
     draw: 'draw.wav',
     gameStart: 'gameStart.wav',
-    gameWin: 'gameWin.wav',
     gameLose: 'gameLose.wav',
+    gameWin: 'gameWin.wav',
     gameDraw: 'gameDraw.wav',
     countdown: 'countdown.wav',
     tick: 'tick.wav',
