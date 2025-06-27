@@ -4,6 +4,7 @@
  */
 
 import { getData, setData } from '../settings/storage.js';
+import * as preloader from '../utils/preloader.js';
 
 // Configuration
 const SOUNDS = {
@@ -12,8 +13,8 @@ const SOUNDS = {
     lose: 'lose.wav',
     draw: 'draw.wav',
     gameStart: 'gameStart.wav',
-    gameLose: 'gameLose.wav',
     gameWin: 'gameWin.wav',
+    gameLose: 'gameLose.wav',
     gameDraw: 'gameDraw.wav',
     countdown: 'countdown.wav',
     tick: 'tick.wav',
@@ -94,23 +95,23 @@ function preloadAllSounds() {
     // Preload regular sounds for both styles
     Object.entries(SOUNDS).forEach(([key, file]) => {
         // Retro sounds
-        retroSounds[key] = new Audio(`./public/audio/retro/${file}`);
+        retroSounds[key] = new Audio(`./audio/retro/${file}`);
         retroSounds[key].load();
         
         // Modern sounds
-        modernSounds[key] = new Audio(`./public/audio/modern/${file}`);
+        modernSounds[key] = new Audio(`./audio/modern/${file}`);
         modernSounds[key].load();
     });
     
     // Preload ambient sounds for both styles
     Object.entries(AMBIENT_SOUNDS).forEach(([key, file]) => {
         // Retro ambient
-        retroAmbient[key] = new Audio(`./public/audio/retro/ambient/${file}`);
+        retroAmbient[key] = new Audio(`./audio/retro/ambient/${file}`);
         retroAmbient[key].loop = true;
         retroAmbient[key].load();
         
         // Modern ambient
-        modernAmbient[key] = new Audio(`./public/audio/modern/ambient/${file}`);
+        modernAmbient[key] = new Audio(`./audio/modern/ambient/${file}`);
         modernAmbient[key].loop = true;
         modernAmbient[key].load();
     });
@@ -332,7 +333,7 @@ function getCurrentAmbientName() {
     
     // Try to determine which ambient sound is playing by checking the src
     for (const [name, file] of Object.entries(AMBIENT_SOUNDS)) {
-        if (currentAmbient.src.includes(`/public/audio/`) && currentAmbient.src.includes(file)) {
+        if (currentAmbient.src.includes(file)) {
             return name;
         }
     }

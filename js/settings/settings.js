@@ -265,23 +265,17 @@ function setupEventListeners() {
         highContrastToggle.addEventListener('change', () => {
             accessibility.toggleHighContrast();
             sound.play('click');
-            
-            // Log the change
             console.log('High contrast toggled to:', accessibility.isHighContrast());
         });
         
-        // Add click event listener for the toggle wrapper
-        const highContrastToggleParent = highContrastToggle.parentElement;
-        if (highContrastToggleParent && highContrastToggleParent.classList.contains('toggle-switch')) {
-            highContrastToggleParent.addEventListener('click', (e) => {
+        // Add click event listener to the parent toggle switch (for better touch/click support)
+        const toggleParent = highContrastToggle.parentElement;
+        if (toggleParent && toggleParent.classList.contains('toggle-switch')) {
+            toggleParent.addEventListener('click', (e) => {
+                // Only toggle if the click wasn't on the checkbox itself
                 if (e.target !== highContrastToggle) {
-                    // Toggle the checkbox state
-                    highContrastToggle.checked = !highContrastToggle.checked;
-                    // Trigger the change manually
                     accessibility.toggleHighContrast();
                     sound.play('click');
-                    
-                    // Log the change
                     console.log('High contrast toggled (parent click) to:', accessibility.isHighContrast());
                 }
             });
@@ -298,27 +292,7 @@ function setupEventListeners() {
         reducedMotionToggle.addEventListener('change', () => {
             accessibility.toggleReducedMotion();
             sound.play('click');
-            
-            // Log the change
-            console.log('Reduced motion toggled to:', accessibility.isReducedMotion());
         });
-        
-        // Add click event listener for the toggle wrapper
-        const reducedMotionToggleParent = reducedMotionToggle.parentElement;
-        if (reducedMotionToggleParent && reducedMotionToggleParent.classList.contains('toggle-switch')) {
-            reducedMotionToggleParent.addEventListener('click', (e) => {
-                if (e.target !== reducedMotionToggle) {
-                    // Toggle the checkbox state
-                    reducedMotionToggle.checked = !reducedMotionToggle.checked;
-                    // Trigger the change manually
-                    accessibility.toggleReducedMotion();
-                    sound.play('click');
-                    
-                    // Log the change
-                    console.log('Reduced motion toggled (parent click) to:', accessibility.isReducedMotion());
-                }
-            });
-        }
     }
     
     // Reset stats button

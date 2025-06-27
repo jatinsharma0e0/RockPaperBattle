@@ -29,8 +29,8 @@ export function init() {
     // Apply initial settings
     applyAccessibilitySettings();
     
-    // Log initialization
-    console.log('Accessibility settings initialized:', {
+    // Log initial state
+    console.log('Accessibility initialized:', {
         highContrast: isHighContrastEnabled,
         reducedMotion: isReducedMotionEnabled
     });
@@ -80,23 +80,28 @@ function setupEventListeners() {
     const highContrastToggle = document.getElementById('high-contrast-toggle');
     if (highContrastToggle) {
         highContrastToggle.checked = isHighContrastEnabled;
-        
-        // Add change event listener
-        highContrastToggle.addEventListener('change', (e) => {
-            enableHighContrast(e.target.checked);
+        highContrastToggle.addEventListener('change', () => {
+            toggleHighContrast();
         });
         
-        // Add click event listener for the toggle wrapper
-        const highContrastToggleParent = highContrastToggle.parentElement;
-        if (highContrastToggleParent && highContrastToggleParent.classList.contains('toggle-switch')) {
-            highContrastToggleParent.addEventListener('click', (e) => {
+        // Add click event listener to the parent toggle switch (for better touch/click support)
+        const toggleParent = highContrastToggle.parentElement;
+        if (toggleParent && toggleParent.classList.contains('toggle-switch')) {
+            toggleParent.addEventListener('click', (e) => {
+                // Only toggle if the click wasn't on the checkbox itself
                 if (e.target !== highContrastToggle) {
-                    // Toggle the checkbox state
-                    highContrastToggle.checked = !highContrastToggle.checked;
-                    // Trigger the change event
-                    enableHighContrast(highContrastToggle.checked);
+                    toggleHighContrast();
                 }
             });
+            
+            // Add specific handler for the toggle slider
+            const toggleSlider = toggleParent.querySelector('.toggle-slider');
+            if (toggleSlider) {
+                toggleSlider.addEventListener('click', () => {
+                    toggleHighContrast();
+                    console.log('Toggle slider clicked, high contrast:', isHighContrastEnabled);
+                });
+            }
         }
     }
     
@@ -104,23 +109,28 @@ function setupEventListeners() {
     const reducedMotionToggle = document.getElementById('reduced-motion-toggle');
     if (reducedMotionToggle) {
         reducedMotionToggle.checked = isReducedMotionEnabled;
-        
-        // Add change event listener
-        reducedMotionToggle.addEventListener('change', (e) => {
-            enableReducedMotion(e.target.checked);
+        reducedMotionToggle.addEventListener('change', () => {
+            toggleReducedMotion();
         });
         
-        // Add click event listener for the toggle wrapper
-        const reducedMotionToggleParent = reducedMotionToggle.parentElement;
-        if (reducedMotionToggleParent && reducedMotionToggleParent.classList.contains('toggle-switch')) {
-            reducedMotionToggleParent.addEventListener('click', (e) => {
+        // Add click event listener to the parent toggle switch (for better touch/click support)
+        const toggleParent = reducedMotionToggle.parentElement;
+        if (toggleParent && toggleParent.classList.contains('toggle-switch')) {
+            toggleParent.addEventListener('click', (e) => {
+                // Only toggle if the click wasn't on the checkbox itself
                 if (e.target !== reducedMotionToggle) {
-                    // Toggle the checkbox state
-                    reducedMotionToggle.checked = !reducedMotionToggle.checked;
-                    // Trigger the change event
-                    enableReducedMotion(reducedMotionToggle.checked);
+                    toggleReducedMotion();
                 }
             });
+            
+            // Add specific handler for the toggle slider
+            const toggleSlider = toggleParent.querySelector('.toggle-slider');
+            if (toggleSlider) {
+                toggleSlider.addEventListener('click', () => {
+                    toggleReducedMotion();
+                    console.log('Toggle slider clicked, reduced motion:', isReducedMotionEnabled);
+                });
+            }
         }
     }
     
@@ -145,20 +155,25 @@ function applyAccessibilitySettings() {
     // Apply high contrast
     if (isHighContrastEnabled) {
         document.body.classList.add(HIGH_CONTRAST_CLASS);
-        console.log('High contrast mode enabled');
+        console.log('Applied high contrast class to body');
     } else {
         document.body.classList.remove(HIGH_CONTRAST_CLASS);
-        console.log('High contrast mode disabled');
+        console.log('Removed high contrast class from body');
     }
     
     // Apply reduced motion
     if (isReducedMotionEnabled) {
         document.body.classList.add(REDUCED_MOTION_CLASS);
-        console.log('Reduced motion mode enabled');
     } else {
         document.body.classList.remove(REDUCED_MOTION_CLASS);
-        console.log('Reduced motion mode disabled');
     }
+    
+    // Log current state for debugging
+    console.log('Current accessibility settings:', {
+        highContrast: isHighContrastEnabled,
+        reducedMotion: isReducedMotionEnabled,
+        bodyClasses: document.body.className
+    });
 }
 
 /**
@@ -169,6 +184,8 @@ export function toggleHighContrast() {
     isHighContrastEnabled = !isHighContrastEnabled;
     setData('highContrast', isHighContrastEnabled);
     applyAccessibilitySettings();
+    
+    console.log('High contrast toggled to:', isHighContrastEnabled);
     
     // Update toggle if it exists
     const highContrastToggle = document.getElementById('high-contrast-toggle');

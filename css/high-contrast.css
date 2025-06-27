@@ -21,12 +21,6 @@ body.high-contrast {
     --special-move-color: #ff8000;
 }
 
-/* Global styles for high contrast */
-body.high-contrast {
-    background-color: var(--bg-color) !important;
-    color: var(--text-color) !important;
-}
-
 /* Enhanced focus indicators */
 body.high-contrast *:focus {
     outline: 3px solid var(--accent-color) !important;
@@ -39,176 +33,93 @@ body.high-contrast h2,
 body.high-contrast h3,
 body.high-contrast h4,
 body.high-contrast p,
-body.high-contrast span,
-body.high-contrast label,
-body.high-contrast div {
-    color: var(--text-color) !important;
-    text-shadow: none !important;
+body.high-contrast span {
+    color: var(--text-color);
+    text-shadow: none;
 }
 
 /* Make buttons more distinct */
 body.high-contrast .btn,
 body.high-contrast .move-btn,
-body.high-contrast .icon-btn,
-body.high-contrast .tab-btn {
-    background-color: var(--btn-bg) !important;
-    color: var(--btn-text) !important;
-    border: 2px solid var(--border-color) !important;
-    text-shadow: none !important;
-    box-shadow: none !important;
-}
-
-body.high-contrast .btn:hover,
-body.high-contrast .move-btn:hover,
-body.high-contrast .icon-btn:hover,
-body.high-contrast .tab-btn:hover {
-    background-color: var(--btn-hover) !important;
-    color: var(--bg-color) !important;
-}
-
-body.high-contrast .btn.active,
-body.high-contrast .tab-btn.active {
-    background-color: var(--accent-color) !important;
-    color: var(--bg-color) !important;
-    border-color: var(--text-color) !important;
+body.high-contrast .icon-btn {
+    border: 2px solid var(--border-color);
+    text-shadow: none;
+    box-shadow: none;
 }
 
 /* Ensure form controls are visible */
 body.high-contrast input[type="checkbox"],
 body.high-contrast input[type="radio"] {
-    border: 2px solid var(--border-color) !important;
-}
-
-body.high-contrast input[type="text"],
-body.high-contrast input[type="number"],
-body.high-contrast select {
-    background-color: #333 !important;
-    color: var(--text-color) !important;
-    border: 2px solid var(--border-color) !important;
+    border: 2px solid var(--border-color);
 }
 
 /* Improved toggle switch visibility */
-body.high-contrast .toggle-switch {
-    background-color: #555555 !important;
-    border: 2px solid var(--border-color) !important;
+body.high-contrast .toggle-slider {
+    background-color: #555555;
+    border: 2px solid var(--border-color);
 }
 
 body.high-contrast input:checked + .toggle-slider {
-    background-color: var(--primary-color) !important;
+    background-color: var(--primary-color);
 }
 
 body.high-contrast .toggle-slider:before {
-    background-color: #ffffff !important;
-    border: 1px solid #000000 !important;
+    background-color: #ffffff;
+    border: 1px solid #000000;
 }
 
 /* Make game areas stand out more */
 body.high-contrast section {
-    background-color: var(--section-bg) !important;
-    border: 2px solid var(--border-color) !important;
-    box-shadow: none !important;
+    border: 2px solid var(--border-color);
+    box-shadow: none;
 }
 
-body.high-contrast .game-area,
-body.high-contrast .settings-content,
-body.high-contrast .tab-content,
-body.high-contrast .stats-container {
-    background-color: var(--section-bg) !important;
-    border: 2px solid var(--border-color) !important;
+body.high-contrast .game-area {
+    border: 2px solid var(--border-color);
 }
 
 /* High contrast game elements */
 body.high-contrast .player-choice,
 body.high-contrast .ai-choice {
-    background-color: var(--section-bg) !important;
-    border: 2px solid var(--border-color) !important;
+    background-color: var(--section-bg);
+    border: 2px solid var(--border-color);
     padding: 15px;
     border-radius: var(--border-radius);
 }
 
 /* Make move display more visible */
 body.high-contrast .move-display {
-    background-color: #333333 !important;
-    border: 2px solid var(--border-color) !important;
+    background-color: #333333;
+    border: 2px solid var(--border-color);
     border-radius: var(--border-radius);
 }
 
 /* Improve notification visibility */
 body.high-contrast .bonus-notification,
 body.high-contrast .achievement-notification {
-    background-color: #000000 !important;
-    border: 3px solid var(--accent-color) !important;
-    color: var(--text-color) !important;
+    background-color: #000000;
+    border: 3px solid var(--accent-color);
+    color: var(--text-color);
 }
 
 /* Clear animations that might reduce visibility */
 body.high-contrast .idle-animation,
 body.high-contrast .idle-pulse,
 body.high-contrast .idle-glow {
-    animation: none !important;
-    box-shadow: none !important;
+    animation: none;
+    box-shadow: none;
 }
 
 /* Ensure speed timer is visible */
 body.high-contrast .speed-timer-container {
-    border: 2px solid var(--border-color) !important;
-    background-color: #333333 !important;
+    border: 2px solid var(--border-color);
+    background-color: #333333;
 }
 
 body.high-contrast .speed-timer {
-    background-color: var(--primary-color) !important;
+    background-color: var(--primary-color);
 }
 
 body.high-contrast .speed-timer.warning {
-    background-color: var(--lose-color) !important;
-}
-
-/* Stats screen */
-body.high-contrast .stat-bar-container {
-    background-color: #333 !important;
-    border: 1px solid var(--border-color) !important;
-}
-
-body.high-contrast .stat-bar.win-bar {
-    background-color: var(--win-color) !important;
-}
-
-body.high-contrast .stat-bar.lose-bar {
-    background-color: var(--lose-color) !important;
-}
-
-body.high-contrast .stat-bar.draw-bar {
-    background-color: var(--draw-color) !important;
-}
-
-/* Achievement items */
-body.high-contrast .achievement-item {
-    background-color: #333 !important;
-    border: 1px solid var(--border-color) !important;
-}
-
-body.high-contrast .achievement-item.unlocked {
-    border-color: var(--win-color) !important;
-}
-
-body.high-contrast .achievement-item.locked {
-    opacity: 0.8;
-}
-
-/* Fire move special styling */
-body.high-contrast .fire-move {
-    background-color: #ff4500 !important;
-    border-color: #ffffff !important;
-}
-
-/* Avatar and theme selectors */
-body.high-contrast .avatar-option,
-body.high-contrast .theme-option {
-    border: 2px solid var(--border-color) !important;
-    background-color: #333 !important;
-}
-
-body.high-contrast .avatar-option[aria-checked="true"],
-body.high-contrast .theme-option[aria-checked="true"] {
-    border-color: var(--primary-color) !important;
+    background-color: var(--lose-color);
 } 
