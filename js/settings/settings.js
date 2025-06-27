@@ -180,16 +180,14 @@ function setupEventListeners() {
         soundStyleRetro.addEventListener('change', () => {
             if (soundStyleRetro.checked) {
                 sound.setAudioStyle('retro');
-                // Reload audio assets with new style
-                preloader.reloadAudioAssets();
+                sound.play('click');
             }
         });
         
         soundStyleModern.addEventListener('change', () => {
             if (soundStyleModern.checked) {
                 sound.setAudioStyle('modern');
-                // Reload audio assets with new style
-                preloader.reloadAudioAssets();
+                sound.play('click');
             }
         });
     }

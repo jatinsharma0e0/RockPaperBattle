@@ -29,6 +29,12 @@ const AMBIENT_SOUNDS = {
     lofi: 'lo-fi-loop.wav'
 };
 
+// Audio caches for both styles
+const retroSounds = {};
+const modernSounds = {};
+const retroAmbient = {};
+const modernAmbient = {};
+
 // State
 let soundEnabled = true;
 let ambientEnabled = true;
@@ -62,8 +68,11 @@ export function init() {
     // Update sound button state
     updateSoundButtonState();
     
-    // Start ambient sound if enabled
-    if (ambientEnabled) {
+    // Preload all sounds for both styles to eliminate delay
+    preloadAllSounds();
+    
+    // Start ambient sound if enabled AND global sound is enabled
+    if (soundEnabled && ambientEnabled) {
         // Small delay to avoid audio conflicts during page load
         setTimeout(() => {
             playAmbient();
@@ -76,6 +85,35 @@ export function init() {
         volume, 
         ambientVolume, 
         audioStyle 
+    });
+}
+
+/**
+ * Preload all sounds for both retro and modern styles
+ */
+function preloadAllSounds() {
+    // Preload regular sounds for both styles
+    Object.entries(SOUNDS).forEach(([key, file]) => {
+        // Retro sounds
+        retroSounds[key] = new Audio(`./audio/retro/${file}`);
+        retroSounds[key].load();
+        
+        // Modern sounds
+        modernSounds[key] = new Audio(`./audio/modern/${file}`);
+        modernSounds[key].load();
+    });
+    
+    // Preload ambient sounds for both styles
+    Object.entries(AMBIENT_SOUNDS).forEach(([key, file]) => {
+        // Retro ambient
+        retroAmbient[key] = new Audio(`./audio/retro/ambient/${file}`);
+        retroAmbient[key].loop = true;
+        retroAmbient[key].load();
+        
+        // Modern ambient
+        modernAmbient[key] = new Audio(`./audio/modern/ambient/${file}`);
+        modernAmbient[key].loop = true;
+        modernAmbient[key].load();
     });
 }
 
@@ -97,27 +135,20 @@ function updateSoundButtonState() {
 export function play(soundName) {
     if (!soundEnabled) return;
     
-    const soundFile = SOUNDS[soundName];
-    if (!soundFile) return;
+    // Get the appropriate sound from our preloaded cache
+    const soundCache = audioStyle === 'retro' ? retroSounds : modernSounds;
+    const sound = soundCache[soundName];
     
-    // Try to get from preloaded cache first
-    let audio;
-    if (preloader.isAudioCached(soundName)) {
-        audio = preloader.getAudio(soundName);
-        if (audio) {
-            audio = audio.cloneNode();
-        }
-    }
+    if (!sound) return;
     
-    // Fall back to creating new Audio
-    if (!audio) {
-        audio = new Audio(`./audio/${audioStyle}/${soundFile}`);
-    }
+    // Clone the audio to allow overlapping sounds
+    const audioToPlay = sound.cloneNode();
     
     // Apply current volume setting
-    audio.volume = volume;
+    audioToPlay.volume = volume;
     
-    audio.play().catch(e => console.warn('Error playing sound:', e));
+    // Play immediately (should be no delay since it's preloaded)
+    audioToPlay.play().catch(e => console.warn('Error playing sound:', e));
 }
 
 /**
@@ -125,32 +156,27 @@ export function play(soundName) {
  * @param {string} ambientName - Optional name of ambient sound to play
  */
 export function playAmbient(ambientName = 'lofi') {
-    if (!ambientEnabled) return;
+    // Don't play ambient if either global sound or ambient sound is disabled
+    if (!soundEnabled || !ambientEnabled) return;
     
     // Stop any currently playing ambient sound
     stopAmbient();
     
-    const soundFile = AMBIENT_SOUNDS[ambientName];
-    if (!soundFile) return;
+    // Get the appropriate ambient sound from our preloaded cache
+    const ambientCache = audioStyle === 'retro' ? retroAmbient : modernAmbient;
+    currentAmbient = ambientCache[ambientName];
     
-    // Try to get from preloaded cache first
-    if (preloader.isAudioCached(ambientName, true)) {
-        currentAmbient = preloader.getAudio(ambientName, true);
-        if (currentAmbient) {
-            // Create a clone to avoid affecting the cached version
-            currentAmbient = currentAmbient.cloneNode();
-        }
-    } else {
-        // Fall back to creating new Audio
-        currentAmbient = new Audio(`./audio/${audioStyle}/ambient/${soundFile}`);
-    }
+    if (!currentAmbient) return;
     
-    if (currentAmbient) {
-        // Apply current ambient volume setting
-        currentAmbient.volume = ambientVolume;
-        currentAmbient.loop = true;
-        currentAmbient.play().catch(e => console.warn('Error playing ambient sound:', e));
-    }
+    // Clone to avoid affecting the cached version
+    currentAmbient = currentAmbient.cloneNode();
+    
+    // Apply current ambient volume setting
+    currentAmbient.volume = ambientVolume;
+    currentAmbient.loop = true;
+    
+    // Play the ambient sound
+    currentAmbient.play().catch(e => console.warn('Error playing ambient sound:', e));
 }
 
 /**
@@ -172,8 +198,15 @@ export function toggleSound() {
     setData('soundEnabled', soundEnabled);
     updateSoundButtonState();
     
-    if (soundEnabled) {
+    // If sound is disabled, stop ambient sounds too
+    if (!soundEnabled) {
+        stopAmbient();
+    } else {
+        // If sound was re-enabled and ambient is enabled, restart ambient
         play('click');
+        if (ambientEnabled) {
+            playAmbient();
+        }
     }
 }
 
@@ -187,11 +220,12 @@ export function setSoundEnabled(enabled) {
     setData('soundEnabled', enabled);
     updateSoundButtonState();
     
-    // If sound is disabled, ensure we don't play any sounds
+    // If sound is disabled, ensure ambient is stopped too
     if (!enabled) {
-        // Stop any currently playing sounds if needed
-        // This would require tracking all playing sounds, which is beyond the scope
-        // of this simple fix, but could be implemented if needed
+        stopAmbient();
+    } else if (ambientEnabled) {
+        // If sound was enabled and ambient is enabled, restart ambient
+        playAmbient();
     }
 }
 
@@ -214,8 +248,8 @@ export function setAmbientEnabled(enabled) {
     
     if (!enabled) {
         stopAmbient();
-    } else {
-        // Start ambient sound if it was just enabled
+    } else if (soundEnabled) {
+        // Only start ambient if global sound is also enabled
         playAmbient();
     }
 }
@@ -235,8 +269,6 @@ export function isAmbientEnabled() {
 export function setVolume(level) {
     volume = Math.max(0, Math.min(1, level));
     setData('soundVolume', volume);
-    
-    // If we were tracking currently playing sounds, we could update their volume here
 }
 
 /**
@@ -281,8 +313,32 @@ export function setAudioStyle(style) {
     audioStyle = style;
     setData('audioStyle', audioStyle);
     
-    // Reload audio assets
-    preloader.reloadAudioAssets();
+    // If ambient is playing, restart it with the new style
+    const wasAmbientPlaying = currentAmbient !== null;
+    if (wasAmbientPlaying) {
+        const ambientName = getCurrentAmbientName();
+        stopAmbient();
+        if (soundEnabled && ambientEnabled) {
+            playAmbient(ambientName);
+        }
+    }
+}
+
+/**
+ * Get the name of the currently playing ambient sound
+ * @returns {string} Name of the current ambient sound or 'lofi' as default
+ */
+function getCurrentAmbientName() {
+    if (!currentAmbient) return 'lofi';
+    
+    // Try to determine which ambient sound is playing by checking the src
+    for (const [name, file] of Object.entries(AMBIENT_SOUNDS)) {
+        if (currentAmbient.src.includes(file)) {
+            return name;
+        }
+    }
+    
+    return 'lofi';
 }
 
 /**
