@@ -869,11 +869,10 @@ input[type="range"]:focus {
 
 /* Speed Mode Timer */
 .speed-timer-container {
-    width: 90%;
-    max-width: 600px;
-    height: 14px;
+    width: 300px;
+    height: 20px;
     background: #222;
-    border-radius: 7px;
+    border-radius: 10px;
     margin: 20px auto 10px auto;
     position: relative;
     overflow: hidden;
@@ -883,10 +882,12 @@ input[type="range"]:focus {
 .speed-timer {
     height: 100%;
     width: 100%;
-    background: linear-gradient(90deg, #ff9800, #2196f3);
-    border-radius: 7px;
-    transition: width 0.2s linear;
-    will-change: width;
+    background: linear-gradient(90deg, #00ffe7, #00bfff);
+    border-radius: 10px;
+    transform-origin: right;
+    transform: scaleX(1);
+    transition: transform 3s linear;
+    will-change: transform;
 }
 
 .speed-timer.warning {

@@ -165,47 +165,31 @@ export function toggle() {
  * @returns {boolean} Whether the timer was successfully started
  */
 export function startTimer(timeLimit = DEFAULT_TIME_LIMIT, onTimeUp = null) {
-    // If speed mode is disabled, current game mode is not endless, or timer is already running, do nothing
     if (!shouldBeActive() || isTimerRunning) {
         return false;
     }
-    
-    // Set up state
     timerCallback = onTimeUp;
     currentTimeLeft = timeLimit;
     isTimerRunning = true;
-    
-    // Show timer container
     const timerContainer = document.getElementById('speed-timer-container');
     if (timerContainer) {
         timerContainer.classList.remove('hidden');
     }
-    
-    // Always get the latest timerElement
     timerElement = document.getElementById('speed-timer');
-    // Reset timer appearance
     if (timerElement) {
-        timerElement.style.width = '100%';
         timerElement.classList.remove('warning');
-        timerElement.style.display = 'block'; // Force visible
+        timerElement.style.transition = 'none';
+        timerElement.style.transform = 'scaleX(1)';
+        timerElement.style.display = 'block';
+        void timerElement.offsetWidth; // force reflow
+        timerElement.style.transition = `transform ${timeLimit/1000}s linear`;
+        timerElement.style.transform = 'scaleX(0)';
     }
-    
-    // Clear any existing timers
-    stopTimer(false); // Don't hide the timer container
-    
-    // Start countdown
+    stopTimer(false);
     currentTimer = setTimeout(() => {
         timeUp();
     }, timeLimit);
-    
-    // Start visual update interval
-    timerUpdateInterval = setInterval(() => {
-        updateTimerVisual();
-    }, TIMER_UPDATE_INTERVAL);
-    
-    // Play start sound
     sound.play('countdown');
-    
     return true;
 }
 
@@ -218,12 +202,6 @@ export function stopTimer(hideContainer = true) {
     if (currentTimer) {
         clearTimeout(currentTimer);
         currentTimer = null;
-    }
-    
-    // Clear update interval
-    if (timerUpdateInterval) {
-        clearInterval(timerUpdateInterval);
-        timerUpdateInterval = null;
     }
     
     // Reset state
@@ -252,30 +230,6 @@ function timeUp() {
     
     // Stop the timer
     stopTimer();
-}
-
-/**
- * Update the visual timer bar
- */
-function updateTimerVisual() {
-    // Always get the latest timerElement
-    timerElement = document.getElementById('speed-timer');
-    if (!timerElement || !isTimerRunning) return;
-    
-    // Update time left
-    currentTimeLeft -= TIMER_UPDATE_INTERVAL;
-    if (currentTimeLeft < 0) currentTimeLeft = 0;
-    
-    // Calculate percentage
-    const percentage = (currentTimeLeft / DEFAULT_TIME_LIMIT) * 100;
-    timerElement.style.width = `${percentage}%`;
-    console.log('Timer width:', timerElement.style.width, 'Time left:', currentTimeLeft);
-    
-    // Add warning class when time is running low
-    if (currentTimeLeft <= WARNING_THRESHOLD && !timerElement.classList.contains('warning')) {
-        timerElement.classList.add('warning');
-        sound.play('tick');
-    }
 }
 
 /**
