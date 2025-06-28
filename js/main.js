@@ -490,6 +490,8 @@ function checkFirstRun() {
  * Performs cleanup before page unload
  */
 function cleanup() {
+    // Clean up speed mode resources
+    speedMode.cleanup();
     
     // Stop any sounds
     sound.stopAmbient();

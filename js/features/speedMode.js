@@ -31,7 +31,7 @@ export function init() {
     if (speedModeEnabled !== undefined) {
         isSpeedModeEnabled = speedModeEnabled;
     } else {
-        // Default to disabled
+        // Always default to disabled
         setData('speedMode', false);
         isSpeedModeEnabled = false;
     }
@@ -50,6 +50,20 @@ export function setGameMode(mode) {
     // If changing to a non-endless mode, stop any active timer
     if (mode !== 'endless' && isTimerRunning) {
         stopTimer();
+    }
+    
+    // Always ensure the banner is hidden when not in Endless mode
+    if (mode !== 'endless') {
+        const banner = document.getElementById('game-info-banner');
+        if (banner) {
+            banner.classList.add('hidden');
+        }
+        
+        // Clear the text animation interval
+        if (window.speedModeTextInterval) {
+            clearInterval(window.speedModeTextInterval);
+            window.speedModeTextInterval = null;
+        }
     }
     
     // Update UI based on the new game mode
@@ -139,8 +153,23 @@ function updateSpeedModeUI() {
             banner.classList.add('speed-mode');
             bannerText.textContent = 'Speed Mode Active';
             bannerIcon.textContent = '⚡';
+            
+            // Add a blinking cursor effect to the text
+            if (!window.speedModeTextInterval) {
+                let showCursor = true;
+                window.speedModeTextInterval = setInterval(() => {
+                    showCursor = !showCursor;
+                    bannerText.textContent = `Speed Mode Active${showCursor ? ' |' : ''}`;
+                }, 500);
+            }
         } else {
             banner.classList.add('hidden');
+            
+            // Clear the interval when speed mode is not active
+            if (window.speedModeTextInterval) {
+                clearInterval(window.speedModeTextInterval);
+                window.speedModeTextInterval = null;
+            }
         }
     }
 }
@@ -294,6 +323,20 @@ export function getAppropriateDelay(standardDelay = 1000, speedDelay = 300) {
     return shouldBeActive() ? speedDelay : standardDelay;
 }
 
+/**
+ * Clean up any resources used by the speed mode module
+ */
+export function cleanup() {
+    // Clear any active timers
+    stopTimer();
+    
+    // Clear the text animation interval
+    if (window.speedModeTextInterval) {
+        clearInterval(window.speedModeTextInterval);
+        window.speedModeTextInterval = null;
+    }
+}
+
 export default {
     init,
     isEnabled,
@@ -304,5 +347,6 @@ export default {
     getTimeoutMove,
     setGameMode,
     shouldBeActive,
-    getAppropriateDelay
+    getAppropriateDelay,
+    cleanup
 }; 

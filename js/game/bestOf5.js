@@ -37,6 +37,12 @@ export function initBestOf5Mode() {
     // Update AI difficulty indicator
     aiModes.updateAiIndicators();
     
+    // Explicitly hide the Speed Mode banner
+    const banner = document.getElementById('game-info-banner');
+    if (banner) {
+        banner.classList.add('hidden');
+    }
+    
     // Show the game screen
     ui.showSection('game-screen');
     
