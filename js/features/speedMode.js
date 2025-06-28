@@ -181,10 +181,13 @@ export function startTimer(timeLimit = DEFAULT_TIME_LIMIT, onTimeUp = null) {
         timerContainer.classList.remove('hidden');
     }
     
+    // Always get the latest timerElement
+    timerElement = document.getElementById('speed-timer');
     // Reset timer appearance
     if (timerElement) {
         timerElement.style.width = '100%';
         timerElement.classList.remove('warning');
+        timerElement.style.display = 'block'; // Force visible
     }
     
     // Clear any existing timers
@@ -255,6 +258,8 @@ function timeUp() {
  * Update the visual timer bar
  */
 function updateTimerVisual() {
+    // Always get the latest timerElement
+    timerElement = document.getElementById('speed-timer');
     if (!timerElement || !isTimerRunning) return;
     
     // Update time left
@@ -264,12 +269,11 @@ function updateTimerVisual() {
     // Calculate percentage
     const percentage = (currentTimeLeft / DEFAULT_TIME_LIMIT) * 100;
     timerElement.style.width = `${percentage}%`;
+    console.log('Timer width:', timerElement.style.width, 'Time left:', currentTimeLeft);
     
     // Add warning class when time is running low
     if (currentTimeLeft <= WARNING_THRESHOLD && !timerElement.classList.contains('warning')) {
         timerElement.classList.add('warning');
-        
-        // Play warning tick sound
         sound.play('tick');
     }
 }
