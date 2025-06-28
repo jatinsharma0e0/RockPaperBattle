@@ -46,28 +46,11 @@ export function init() {
  */
 export function setGameMode(mode) {
     currentGameMode = mode;
-    
-    // If changing to a non-endless mode, stop any active timer and hide the banner
-    if (mode !== 'endless') {
-        // Stop any active timer
-        if (isTimerRunning) {
-            stopTimer();
-        }
-        
-        // Hide the banner immediately
-        const banner = document.getElementById('game-info-banner');
-        if (banner) {
-            banner.classList.add('hidden');
-            
-            // Clear the text animation interval
-            if (window.speedModeTextInterval) {
-                clearInterval(window.speedModeTextInterval);
-                window.speedModeTextInterval = null;
-            }
-        }
-    } else {
-        // If changing to endless mode, update UI based on current settings
-        updateSpeedModeUI();
+    // Always update the UI based on the new game mode
+    updateSpeedModeUI();
+    // Stop timer if not endless
+    if (mode !== 'endless' && isTimerRunning) {
+        stopTimer();
     }
 }
 
@@ -143,35 +126,21 @@ export function setEnabled(enabled) {
  * Update the speed mode UI elements
  */
 function updateSpeedModeUI() {
-    // Update the game info banner
     const banner = document.getElementById('game-info-banner');
     const bannerText = document.getElementById('game-info-text');
     const bannerIcon = document.querySelector('.game-info-banner-icon');
-    
-    if (banner && bannerText && bannerIcon) {
-        if (shouldBeActive()) {
-            banner.classList.remove('hidden');
-            banner.classList.add('speed-mode');
-            bannerText.textContent = 'Speed Mode Active';
-            bannerIcon.textContent = '⚡';
-            
-            // Add a blinking cursor effect to the text
-            if (!window.speedModeTextInterval) {
-                let showCursor = true;
-                window.speedModeTextInterval = setInterval(() => {
-                    showCursor = !showCursor;
-                    bannerText.textContent = `Speed Mode Active${showCursor ? ' |' : ''}`;
-                }, 500);
-            }
-        } else {
-            banner.classList.add('hidden');
-            
-            // Clear the interval when speed mode is not active
-            if (window.speedModeTextInterval) {
-                clearInterval(window.speedModeTextInterval);
-                window.speedModeTextInterval = null;
-            }
-        }
+
+    if (!banner || !bannerText || !bannerIcon) return;
+
+    if (shouldBeActive()) {
+        banner.classList.remove('hidden');
+        banner.classList.add('speed-mode');
+        bannerText.textContent = 'Speed Mode Active';
+        bannerIcon.textContent = '⚡';
+        // (Optional: blinking cursor logic)
+    } else {
+        banner.classList.add('hidden');
+        // (Optional: clear blinking cursor interval)
     }
 }
 

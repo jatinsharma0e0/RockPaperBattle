@@ -180,17 +180,10 @@ function setupEventHandlers() {
     if (bestOf5Btn) {
         bestOf5Btn.addEventListener('click', () => {
             currentGameMode = 'bestOf5';
-            // Set the game mode in speedMode
             speedMode.setGameMode('bestOf5');
             bestOf5.initBestOf5Mode();
             sound.play('click');
             stats.updateBestMode('Best of 5');
-            
-            // Explicitly hide the speed mode banner
-            const banner = document.getElementById('game-info-banner');
-            if (banner) {
-                banner.classList.add('hidden');
-            }
         });
     }
     

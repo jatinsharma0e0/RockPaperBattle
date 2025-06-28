@@ -13,8 +13,8 @@
     <meta name="apple-mobile-web-app-title" content="RPS" />
     <link rel="manifest" href="./icons/site.webmanifest" />
     <!-- Stylesheets -->
-  <script type="module" crossorigin src="./index.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index.css">
+  <script type="module" crossorigin src="/index.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index.css">
 </head>
 <body class="theme-day">
     <!-- Loading Screen -->
@@ -80,13 +80,13 @@
                 </div>
                 <div class="score ai-score">
                     <div class="ai-info">
-                        <div id="ai-mode-indicator" class="ai-mode-indicator" aria-hidden="true">🤖</div>
+                        <div id="ai-avatar" class="avatar-small" aria-hidden="true">🤖</div>
                         <span>AI</span>:
                     </div>
                     <span id="ai-score" aria-live="polite">0</span>
                 </div>
             </div>
-
+            
             <div class="game-area">
                 <div class="player-choice">
                     <h3 id="player-move-heading">Your Choice</h3>
@@ -176,8 +176,8 @@
                 
                 <div class="stats-details">
                     <div class="stat-detail">
-                        <h4>Best AI Mode</h4>
-                        <p id="stats-best-ai-mode" aria-live="polite">Random</p>
+                        <h4>Best AI Difficulty</h4>
+                        <p id="stats-best-ai-mode" aria-live="polite">Medium</p>
                     </div>
                     <div class="stat-detail">
                         <h4>Bonus Rounds Won</h4>
@@ -317,18 +317,19 @@
                 <div id="ai-tab" class="tab-content" role="tabpanel" aria-labelledby="ai-tab-btn">
                     <h3>AI Settings</h3>
                     <div class="setting-group">
-                        <label for="ai-mode-select">AI Personality</label>
-                        <select id="ai-mode-select" class="select-dropdown" aria-describedby="ai-mode-desc">
-                            <option value="random">🤖 Random</option>
-                            <option value="cheeky">😏 Cheeky</option>
-                            <option value="predictive">🧠 Predictive</option>
+                        <label for="ai-difficulty-select">AI Difficulty</label>
+                        <select id="ai-difficulty-select" class="select-dropdown" aria-describedby="ai-difficulty-desc">
+                            <option value="easy">😊 Noobron</option>
+                            <option value="medium">😐 Median Mind</option>
+                            <option value="hard">😈 Mindbreaker</option>
+                            <option value="impossible">👹 Impossible</option>
                         </select>
-                        <p id="ai-mode-desc" class="setting-description">Choose the AI behavior style</p>
+                        <p id="ai-difficulty-desc" class="setting-description">Choose how challenging the AI opponent will be</p>
                     </div>
                     
-                    <div id="ai-mode-description" class="mode-description" aria-live="polite">
-                        <h4>Random Mode</h4>
-                        <p>AI picks a move randomly each turn.</p>
+                    <div id="ai-difficulty-description" class="mode-description" aria-live="polite">
+                        <h4>Medium Difficulty</h4>
+                        <p>AI uses strategy about half the time.</p>
                     </div>
                 </div>
                 
