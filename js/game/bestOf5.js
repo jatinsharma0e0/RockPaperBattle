@@ -137,6 +137,9 @@ export function handlePlayerMove(playerMove) {
         secretMove.init();
     }
     
+    // Always use standard delay for Best of 5 mode (speed mode doesn't apply)
+    const resultDelay = 1000;
+    
     // Show result after a short delay
     setTimeout(() => {
         if (isGameOver) {
@@ -144,7 +147,7 @@ export function handlePlayerMove(playerMove) {
         } else {
             ui.showResult(result, resultMessage, playerMove, aiMove);
         }
-    }, 1000);
+    }, resultDelay);
     
     // Update localStorage stats
     updateStat(result === 'win' ? 'wins' : result === 'lose' ? 'losses' : 'draws');

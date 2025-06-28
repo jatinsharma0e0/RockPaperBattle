@@ -121,12 +121,11 @@ function setupEventHandlers() {
         // Game mode selection
         startEndlessMode: () => {
             currentGameMode = 'endless';
+            // Set the game mode in speedMode
+            speedMode.setGameMode('endless');
             endless.initEndlessMode();
             sound.play('click');
             stats.updateBestMode('Endless');
-            
-            // Update game info banner
-            settings.updateGameBanner();
         },
         
         // Navigation
@@ -142,6 +141,10 @@ function setupEventHandlers() {
             
             // Stop speed timer if active
             speedMode.stopTimer();
+            
+            // Reset game mode
+            currentGameMode = null;
+            speedMode.setGameMode(null);
         },
         
         // Play again
@@ -177,15 +180,11 @@ function setupEventHandlers() {
     if (bestOf5Btn) {
         bestOf5Btn.addEventListener('click', () => {
             currentGameMode = 'bestOf5';
+            // Set the game mode in speedMode
+            speedMode.setGameMode('bestOf5');
             bestOf5.initBestOf5Mode();
             sound.play('click');
             stats.updateBestMode('Best of 5');
-            
-            // Speed mode is disabled for Best of 5
-            const banner = document.getElementById('game-info-banner');
-            if (banner) {
-                banner.classList.add('hidden');
-            }
         });
     }
     

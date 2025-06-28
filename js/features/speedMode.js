@@ -20,6 +20,7 @@ let currentTimeLeft = 0;
 let timerCallback = null;
 let timerElement = null;
 let isTimerRunning = false;
+let currentGameMode = null;
 
 /**
  * Initialize the speed mode system
@@ -37,6 +38,30 @@ export function init() {
     
     // Create timer element if it doesn't exist
     createTimerElement();
+}
+
+/**
+ * Set the current game mode
+ * @param {string} mode - The current game mode ('endless', 'bestOf5', etc.)
+ */
+export function setGameMode(mode) {
+    currentGameMode = mode;
+    
+    // If changing to a non-endless mode, stop any active timer
+    if (mode !== 'endless' && isTimerRunning) {
+        stopTimer();
+    }
+    
+    // Update UI based on the new game mode
+    updateSpeedModeUI();
+}
+
+/**
+ * Check if speed mode should be active based on settings and game mode
+ * @returns {boolean} Whether speed mode should be active
+ */
+export function shouldBeActive() {
+    return isSpeedModeEnabled && currentGameMode === 'endless';
 }
 
 /**
@@ -94,6 +119,30 @@ export function isEnabled() {
 export function setEnabled(enabled) {
     isSpeedModeEnabled = enabled;
     setData('speedMode', enabled);
+    
+    // Update UI based on the new setting
+    updateSpeedModeUI();
+}
+
+/**
+ * Update the speed mode UI elements
+ */
+function updateSpeedModeUI() {
+    // Update the game info banner
+    const banner = document.getElementById('game-info-banner');
+    const bannerText = document.getElementById('game-info-text');
+    const bannerIcon = document.querySelector('.game-info-banner-icon');
+    
+    if (banner && bannerText && bannerIcon) {
+        if (shouldBeActive()) {
+            banner.classList.remove('hidden');
+            banner.classList.add('speed-mode');
+            bannerText.textContent = 'Speed Mode Active';
+            bannerIcon.textContent = '⚡';
+        } else {
+            banner.classList.add('hidden');
+        }
+    }
 }
 
 /**
@@ -103,6 +152,10 @@ export function setEnabled(enabled) {
 export function toggle() {
     isSpeedModeEnabled = !isSpeedModeEnabled;
     setData('speedMode', isSpeedModeEnabled);
+    
+    // Update UI based on the new setting
+    updateSpeedModeUI();
+    
     return isSpeedModeEnabled;
 }
 
@@ -113,8 +166,8 @@ export function toggle() {
  * @returns {boolean} Whether the timer was successfully started
  */
 export function startTimer(timeLimit = DEFAULT_TIME_LIMIT, onTimeUp = null) {
-    // If speed mode is disabled or timer is already running, do nothing
-    if (!isSpeedModeEnabled || isTimerRunning) {
+    // If speed mode is disabled, current game mode is not endless, or timer is already running, do nothing
+    if (!shouldBeActive() || isTimerRunning) {
         return false;
     }
     
@@ -136,7 +189,7 @@ export function startTimer(timeLimit = DEFAULT_TIME_LIMIT, onTimeUp = null) {
     }
     
     // Clear any existing timers
-    stopTimer();
+    stopTimer(false); // Don't hide the timer container
     
     // Start countdown
     currentTimer = setTimeout(() => {
@@ -156,8 +209,9 @@ export function startTimer(timeLimit = DEFAULT_TIME_LIMIT, onTimeUp = null) {
 
 /**
  * Stop the speed mode timer
+ * @param {boolean} hideContainer - Whether to hide the timer container
  */
-export function stopTimer() {
+export function stopTimer(hideContainer = true) {
     // Clear countdown timer
     if (currentTimer) {
         clearTimeout(currentTimer);
@@ -173,10 +227,12 @@ export function stopTimer() {
     // Reset state
     isTimerRunning = false;
     
-    // Hide timer container
-    const timerContainer = document.getElementById('speed-timer-container');
-    if (timerContainer) {
-        timerContainer.classList.add('hidden');
+    // Hide timer container if requested
+    if (hideContainer) {
+        const timerContainer = document.getElementById('speed-timer-container');
+        if (timerContainer) {
+            timerContainer.classList.add('hidden');
+        }
     }
 }
 
@@ -228,6 +284,16 @@ export function getTimeoutMove(availableMoves) {
     return getRandomMove(availableMoves);
 }
 
+/**
+ * Get the appropriate delay time based on current game mode and speed mode settings
+ * @param {number} standardDelay - The standard delay time in milliseconds
+ * @param {number} speedDelay - The speed mode delay time in milliseconds
+ * @returns {number} The appropriate delay time based on current settings
+ */
+export function getAppropriateDelay(standardDelay = 1000, speedDelay = 300) {
+    return shouldBeActive() ? speedDelay : standardDelay;
+}
+
 export default {
     init,
     isEnabled,
@@ -235,5 +301,8 @@ export default {
     toggle,
     startTimer,
     stopTimer,
-    getTimeoutMove
+    getTimeoutMove,
+    setGameMode,
+    shouldBeActive,
+    getAppropriateDelay
 }; 

@@ -228,7 +228,6 @@ function setupEventListeners() {
         speedModeToggle.addEventListener('change', () => {
             speedMode.setEnabled(speedModeToggle.checked);
             sound.play('click');
-            updateGameBanner();
         });
     }
     
@@ -317,27 +316,6 @@ function setupEventListeners() {
                 window.location.reload();
             }
         });
-    }
-}
-
-/**
- * Update the game info banner based on current settings
- */
-export function updateGameBanner() {
-    const banner = document.getElementById('game-info-banner');
-    const bannerText = document.getElementById('game-info-text');
-    const bannerIcon = document.querySelector('.game-info-banner-icon');
-    
-    if (!banner || !bannerText || !bannerIcon) return;
-    
-    // Check if speed mode is enabled
-    if (speedMode.isEnabled()) {
-        banner.classList.remove('hidden');
-        banner.classList.add('speed-mode');
-        bannerText.textContent = 'Speed Mode Active';
-        bannerIcon.textContent = '⚡';
-    } else {
-        banner.classList.add('hidden');
     }
 }
 
@@ -450,5 +428,5 @@ function hideSettings() {
 export default {
     init,
     showSettings,
-    updateGameBanner
+    updateAiDifficultyDescription
 }; 

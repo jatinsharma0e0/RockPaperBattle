@@ -54,8 +54,8 @@ export function initEndlessMode() {
     // Play start sound
     sound.play('gameStart');
     
-    // If speed mode is enabled, start the timer
-    if (speedMode.isEnabled()) {
+    // If speed mode is enabled and we're in endless mode, start the timer
+    if (speedMode.shouldBeActive()) {
         startSpeedModeTimer();
     }
 }
@@ -64,8 +64,8 @@ export function initEndlessMode() {
  * Starts the speed mode timer
  */
 function startSpeedModeTimer() {
-    // Only start the timer if speed mode is enabled
-    if (!speedMode.isEnabled()) return;
+    // Only start the timer if speed mode should be active
+    if (!speedMode.shouldBeActive()) return;
     
     // Start the timer
     speedMode.startTimer(3000, () => {
@@ -169,6 +169,9 @@ export function handlePlayerMove(playerMove, isTimeoutMove = false) {
     // Apply win/loss/draw animations
     applyResultAnimations(result);
     
+    // Get appropriate delay based on speed mode
+    const resultDelay = speedMode.getAppropriateDelay(1000, 500);
+    
     // Show result after a short delay
     setTimeout(() => {
         ui.showResult(result, resultMessage, playerMove, aiMove);
@@ -179,7 +182,7 @@ export function handlePlayerMove(playerMove, isTimeoutMove = false) {
             gameState.bonusRoundActive = false;
             gameState.bonusType = null;
         }
-    }, 1000);
+    }, resultDelay);
 }
 
 /**
@@ -368,8 +371,8 @@ export function continueGame() {
     sound.play('click');
     ui.showSection('game-screen');
     
-    // If speed mode is enabled, start the timer
-    if (speedMode.isEnabled()) {
+    // If speed mode should be active, start the timer
+    if (speedMode.shouldBeActive()) {
         startSpeedModeTimer();
     }
 }
@@ -397,8 +400,8 @@ export function resetScores() {
     // Play sound
     sound.play('click');
     
-    // If speed mode is enabled, restart the timer
-    if (speedMode.isEnabled()) {
+    // If speed mode should be active, restart the timer
+    if (speedMode.shouldBeActive()) {
         startSpeedModeTimer();
     }
 }
