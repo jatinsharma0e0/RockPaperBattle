@@ -185,6 +185,12 @@ function setupEventHandlers() {
             bestOf5.initBestOf5Mode();
             sound.play('click');
             stats.updateBestMode('Best of 5');
+            
+            // Explicitly hide the speed mode banner
+            const banner = document.getElementById('game-info-banner');
+            if (banner) {
+                banner.classList.add('hidden');
+            }
         });
     }
     

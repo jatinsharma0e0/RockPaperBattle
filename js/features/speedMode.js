@@ -31,7 +31,7 @@ export function init() {
     if (speedModeEnabled !== undefined) {
         isSpeedModeEnabled = speedModeEnabled;
     } else {
-        // Always default to disabled
+        // Default to disabled
         setData('speedMode', false);
         isSpeedModeEnabled = false;
     }
@@ -47,27 +47,28 @@ export function init() {
 export function setGameMode(mode) {
     currentGameMode = mode;
     
-    // If changing to a non-endless mode, stop any active timer
-    if (mode !== 'endless' && isTimerRunning) {
-        stopTimer();
-    }
-    
-    // Always ensure the banner is hidden when not in Endless mode
+    // If changing to a non-endless mode, stop any active timer and hide the banner
     if (mode !== 'endless') {
+        // Stop any active timer
+        if (isTimerRunning) {
+            stopTimer();
+        }
+        
+        // Hide the banner immediately
         const banner = document.getElementById('game-info-banner');
         if (banner) {
             banner.classList.add('hidden');
+            
+            // Clear the text animation interval
+            if (window.speedModeTextInterval) {
+                clearInterval(window.speedModeTextInterval);
+                window.speedModeTextInterval = null;
+            }
         }
-        
-        // Clear the text animation interval
-        if (window.speedModeTextInterval) {
-            clearInterval(window.speedModeTextInterval);
-            window.speedModeTextInterval = null;
-        }
+    } else {
+        // If changing to endless mode, update UI based on current settings
+        updateSpeedModeUI();
     }
-    
-    // Update UI based on the new game mode
-    updateSpeedModeUI();
 }
 
 /**

@@ -37,17 +37,17 @@ export function initBestOf5Mode() {
     // Update AI difficulty indicator
     aiModes.updateAiIndicators();
     
-    // Explicitly hide the Speed Mode banner
-    const banner = document.getElementById('game-info-banner');
-    if (banner) {
-        banner.classList.add('hidden');
-    }
-    
     // Show the game screen
     ui.showSection('game-screen');
     
     // Play start sound
     sound.play('gameStart');
+    
+    // Explicitly hide the speed mode banner
+    const banner = document.getElementById('game-info-banner');
+    if (banner) {
+        banner.classList.add('hidden');
+    }
 }
 
 /**
@@ -311,6 +311,12 @@ export function continueGame() {
     }
     
     ui.showSection('game-screen');
+    
+    // Ensure speed mode banner remains hidden in Best of 5
+    const banner = document.getElementById('game-info-banner');
+    if (banner) {
+        banner.classList.add('hidden');
+    }
 }
 
 /**
@@ -319,6 +325,12 @@ export function continueGame() {
 export function resetScores() {
     resetGameState();
     sound.play('click');
+    
+    // Ensure speed mode banner remains hidden in Best of 5
+    const banner = document.getElementById('game-info-banner');
+    if (banner) {
+        banner.classList.add('hidden');
+    }
 }
 
 export default {
