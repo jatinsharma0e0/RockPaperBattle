@@ -869,70 +869,28 @@ input[type="range"]:focus {
 
 /* Speed Mode Timer */
 .speed-timer-container {
-    width: 80%;
-    height: 10px;
-    background-color: var(--border-color);
-    border-radius: 5px;
-    margin: 10px auto 20px;
+    width: 90%;
+    max-width: 600px;
+    height: 14px;
+    background: #222;
+    border-radius: 7px;
+    margin: 20px auto 10px auto;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    animation: slide-down 0.3s ease-out;
-}
-
-@keyframes slide-down {
-    0% {
-        transform: translateY(-20px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
 
 .speed-timer {
     height: 100%;
     width: 100%;
-    background-color: var(--primary-color);
-    transition: width 0.05s linear;
-    background-image: linear-gradient(
-        to right,
-        var(--primary-color) 0%,
-        var(--accent-color) 50%,
-        var(--primary-color) 100%
-    );
-    background-size: 200% 100%;
-    animation: timer-gradient 2s linear infinite;
-}
-
-@keyframes timer-gradient {
-    0% {
-        background-position: 100% 0;
-    }
-    100% {
-        background-position: -100% 0;
-    }
+    background: linear-gradient(90deg, #ff9800, #2196f3);
+    border-radius: 7px;
+    transition: width 0.2s linear;
+    will-change: width;
 }
 
 .speed-timer.warning {
-    background-color: var(--lose-color);
-    background-image: linear-gradient(
-        to right,
-        var(--lose-color) 0%,
-        #ff8080 50%,
-        var(--lose-color) 100%
-    );
-    animation: timer-warning 0.5s linear infinite;
-}
-
-@keyframes timer-warning {
-    0% {
-        background-position: 100% 0;
-    }
-    100% {
-        background-position: -100% 0;
-    }
+    background: linear-gradient(90deg, #ff5252, #ff9800);
 }
 
 /* Bonus Round Styles */
