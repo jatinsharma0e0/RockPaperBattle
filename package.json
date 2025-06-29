@@ -9,7 +9,8 @@
     "build": "vite build",
     "start": "node api/server.js",
     "vercel-build": "node node_modules/vite/bin/vite.js build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "simple": "node simple-server.js"
   },
   "engines": {
     "node": "18.x"

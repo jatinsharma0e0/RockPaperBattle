@@ -174,15 +174,20 @@ To add new features, follow the modular structure:
 - Settings go in `js/settings/`
 - Utilities go in `js/utils/`
 
+## Running Locally
+
+To run this project locally:
+
+```bash
+# Start the simple Node.js HTTP server
+npm run simple
+```
+
+This will start a basic HTTP server at http://localhost:3000 serving the source files directly without requiring any additional dependencies.
+
 ## Deployment
 
-The game can be deployed on any static hosting platform:
-- GitHub Pages
-- Netlify
-- Vercel
-- Any web server that can serve static files
-
-No build process is required - just upload the files to your web server.
+The game is currently deployed on Vercel. The project is already configured with `vercel.json` for seamless deployment.
 
 ## Browser Support
 
