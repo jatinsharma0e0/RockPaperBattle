@@ -179,12 +179,40 @@ export function startTimer(timeLimit = DEFAULT_TIME_LIMIT, onTimeUp = null) {
     if (timerElement) {
         timerElement.classList.remove('warning');
         timerElement.style.transition = 'none';
-        timerElement.style.transform = 'scaleX(1)';
+        timerElement.style.width = '100%';
         timerElement.style.display = 'block';
         void timerElement.offsetWidth; // force reflow
-        timerElement.style.transition = `transform ${timeLimit/1000}s linear`;
-        timerElement.style.transform = 'scaleX(0)';
+        
+        // Clear any existing timer update interval
+        if (timerUpdateInterval) {
+            clearInterval(timerUpdateInterval);
+        }
+        
+        // Start a timer update interval to smoothly update the timer width
+        timerUpdateInterval = setInterval(() => {
+            if (!isTimerRunning || !timerElement) {
+                clearInterval(timerUpdateInterval);
+                return;
+            }
+            
+            currentTimeLeft -= TIMER_UPDATE_INTERVAL;
+            if (currentTimeLeft <= 0) {
+                clearInterval(timerUpdateInterval);
+                return;
+            }
+            
+            // Calculate remaining percentage
+            const remainingPercentage = (currentTimeLeft / timeLimit) * 100;
+            timerElement.style.width = `${remainingPercentage}%`;
+            
+            // Add warning class when time is running low
+            if (currentTimeLeft <= WARNING_THRESHOLD && !timerElement.classList.contains('warning')) {
+                timerElement.classList.add('warning');
+                sound.play('tick');
+            }
+        }, TIMER_UPDATE_INTERVAL);
     }
+    
     stopTimer(false);
     currentTimer = setTimeout(() => {
         timeUp();
@@ -202,6 +230,12 @@ export function stopTimer(hideContainer = true) {
     if (currentTimer) {
         clearTimeout(currentTimer);
         currentTimer = null;
+    }
+    
+    // Clear timer update interval
+    if (timerUpdateInterval) {
+        clearInterval(timerUpdateInterval);
+        timerUpdateInterval = null;
     }
     
     // Reset state
