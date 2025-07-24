@@ -10,10 +10,13 @@ A modern HTML5 + JavaScript game featuring Rock, Paper, Scissors with multiple g
 - **Deployment**: Configured for both Replit and Vercel
 
 ## Recent Changes
-- **2025-07-24**: Migrating from Replit Agent to standard Replit environment
+- **2025-07-24**: Successfully migrated from Replit Agent to standard Replit environment
   - Created Python server wrapper for Replit compatibility
-  - Updated workflow configuration
+  - Fixed Express.js version conflicts (downgraded to v4.18.2)
+  - Updated workflow configuration to use port 5000
   - Maintained client/server separation for security
+  - Created comprehensive README.md with screenshots
+  - All features working: game modes, AI, themes, stats, achievements
 
 ## User Preferences
 - Prefers simple deployment process

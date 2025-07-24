@@ -1,199 +1,279 @@
-# Rock Paper Battle
+# Rock Paper Battle 🎮
 
-A modern HTML5 + JavaScript game featuring Rock, Paper, Scissors with multiple game modes and features.
+A modern, feature-rich take on the classic Rock Paper Scissors game with stunning visuals, multiple game modes, AI opponents, and comprehensive accessibility features.
 
-## Game Modes
+## Demo & Screenshots
 
-- **Endless Mode**: Play continuously against AI with persistent score tracking.
-- **Best of 5**: Battle the AI in a best-of-five match format.
-- **Speed Mode**: Time-limited gameplay with 3-second turns.
+### Main Menu
+![Main Menu](assets/screenshots/screenshot1_1753368471771.png)
+
+### Game Settings
+![Settings](assets/screenshots/screenshot2_1753368471772.png)
+
+### Gameplay
+![Gameplay](assets/screenshots/screenshot3_1753368471772.png)
+![Speed Mode Active](assets/screenshots/screenshot4_1753368471769.png)
+
+### Results & Stats
+![Win Screen](assets/screenshots/screenshot5_1753368471769.png)
+![Game Statistics](assets/screenshots/screenshot6_1753368471770.png)
+
+## Description
+
+Rock Paper Battle is a comprehensive reimagining of the timeless Rock Paper Scissors game, built with modern web technologies. It features multiple game modes, intelligent AI opponents, achievement systems, and beautiful themes. The game is designed with accessibility in mind and offers a rich, engaging experience for players of all skill levels.
+
+**Genre:** Strategy/Casual  
+**Platform:** Web Browser  
+**Players:** Single Player vs AI
 
 ## Features
 
-### Phase 1 (Completed)
-- Base game structure
-- Endless mode gameplay
-- Basic UI with responsive design
-- Local storage for game progress
-- Theme toggle (Day mode)
+### 🎯 Core Gameplay
+- **Multiple Game Modes**: Endless Mode and Best of 5 tournaments
+- **Smart AI Opponents**: Different difficulty levels with unique strategies
+- **Speed Mode**: Fast-paced gameplay with time pressure
+- **Bonus Rounds**: Special challenge rounds with unique rewards
+- **Secret Moves**: Unlock special moves like Fire for enhanced gameplay
 
-### Phase 2 (Completed)
-- Best of 5 game mode
-- Navigation buttons (Back, Reset)
-- Sound effects with toggle
-- Improved UI feedback
+### 🎨 Visual & Audio
+- **4 Beautiful Themes**: Day, Night, Retro, and Neon themes
+- **Sound Systems**: Retro and Modern sound packs with ambient audio
+- **Smooth Animations**: Polished UI transitions and effects
+- **Responsive Design**: Works perfectly on desktop, tablet, and mobile
 
-### Phase 3 (Completed)
-- Achievements system with notifications
-- Game statistics tracking
-- Stats dashboard with visualizations
-- Win streak tracking
-- Data persistence and reset options
+### 📊 Progression & Stats
+- **Achievement System**: Unlock achievements for various accomplishments
+- **Comprehensive Statistics**: Track wins, losses, streaks, and performance
+- **Profile Customization**: Choose from multiple avatars and customize your name
+- **Data Persistence**: All progress saved locally
 
-### Phase 4 (Completed)
-- Multiple theme options (Day, Night, Retro, Neon)
-- Player profile with custom name and avatar
-- Secret "Fire" move unlock (after 10 wins)
-- Settings screen with tabs for profile, theme, sound, and data management
-- First-run experience with profile setup
+### ♿ Accessibility
+- **High Contrast Mode**: Enhanced visibility for users with visual impairments
+- **Reduced Motion**: Disable animations for users sensitive to motion
+- **Keyboard Navigation**: Full keyboard support for all interactions
+- **Screen Reader Support**: ARIA labels and semantic HTML structure
 
-### Phase 5 (Completed)
-- AI Personality Modes (🤖 Random, 😏 Cheeky, 🧠 Predictive)
-- Idle animations and ambient sound when inactive
-- Enhanced sound management with separate ambient controls
-- AI mode statistics tracking
-- Responsive visual indicators for different AI personalities
+## Installation
 
-### Phase 6 (Completed)
-- Speed Mode with 3-second time limit per move
-- Bonus Rounds with special rules
-  - 🎯 Double Points: Win for double score
-  - 🔁 Reverse Rules: Rock beats Paper, Paper beats Scissors, Scissors beats Rock
-  - 🎲 Chaos Mode: Randomly shuffled move labels
-- Enhanced visual feedback:
-  - Confetti animation for wins
-  - Shake effect on losses
-  - Glow effect on draws
-- Game settings tab with toggles for Speed and Bonus features
+### Prerequisites
+- Node.js 18.x or higher
+- npm or yarn package manager
 
-### Phase 7 (Completed)
-- Accessibility improvements:
-  - ARIA attributes and semantic HTML
-  - Keyboard navigation support
-  - High contrast mode
-  - Reduced motion option
-  - System preference detection
-- Performance optimization:
-  - Asset preloading system
-  - Loading screen with progress bar
-  - FPS counter and performance metrics
-  - Optimized animations and transitions
-- Data management:
-  - Export/import game data as JSON
-  - Data schema versioning
-  - Improved localStorage handling
-- UI Polish:
-  - Improved animations and transitions
-  - Enhanced focus states for better navigation
-  - Loading screen with visual feedback
-  - Better error handling and fallbacks
+### Quick Start
 
-## Themes
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/rock-paper-battle.git
+   cd rock-paper-battle
+   ```
 
-Choose from four unique visual themes:
-- 🌞 **Day**: Light and clean default theme
-- 🌙 **Night**: Dark theme for low-light environments
-- 🎮 **Retro**: 8-bit pixel style with vibrant colors
-- 💡 **Neon**: Futuristic theme with glowing elements
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-## Accessibility
+3. **Run the development server**
+   ```bash
+   # For simple development server
+   npm run simple
+   
+   # For Vite development server
+   npm run dev
+   
+   # For production server
+   npm start
+   ```
 
-Rock Paper Battle includes several accessibility features:
-- **High Contrast Mode**: Enhanced color contrast for better visibility
-- **Reduced Motion**: Minimizes animations for users sensitive to motion
-- **Keyboard Navigation**: Full keyboard support for all game actions
-- **ARIA Support**: Screen reader compatibility with semantic HTML
-- **System Preference Detection**: Automatically matches OS accessibility settings
+4. **Open your browser**
+   Navigate to `http://localhost:5000` (simple server) or `http://localhost:5173` (Vite dev server)
 
-## Secret Move
+### Build for Production
 
-Unlock the special "Fire" move after winning 10 games:
-- 🔥 Fire beats Scissors and Paper
-- Rock beats Fire
-- Paper loses to Fire
-- Scissors lose to Fire
+```bash
+# Build the project
+npm run build
 
-## AI Personalities
+# Preview the production build
+npm run preview
+```
 
-- 🤖 **Random**: The default AI that picks moves randomly.
-- 😏 **Cheeky**: This AI mimics your last move 40% of the time.
-- 🧠 **Predictive**: Analyzes your patterns and tries to counter your most-used moves.
+## How to Play
 
-## Bonus Rounds
+### Basic Rules
+1. **Rock** beats **Scissors**
+2. **Scissors** beats **Paper**  
+3. **Paper** beats **Rock**
+4. **Fire** (secret move) beats **Paper** and **Scissors** but loses to **Rock**
 
-Special rounds with unique rules that occur randomly:
+### Game Modes
+
+#### Endless Mode
+- Play unlimited rounds against the AI
+- Track your win streak and overall performance
+- Unlock achievements as you progress
+
+#### Best of 5
+- First to win 3 rounds wins the match
+- Perfect for quick gaming sessions
+- Competitive scoring system
+
+### Controls
+- **Mouse/Touch**: Click or tap move buttons to make your choice
+- **Keyboard**: Use arrow keys to navigate, Enter to select, Escape to go back
+- **Settings**: Access via the gear icon to customize your experience
+
+### Special Features
+- **Speed Mode**: Activated randomly, adds time pressure to decisions
+- **Bonus Rounds**: Special challenge rounds with enhanced rewards
+- **AI Difficulty**: Choose from multiple AI personalities and strategies
+
+### AI Personalities
+- 🤖 **Random**: The default AI that picks moves randomly
+- 😏 **Cheeky**: This AI mimics your last move 40% of the time
+- 🧠 **Predictive**: Analyzes your patterns and tries to counter your most-used moves
+
+### Bonus Round Types
 - 🎯 **Double Points**: Win this round for twice the points!
 - 🔁 **Reverse Rules**: All win conditions are flipped (except for Fire)
 - 🎲 **Chaos Mode**: Move labels are shuffled - can you figure out which is which?
 
-## Achievements
-
-Unlock these achievements as you play:
+### Achievements
 - 🥉 **3 Wins in a Row**: Win three games consecutively
 - 🥇 **Flawless Victory**: Win a Best of 5 match without losing any rounds
 - 📊 **10 Total Rounds Played**: Play a total of 10 rounds across any mode
 
-## Technical Details
+## Technologies Used
 
-- Modular JavaScript architecture
-- Local storage for game persistence
-- No external dependencies
-- Responsive design for all devices
-- Asset preloading system
-- Accessibility support
-- Performance optimization
+### Frontend
+- **HTML5**: Semantic markup with accessibility features
+- **CSS3**: Modern styling with CSS Grid, Flexbox, and custom properties
+- **Vanilla JavaScript**: Pure ES6+ JavaScript for optimal performance
+- **Web APIs**: Local Storage, Audio API, Intersection Observer
 
-## Audio Credits
+### Build Tools
+- **Vite**: Fast build tool and development server
+- **Express.js**: Production server for static file serving
+- **Node.js**: Runtime environment
 
-Place audio files in the `assets/audio` directory with the following names:
-- click.mp3
-- win.mp3
-- lose.mp3
-- draw.mp3
-- game-start.mp3
-- game-win.mp3
-- game-lose.mp3
-- game-draw.mp3
-- countdown.mp3 (for Speed Mode)
-- tick.mp3 (for Speed Mode warning)
-- time-up.mp3 (for Speed Mode timeout)
-- bonus-round.mp3 (for Bonus Round announcement)
-- chaos.mp3 (for Chaos Mode activation)
+### Development
+- **ESLint**: Code linting and consistency
+- **Modern ES6+**: Classes, modules, async/await, destructuring
+- **Responsive Design**: Mobile-first approach with progressive enhancement
 
-For ambient sounds, place files in `assets/audio/ambient`:
-- wind.mp3
-- hum.mp3
-- lo-fi-loop.mp3
+## Project Structure
 
-## How to Play
-
-1. Choose a game mode from the landing page
-2. Select Rock (✊), Paper (✋), Scissors (✌️), or Fire (🔥)
-3. See the result and your updated score
-4. Continue playing or return to the menu
-5. Check your stats and achievements anytime
-6. Try different AI personalities in settings
-7. Enable Speed Mode for a timed challenge
-8. Watch for surprise Bonus Rounds with special rules!
-
-## Development
-
-To add new features, follow the modular structure:
-- Game modes go in `js/game/`
-- Features go in `js/features/`
-- Settings go in `js/settings/`
-- Utilities go in `js/utils/`
-
-## Running Locally
-
-To run this project locally:
-
-```bash
-# Start the simple Node.js HTTP server
-npm run simple
+```
+rock-paper-battle/
+├── api/                    # Express.js server configuration
+├── assets/                 # Game assets (audio, images, icons)
+│   ├── audio/             # Sound effects and ambient audio
+│   ├── icons/             # App icons and favicons
+│   ├── images/            # Game images and graphics
+│   └── screenshots/       # Documentation screenshots
+├── css/                   # Stylesheets
+│   ├── style.css         # Main styles
+│   ├── themes.css        # Theme definitions
+│   ├── animations.css    # Animation effects
+│   ├── responsive.css    # Mobile responsiveness
+│   └── high-contrast.css # Accessibility styles
+├── js/                    # JavaScript modules
+│   ├── game/             # Core game logic
+│   ├── features/         # Feature implementations
+│   ├── settings/         # Settings and storage
+│   └── utils/            # Utility functions
+├── dist/                  # Built files (generated)
+├── public/               # Public assets
+├── index.html            # Main HTML file
+├── serve.py             # Python server wrapper for Replit
+├── simple-server.js     # Simple Node.js server
+└── vite.config.js       # Vite configuration
 ```
 
-This will start a basic HTTP server at http://localhost:3000 serving the source files directly without requiring any additional dependencies.
+## Contributing
 
-## Deployment
+We welcome contributions! Here's how you can help:
 
-The game is currently deployed on Vercel. The project is already configured with `vercel.json` for seamless deployment.
+### Getting Started
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Test thoroughly across different browsers and devices
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
-## Browser Support
+### Areas for Contribution
+- **New Game Modes**: Tournament modes, multiplayer, time trials
+- **AI Improvements**: More sophisticated AI strategies
+- **Accessibility**: Enhanced screen reader support, more accessibility options
+- **Themes**: New visual themes and customization options
+- **Localization**: Multi-language support
+- **Performance**: Code optimization and bundle size reduction
 
-Tested and compatible with:
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-- Mobile browsers (iOS Safari, Android Chrome) 
+### Code Style
+- Use modern ES6+ JavaScript features
+- Follow existing code patterns and naming conventions
+- Maintain accessibility standards (WCAG 2.1 AA)
+- Write meaningful commit messages
+- Test across different browsers and devices
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+```
+MIT License
+
+Copyright (c) 2025 Rock Paper Battle
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## Credits
+
+### Inspiration
+- Classic Rock Paper Scissors game mechanics
+- Modern web game design principles
+- Accessibility-first development approach
+
+### Resources
+- **Emoji Graphics**: Unicode Consortium emoji set
+- **Sound Design**: Custom audio effects and ambient tracks
+- **Color Schemes**: Carefully crafted theme palettes for optimal user experience
+
+### Special Thanks
+- Web accessibility community for guidelines and best practices
+- Modern JavaScript community for development patterns
+- Beta testers and feedback contributors
+
+## Contact
+
+### Developer
+- **GitHub**: [Your GitHub Profile](https://github.com/your-username)
+- **Email**: your.email@example.com
+- **Project Repository**: [Rock Paper Battle](https://github.com/your-username/rock-paper-battle)
+
+### Feedback & Support
+- **Issues**: Report bugs and request features on [GitHub Issues](https://github.com/your-username/rock-paper-battle/issues)
+- **Discussions**: Join the conversation in [GitHub Discussions](https://github.com/your-username/rock-paper-battle/discussions)
+- **Contributing**: See the [Contributing](#contributing) section above
+
+---
+
+**Enjoy playing Rock Paper Battle!** 🎮✊✋✌️
