@@ -2,21 +2,23 @@
 
 A modern, feature-rich take on the classic Rock Paper Scissors game with stunning visuals, multiple game modes, AI opponents, and comprehensive accessibility features.
 
+**Play here 👉🏻** - [https://rockpaperscissorbattle.vercel.app]
+
 ## Demo & Screenshots
 
 ### Main Menu
-![Main Menu](assets/screenshots/screenshot1_1753368471771.png)
+![Main Menu](assets/screenshots/screenshot1.png)
 
 ### Game Settings
-![Settings](assets/screenshots/screenshot2_1753368471772.png)
+![Settings](assets/screenshots/screenshot2.png)
 
 ### Gameplay
-![Gameplay](assets/screenshots/screenshot3_1753368471772.png)
-![Speed Mode Active](assets/screenshots/screenshot4_1753368471769.png)
+![Gameplay](assets/screenshots/screenshot3.png)
+![Speed Mode Active](assets/screenshots/screenshot4.png)
 
 ### Results & Stats
-![Win Screen](assets/screenshots/screenshot5_1753368471769.png)
-![Game Statistics](assets/screenshots/screenshot6_1753368471770.png)
+![Win Screen](assets/screenshots/screenshot5.png)
+![Game Statistics](assets/screenshots/screenshot6.png)
 
 ## Description
 
@@ -265,13 +267,12 @@ SOFTWARE.
 ## Contact
 
 ### Developer
-- **GitHub**: [Your GitHub Profile](https://github.com/your-username)
-- **Email**: your.email@example.com
-- **Project Repository**: [Rock Paper Battle](https://github.com/your-username/rock-paper-battle)
+- **GitHub**: [Your GitHub Profile](https://github.com/jatinsharma0e0)
+- **Email**: [jatin0e0help.com](mailto:jatin0e0help.com)
 
 ### Feedback & Support
-- **Issues**: Report bugs and request features on [GitHub Issues](https://github.com/your-username/rock-paper-battle/issues)
-- **Discussions**: Join the conversation in [GitHub Discussions](https://github.com/your-username/rock-paper-battle/discussions)
+- **Issues**: Report bugs and request features on [GitHub Issues](https://github.com/jatinsharma0e0/rock-paper-battle/issues)
+- **Discussions**: Join the conversation in [GitHub Discussions](https://github.com/jatinsharma0e0/rock-paper-battle/discussions)
 - **Contributing**: See the [Contributing](#contributing) section above
 
 ---
