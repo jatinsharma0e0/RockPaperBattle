@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 // Serve static files from the dist directory
 app.use(express.static(path.join(__dirname, '../dist')));
@@ -14,8 +14,9 @@ app.get('*', (req, res) => {
 
 // Start the server if not running in Vercel
 if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}/`);
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Rock Paper Battle server running at http://0.0.0.0:${PORT}/`);
+    console.log('Game is ready to play!');
   });
 }
 
